@@ -269,3 +269,42 @@ export interface ClientToServerEvents {
   interactableUpdate: (update: Interactable) => void;
   interactableCommand: (command: InteractableCommand & InteractableCommandBase) => void;
 }
+
+// The following types are to support the Pizza Party game
+export interface PizzaPartyGameState extends GameState {
+  currentScore: number
+  currentCustomers: Customer[]
+  ovenFull: boolean 
+  currentPizza: Pizza
+  player?: PlayerID
+}
+
+export interface Customer {
+  id: number
+  name: string
+  order: Order
+  timeRemaining: number // in seconds
+  completed: boolean
+}
+
+export interface Order {
+  pizzas: Pizza[]
+  customer: Customer
+  pointValue: number
+}
+
+export interface Toppings {
+  id: number
+  kind: ToppingOptions
+  appliedOnPizza: boolean
+}
+
+
+// All the toppings available in the game. Subject to change
+export type ToppingOptions = "pepperoni" | "mushrooms" | "anchovies" | "olives" | "onions" | "peppers" | "sausage" 
+
+export interface Pizza {
+  id: number
+  toppings: Topping[]
+  cooked: boolean
+}
