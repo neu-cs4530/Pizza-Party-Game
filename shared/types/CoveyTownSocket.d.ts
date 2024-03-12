@@ -289,6 +289,8 @@ export interface Customer {
 
 export interface Order {
   pizzas: Pizza[]
+  customer: Customer
+  pointValue: number
 }
 
 export interface Toppings {
