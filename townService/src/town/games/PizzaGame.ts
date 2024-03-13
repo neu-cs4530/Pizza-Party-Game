@@ -1,4 +1,3 @@
-import { PassThrough } from 'stream';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -9,7 +8,6 @@ import InvalidParametersError, {
 import Player from '../../lib/Player';
 import { PizzaPartyGameState, PizzaPartyGameMove, GameMove } from '../../types/CoveyTownSocket';
 import Game from './Game';
-import { removeThisFunctionCallWhenYouImplementThis } from '../../Utils';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -48,7 +46,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
 
   /**
    * Sets up the player's departure for the game, which will then be finalized by the leave() method (see Game.ts).
-   * This method resets the status to WAITING_FOR_PLAYERS before 
+   * This method resets the status to WAITING_FOR_PLAYERS before
    * @param player The player leaving the game.
    */
   public _leave(player: Player): void {
