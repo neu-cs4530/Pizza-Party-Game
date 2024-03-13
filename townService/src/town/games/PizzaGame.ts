@@ -50,7 +50,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
    * @param player The player leaving the game.
    */
   public _leave(player: Player): void {
-    if (!this._players.includes(player)) {
+    if (!this.state.player) {
       throw new Error(PLAYER_NOT_IN_GAME_MESSAGE);
     }
     if (this.state.status !== 'WAITING_FOR_PLAYERS') {
@@ -72,7 +72,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     if (this.state.status !== 'WAITING_TO_START') {
       throw new InvalidParametersError(GAME_NOT_STARTABLE_MESSAGE);
     }
-    if (this.state.player) {
+    if (!this.state.player) {
       throw new InvalidParametersError(PLAYER_NOT_IN_GAME_MESSAGE);
     }
     this.state = {
