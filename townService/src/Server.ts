@@ -6,11 +6,17 @@ import swaggerUi from 'swagger-ui-express';
 import { ValidateError } from 'tsoa';
 import fs from 'fs/promises';
 import { Server as SocketServer } from 'socket.io';
+import mongoose from 'mongoose';
 import { RegisterRoutes } from '../generated/routes';
 import TownsStore from './lib/TownsStore';
 import { ClientToServerEvents, ServerToClientEvents } from './types/CoveyTownSocket';
 import { TownsController } from './town/TownsController';
 import { logError } from './Utils';
+import CustomerRoutes from './town/database/customer/routes';
+import LeaderboardRoutes from './town/database/leaderboard/routes';
+import OrderRoutes from './town/database/order/routes';
+import PizzaRoutes from './town/database/pizza/routes';
+import ToppingRoutes from './town/database/topping/routes';
 
 // Create the server instances
 const app = Express();
@@ -19,6 +25,17 @@ const server = http.createServer(app);
 const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: { origin: '*' },
 });
+
+const CONNECTION_STRING =
+  'mongodb+srv://nagishaca:3iSzoCdfSanOVzIK@pizzapartycluster.k7att2q.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPartyCluster';
+
+if (CONNECTION_STRING === undefined) {
+  logError('Unable to connect to MongoDB');
+} else {
+  mongoose.connect(CONNECTION_STRING, {
+    dbName: 'PizzaPartyGameDatabase',
+  });
+}
 
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));
@@ -65,6 +82,12 @@ app.use(
     return next();
   },
 );
+
+CustomerRoutes(app);
+LeaderboardRoutes(app);
+OrderRoutes(app);
+PizzaRoutes(app);
+ToppingRoutes(app);
 
 // Start the configured server, defaulting to port 8081 if $PORT is not set
 server.listen(process.env.PORT || 8081, () => {
