@@ -17,7 +17,7 @@ export type TownJoinResponse = {
   interactables: TypedInteractable[];
 }
 
-export type InteractableType = 'ConversationArea' | 'ViewingArea' | 'TicTacToeArea' | 'ConnectFourArea';
+export type InteractableType = 'ConversationArea' | 'ViewingArea' | 'TicTacToeArea' | 'ConnectFourArea' | 'PizzaPartyGameArea';
 export interface Interactable {
   type: InteractableType;
   id: InteractableID;
@@ -271,12 +271,17 @@ export interface ClientToServerEvents {
 }
 
 // The following types are to support the Pizza Party game
-export interface PizzaPartyGameState extends GameState {
+export interface PizzaPartyGameState extends WinnableGameState {
   currentScore: number
   currentCustomers: Customer[]
   ovenFull: boolean 
   currentPizza: Pizza
   player?: PlayerID
+}
+
+export interface PizzaPartyGameMove {
+  topping?: Topping,
+  pizza?: Pizza,
 }
 
 export interface Customer {
@@ -293,7 +298,7 @@ export interface Order {
   pointValue: number
 }
 
-export interface Toppings {
+export interface Topping {
   id: number
   kind: ToppingOptions
   appliedOnPizza: boolean
