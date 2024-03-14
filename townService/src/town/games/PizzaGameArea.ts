@@ -5,7 +5,6 @@ import InvalidParametersError, {
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
 import {
-  ConnectFourGameState,
   PizzaPartyGameState,
   GameInstance,
   InteractableCommand,
@@ -39,7 +38,10 @@ export default class PizzaPartyGameArea extends GameArea<PizzaPartyGame> {
           this._history.push({
             gameID,
             scores: {
-              [playerName]: updatedState.state.winner === player ? 1 : 0,
+              [playerName]:
+                updatedState.state.winner === player
+                  ? (this.game?.state.currentScore as number)
+                  : 0,
             },
           });
         }
@@ -75,25 +77,6 @@ export default class PizzaPartyGameArea extends GameArea<PizzaPartyGame> {
     command: CommandType,
     player: Player,
   ): InteractableCommandReturnType<CommandType> {
-    // if (command.type === 'GameMove') {
-    //   const game = this._game;
-    //   if (!game) {
-    //     throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
-    //   }
-    //   if (this._game?.id !== command.gameID) {
-    //     throw new InvalidParametersError(GAME_ID_MISSMATCH_MESSAGE);
-    //   }
-    //   if (command.move.gamePiece !== 'Red' && command.move.gamePiece !== 'Yellow') {
-    //     throw new InvalidParametersError('Invalid game piece');
-    //   }
-    //   game.applyMove({
-    //     gameID: command.gameID,
-    //     playerID: player.id,
-    //     move: command.move,
-    //   });
-    //   this._stateUpdated(game.toModel());
-    //   return undefined as InteractableCommandReturnType<CommandType>;
-    // }
     if (command.type === 'JoinGame') {
       let game = this._game;
       if (!game || game.state.status === 'OVER') {
