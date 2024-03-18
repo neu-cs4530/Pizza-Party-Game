@@ -7,6 +7,7 @@ import InvalidParametersError, {
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
 import { PizzaPartyGameState, PizzaPartyGameMove, GameMove } from '../../types/CoveyTownSocket';
+import { createLeaderboardEntry } from '../database/leaderboard/dao';
 import Game from './Game';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
@@ -24,9 +25,18 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     });
   }
 
-  public applyMove(move: GameMove<PizzaPartyGameMove>): void {
+  public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+    }
+
+    this.state.status = 'OVER';
+
+    if (this.state.status === 'OVER') {
+      const playerId = this.state.player;
+      const score = this.state.currentScore;
+      const entry = [playerId, score];
+      await createLeaderboardEntry(entry);
     }
   }
 
