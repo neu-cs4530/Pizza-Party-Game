@@ -8,7 +8,6 @@ import {
   GameMove,
   TownEmitter,
 } from '../../types/CoveyTownSocket';
-import PizzaPartyGame from './PizzaGame';
 import PizzaPartyGameArea from './PizzaGameArea';
 import * as PizzaPartyGameModule from './PizzaGame';
 import Game from './Game';
@@ -20,11 +19,17 @@ import {
 } from '../../lib/InvalidParametersError';
 
 class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
-  public constructor(priorGame?: PizzaPartyGame) {
+  public constructor() {
     super({
-      moves: [],
       status: 'WAITING_TO_START',
-      firstPlayer: 'Red',
+      currentScore: 0,
+      ovenFull: false,
+      currentCustomers: [],
+      currentPizza: {
+        id: 0,
+        toppings: [],
+        cooked: false,
+      },
     });
   }
 
@@ -38,6 +43,8 @@ class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
     };
   }
 
+  public startGame(player: Player) {}
+
   protected _join(player: Player): void {
     this._players.push(player);
   }
@@ -46,8 +53,6 @@ class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
 }
 describe('ConnectFourGameArea', () => {
   let gameArea: PizzaPartyGameArea;
-//   let red: Player;
-//   let yellow: Player;
   let player1: Player;
   let player2: Player;
   let interactableUpdateSpy: jest.SpyInstance;
@@ -73,7 +78,9 @@ describe('ConnectFourGameArea', () => {
     // game.join(red);
     // gameArea.add(yellow);
     // game.join(yellow);
-    game.add(player1);
+    gameArea.add(player1);
+    game.join(player1);
+    gameArea.add(player2);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore (Test requires access to protected method)
@@ -83,7 +90,7 @@ describe('ConnectFourGameArea', () => {
   describe('[T3.1] JoinGame command', () => {
     test('when there is no existing game, it should create a new game and call _emitAreaChanged', () => {
       expect(gameArea.game).toBeUndefined();
-      const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+      const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, player1);
       expect(gameArea.game).toBeDefined();
       expect(gameID).toEqual(game.id);
       expect(interactableUpdateSpy).toHaveBeenCalled();
@@ -92,7 +99,7 @@ describe('ConnectFourGameArea', () => {
       expect(gameArea.game).toBeUndefined();
 
       gameConstructorSpy.mockClear();
-      const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+      const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, player1);
       expect(gameArea.game).toBeDefined();
       expect(gameID).toEqual(game.id);
       expect(interactableUpdateSpy).toHaveBeenCalled();
@@ -100,7 +107,7 @@ describe('ConnectFourGameArea', () => {
       game.endGame();
 
       gameConstructorSpy.mockClear();
-      const { gameID: newGameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+      const { gameID: newGameID } = gameArea.handleCommand({ type: 'JoinGame' }, player1);
       expect(gameArea.game).toBeDefined();
       expect(newGameID).toEqual(game.id);
       expect(interactableUpdateSpy).toHaveBeenCalled();
@@ -108,20 +115,16 @@ describe('ConnectFourGameArea', () => {
     });
     describe('when there is a game in progress', () => {
       it('should call join on the game and call _emitAreaChanged', () => {
-        const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+        const joinSpy = jest.spyOn(game, 'join');
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
         expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
-
-        const joinSpy = jest.spyOn(game, 'join');
-        const gameID2 = gameArea.handleCommand({ type: 'JoinGame' }, yellow).gameID;
-        expect(joinSpy).toHaveBeenCalledWith(yellow);
-        expect(gameID).toEqual(gameID2);
-        expect(interactableUpdateSpy).toHaveBeenCalledTimes(2);
+        expect(joinSpy).toHaveBeenCalledWith(player1);
       });
       it('should not call _emitAreaChanged if the game throws an error', () => {
-        gameArea.handleCommand({ type: 'JoinGame' }, red);
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
@@ -130,10 +133,10 @@ describe('ConnectFourGameArea', () => {
         const joinSpy = jest.spyOn(game, 'join').mockImplementationOnce(() => {
           throw new Error('Test Error');
         });
-        expect(() => gameArea.handleCommand({ type: 'JoinGame' }, yellow)).toThrowError(
+        expect(() => gameArea.handleCommand({ type: 'JoinGame' }, player2)).toThrowError(
           'Test Error',
         );
-        expect(joinSpy).toHaveBeenCalledWith(yellow);
+        expect(joinSpy).toHaveBeenCalledWith(player2);
         expect(interactableUpdateSpy).not.toHaveBeenCalled();
       });
     });
@@ -141,18 +144,18 @@ describe('ConnectFourGameArea', () => {
   describe('[T3.2] StartGame command', () => {
     it('when there is no game, it should throw an error and not call _emitAreaChanged', () => {
       expect(() =>
-        gameArea.handleCommand({ type: 'StartGame', gameID: nanoid() }, red),
+        gameArea.handleCommand({ type: 'StartGame', gameID: nanoid() }, player1),
       ).toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
     });
     describe('when there is a game in progress', () => {
       it('should call startGame on the game and call _emitAreaChanged', () => {
-        const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+        const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, player1);
         interactableUpdateSpy.mockClear();
-        gameArea.handleCommand({ type: 'StartGame', gameID }, yellow);
+        gameArea.handleCommand({ type: 'StartGame', gameID }, player1);
         expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
       });
       it('should not call _emitAreaChanged if the game throws an error', () => {
-        gameArea.handleCommand({ type: 'JoinGame' }, red);
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
@@ -162,154 +165,51 @@ describe('ConnectFourGameArea', () => {
           throw new Error('Test Error');
         });
         expect(() =>
-          gameArea.handleCommand({ type: 'StartGame', gameID: game.id }, yellow),
+          gameArea.handleCommand({ type: 'StartGame', gameID: game.id }, player1),
         ).toThrowError('Test Error');
-        expect(startSpy).toHaveBeenCalledWith(yellow);
+        expect(startSpy).toHaveBeenCalledWith(player1);
         expect(interactableUpdateSpy).not.toHaveBeenCalled();
       });
       test('when the game ID mismatches, it should throw an error and not call _emitAreaChanged', () => {
-        gameArea.handleCommand({ type: 'JoinGame' }, red);
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
         expect(() =>
-          gameArea.handleCommand({ type: 'StartGame', gameID: nanoid() }, red),
+          gameArea.handleCommand({ type: 'StartGame', gameID: nanoid() }, player1),
         ).toThrowError(GAME_ID_MISSMATCH_MESSAGE);
-      });
-    });
-  });
-  describe('[T3.3] GameMove command', () => {
-    it('should throw an error if there is no game in progress and not call _emitAreaChanged', () => {
-      interactableUpdateSpy.mockClear();
-
-      expect(() =>
-        gameArea.handleCommand(
-          { type: 'GameMove', move: { col: 0, row: 0, gamePiece: 'X' }, gameID: nanoid() },
-          red,
-        ),
-      ).toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
-      expect(interactableUpdateSpy).not.toHaveBeenCalled();
-    });
-    describe('when there is a game in progress', () => {
-      let gameID: GameInstanceID;
-      beforeEach(() => {
-        gameID = gameArea.handleCommand({ type: 'JoinGame' }, red).gameID;
-        gameArea.handleCommand({ type: 'JoinGame' }, yellow);
-        interactableUpdateSpy.mockClear();
-      });
-      it('should throw an error if the gameID does not match the game and not call _emitAreaChanged', () => {
-        expect(() =>
-          gameArea.handleCommand(
-            { type: 'GameMove', move: { col: 0, row: 0, gamePiece: 'Yellow' }, gameID: nanoid() },
-            red,
-          ),
-        ).toThrowError(GAME_ID_MISSMATCH_MESSAGE);
-      });
-      it('should call applyMove on the game and call _emitAreaChanged', () => {
-        const move: ConnectFourMove = { col: 0, row: 0, gamePiece: 'Red' };
-        const applyMoveSpy = jest.spyOn(game, 'applyMove');
-        gameArea.handleCommand({ type: 'GameMove', move, gameID }, red);
-        expect(applyMoveSpy).toHaveBeenCalledWith({
-          gameID: game.id,
-          playerID: red.id,
-          move: {
-            ...move,
-            gamePiece: 'Red',
-          },
-        });
-        expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
-      });
-      it('should not call _emitAreaChanged if the game throws an error', () => {
-        const move: ConnectFourMove = { col: 0, row: 0, gamePiece: 'Red' };
-        const applyMoveSpy = jest.spyOn(game, 'applyMove');
-        applyMoveSpy.mockImplementationOnce(() => {
-          throw new Error('Test Error');
-        });
-        expect(() => gameArea.handleCommand({ type: 'GameMove', move, gameID }, red)).toThrowError(
-          'Test Error',
-        );
-        expect(applyMoveSpy).toHaveBeenCalledWith({
-          gameID: game.id,
-          playerID: red.id,
-          move: {
-            ...move,
-            gamePiece: 'Red',
-          },
-        });
-        expect(interactableUpdateSpy).not.toHaveBeenCalled();
-      });
-      describe('when the game ends', () => {
-        test.each<ConnectFourColor>(['Red', 'Yellow'])(
-          'when the game is won by %p',
-          (winner: ConnectFourColor) => {
-            const finalMove: ConnectFourMove = { col: 0, row: 0, gamePiece: 'Red' };
-            jest.spyOn(game, 'applyMove').mockImplementationOnce(() => {
-              game.endGame(winner === 'Red' ? red.id : yellow.id);
-            });
-            gameArea.handleCommand({ type: 'GameMove', move: finalMove, gameID }, red);
-            expect(game.state.status).toEqual('OVER');
-            expect(gameArea.history.length).toEqual(1);
-            const winningUsername = winner === 'Red' ? red.userName : yellow.userName;
-            const losingUsername = winner === 'Red' ? yellow.userName : red.userName;
-            expect(gameArea.history[0]).toEqual({
-              gameID: game.id,
-              scores: {
-                [winningUsername]: 1,
-                [losingUsername]: 0,
-              },
-            });
-            expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
-          },
-        );
-        test('when the game results in a tie', () => {
-          const finalMove: ConnectFourMove = { col: 0, row: 0, gamePiece: 'Red' };
-          jest.spyOn(game, 'applyMove').mockImplementationOnce(() => {
-            game.endGame();
-          });
-          gameArea.handleCommand({ type: 'GameMove', move: finalMove, gameID }, red);
-          expect(game.state.status).toEqual('OVER');
-          expect(gameArea.history.length).toEqual(1);
-          expect(gameArea.history[0]).toEqual({
-            gameID: game.id,
-            scores: {
-              [red.userName]: 0,
-              [yellow.userName]: 0,
-            },
-          });
-          expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
-        });
       });
     });
   });
   describe('[T3.4] LeaveGame command', () => {
     it('should throw an error if there is no game in progress and not call _emitAreaChanged', () => {
       expect(() =>
-        gameArea.handleCommand({ type: 'LeaveGame', gameID: nanoid() }, red),
+        gameArea.handleCommand({ type: 'LeaveGame', gameID: nanoid() }, player1),
       ).toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
       expect(interactableUpdateSpy).not.toHaveBeenCalled();
     });
     describe('when there is a game in progress', () => {
       it('should throw an error if the gameID does not match the game and not call _emitAreaChanged', () => {
-        gameArea.handleCommand({ type: 'JoinGame' }, red);
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         interactableUpdateSpy.mockClear();
         expect(() =>
-          gameArea.handleCommand({ type: 'LeaveGame', gameID: nanoid() }, red),
+          gameArea.handleCommand({ type: 'LeaveGame', gameID: nanoid() }, player1),
         ).toThrowError(GAME_ID_MISSMATCH_MESSAGE);
         expect(interactableUpdateSpy).not.toHaveBeenCalled();
       });
       it('should call leave on the game and call _emitAreaChanged', () => {
-        const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
+        const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
         expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
         const leaveSpy = jest.spyOn(game, 'leave');
-        gameArea.handleCommand({ type: 'LeaveGame', gameID }, red);
-        expect(leaveSpy).toHaveBeenCalledWith(red);
+        gameArea.handleCommand({ type: 'LeaveGame', gameID }, player1);
+        expect(leaveSpy).toHaveBeenCalledWith(player1);
         expect(interactableUpdateSpy).toHaveBeenCalledTimes(2);
       });
       it('should not call _emitAreaChanged if the game throws an error', () => {
-        gameArea.handleCommand({ type: 'JoinGame' }, red);
+        gameArea.handleCommand({ type: 'JoinGame' }, player1);
         if (!game) {
           throw new Error('Game was not created by the first call to join');
         }
@@ -318,47 +218,17 @@ describe('ConnectFourGameArea', () => {
           throw new Error('Test Error');
         });
         expect(() =>
-          gameArea.handleCommand({ type: 'LeaveGame', gameID: game.id }, red),
+          gameArea.handleCommand({ type: 'LeaveGame', gameID: game.id }, player1),
         ).toThrowError('Test Error');
-        expect(leaveSpy).toHaveBeenCalledWith(red);
+        expect(leaveSpy).toHaveBeenCalledWith(player1);
         expect(interactableUpdateSpy).not.toHaveBeenCalled();
       });
-      test.each<ConnectFourColor>(['Red', 'Yellow'])(
-        'when the game is won by %p, it updates the history',
-        (playerThatWins: ConnectFourColor) => {
-          const leavingPlayer = playerThatWins === 'Red' ? yellow : red;
-          const winningPlayer = playerThatWins === 'Red' ? red : yellow;
-
-          const { gameID } = gameArea.handleCommand({ type: 'JoinGame' }, red);
-          gameArea.handleCommand({ type: 'JoinGame' }, yellow);
-
-          interactableUpdateSpy.mockClear();
-
-          jest.spyOn(game, 'leave').mockImplementationOnce(() => {
-            game.endGame(winningPlayer.id);
-          });
-          gameArea.handleCommand({ type: 'LeaveGame', gameID }, leavingPlayer);
-          expect(game.state.status).toEqual('OVER');
-          expect(gameArea.history.length).toEqual(1);
-          const winningUsername = winningPlayer.userName;
-          const losingUsername = leavingPlayer.userName;
-
-          expect(gameArea.history[0]).toEqual({
-            gameID: game.id,
-            scores: {
-              [winningUsername]: 1,
-              [losingUsername]: 0,
-            },
-          });
-          expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
-        },
-      );
     });
   });
   test('[T3.5] When given an invalid command it should throw an error', () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore (Testing an invalid command, only possible at the boundary of the type system)
-    expect(() => gameArea.handleCommand({ type: 'InvalidCommand' }, red)).toThrowError(
+    expect(() => gameArea.handleCommand({ type: 'InvalidCommand' }, player1)).toThrowError(
       INVALID_COMMAND_MESSAGE,
     );
     expect(interactableUpdateSpy).not.toHaveBeenCalled();
