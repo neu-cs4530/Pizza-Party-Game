@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Backend service for processing Covey.Town town requests",
-  "main": "server.js",
+  "main": "Server.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neu-se/covey.town.git"

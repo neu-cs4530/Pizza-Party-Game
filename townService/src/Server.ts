@@ -98,4 +98,3 @@ server.listen(process.env.PORT || 8081, () => {
     TownsStore.getInstance().createTown(process.env.DEMO_TOWN_ID, false);
   }
 });
-socketServer.close();
