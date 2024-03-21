@@ -1,1 +1,1 @@
-web: cd townService && node --es-module-specifier-resolution=node src/Server.ts
+web: cd townService && node --es-module-specifier-resolution=node build/src/Server.js

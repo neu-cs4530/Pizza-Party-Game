@@ -21,7 +21,6 @@
     },
     "homepage": "https://github.com/neu-se/covey.town#readme",
     "devDependencies": {
-        "@babel/preset-typescript": "^7.23.3",
         "@types/jest": "^26.0.15",
         "@typescript-eslint/eslint-plugin": "^4.8.1",
         "@typescript-eslint/parser": "^4.8.1",
@@ -40,6 +39,7 @@
     },
     "dependencies": {
         "@types/ramda": "^0.27.34",
+        "mongoose": "^8.2.2",
         "ramda": "^0.27.1",
         "typescript-is": "^0.17.0"
     },
