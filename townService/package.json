@@ -15,7 +15,7 @@
   },
   "engines": {
     "node": "16.x.x",
-    "npm": "9.x.x"
+    "npm": "8.x.x"
   },
   "homepage": "https://github.com/neu-se/covey.town#readme",
   "scripts": {
