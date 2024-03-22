@@ -27,6 +27,7 @@ const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents
 });
 
 const CONNECTION_STRING =
+  process.env.CONNECTION_STRING ||
   'mongodb+srv://nagishaca:3iSzoCdfSanOVzIK@pizzapartycluster.k7att2q.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPartyCluster';
 
 if (CONNECTION_STRING === undefined) {
