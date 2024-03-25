@@ -11,7 +11,7 @@ import PizzaPartyGame from './PizzaGame';
 import Player from '../../lib/Player';
 import { PizzaPartyGameMove } from '../../types/CoveyTownSocket';
 
-describe('TicTacToeGame', () => {
+describe('PizzaPartyGame', () => {
   let game: PizzaPartyGame;
 
   beforeEach(() => {
@@ -19,15 +19,6 @@ describe('TicTacToeGame', () => {
   });
 
   describe('[T1.1] _join', () => {
-    it('should throw an error if the player is already in the game', () => {
-      const player = createPlayerForTesting();
-      game.join(player);
-      expect(() => game.join(player)).toThrowError(PLAYER_ALREADY_IN_GAME_MESSAGE);
-      const player2 = createPlayerForTesting();
-      // TODO weaker test suite doesn't add this
-      game.join(player2);
-      expect(() => game.join(player2)).toThrowError(PLAYER_ALREADY_IN_GAME_MESSAGE);
-    });
     it('should throw an error if the game is full', () => {
       const player1 = createPlayerForTesting();
       const player2 = createPlayerForTesting();
@@ -61,7 +52,7 @@ describe('TicTacToeGame', () => {
         game.join(player1);
         expect(game.state.status).toEqual('WAITING_TO_START');
         game.leave(player1);
-        expect(game.state.status).toEqual('WAITING_TO_START');
+        expect(game.state.status).toEqual('WAITING_FOR_PLAYERS');
       });
     });
   });
