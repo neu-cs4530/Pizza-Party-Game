@@ -29,15 +29,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
-
-    this.state.status = 'OVER';
-
-    if (this.state.status === 'OVER') {
-      const playerId = this.state.player;
-      const score = this.state.currentScore;
-      const entry = [playerId, score];
-      await createLeaderboardEntry(entry);
-    }
   }
 
   public _join(player: Player): void {
