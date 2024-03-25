@@ -282,7 +282,10 @@ export interface PizzaPartyGameState extends WinnableGameState {
 export interface PizzaPartyGameMove {
   topping?: Topping,
   pizza?: Pizza,
+  moveType: PizzaMoveType
 }
+
+export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer"
 
 export interface Customer {
   id: number
