@@ -32,9 +32,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   }
 
   public _join(player: Player): void {
-    if (this._players.length === 1) {
-      throw new Error(GAME_FULL_MESSAGE);
-    }
     if (this.state.status !== 'WAITING_FOR_PLAYERS') {
       throw new Error(GAME_FULL_MESSAGE);
     }
