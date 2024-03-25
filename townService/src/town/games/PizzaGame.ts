@@ -22,6 +22,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         toppings: [],
         cooked: false,
       },
+      difficulty: 'level1',
     });
   }
 
