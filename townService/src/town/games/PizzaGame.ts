@@ -6,7 +6,12 @@ import InvalidParametersError, {
   GAME_NOT_STARTABLE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
-import { PizzaPartyGameState, PizzaPartyGameMove, GameMove, Order } from '../../types/CoveyTownSocket';
+import {
+  PizzaPartyGameState,
+  PizzaPartyGameMove,
+  GameMove,
+  Order,
+} from '../../types/CoveyTownSocket';
 import Game from './Game';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
