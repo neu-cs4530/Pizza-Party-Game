@@ -17,7 +17,7 @@ import Game from './Game';
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
     super({
-      status: 'WAITING_TO_START',
+      status: 'WAITING_FOR_PLAYERS',
       currentScore: 0,
       ovenFull: false,
       currentCustomers: [],
@@ -29,19 +29,13 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     });
   }
 
-  public applyMove(move: GameMove<PizzaPartyGameMove>): void {
+  public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
   }
 
   public _join(player: Player): void {
-    if (this._players.length === 1) {
-      throw new Error(GAME_FULL_MESSAGE);
-    }
-    if (this._players[0] === player) {
-      throw new Error(PLAYER_ALREADY_IN_GAME_MESSAGE);
-    }
     if (this.state.status !== 'WAITING_FOR_PLAYERS') {
       throw new Error(GAME_FULL_MESSAGE);
     }
@@ -58,7 +52,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     if (!(player.id === this.state.player)) {
       throw new Error(PLAYER_NOT_IN_GAME_MESSAGE);
     }
-    if (this.state.status !== 'WAITING_FOR_PLAYERS') {
+    if (this.state.status === 'IN_PROGRESS') {
+      this.state.status = 'OVER';
+    } else if (this.state.status === 'WAITING_TO_START') {
       this.state.status = 'WAITING_FOR_PLAYERS';
     }
     this.state.player = undefined;

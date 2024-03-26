@@ -15,10 +15,10 @@ import PizzaPartyGame from './PizzaGame';
 import GameArea from './GameArea';
 
 /**
- * The ConnectFourGameArea class is responsible for managing the state of a single game area for Connect Four.
+ * The PizzaPartyGameArea class is responsible for managing the state of a single game area for Connect Four.
  * Responsibilty for managing the state of the game itself is delegated to the ConnectFourGame class.
  *
- * @see ConnectFourGame
+ * @see PizzaGame
  * @see GameArea
  */
 export default class PizzaPartyGameArea extends GameArea<PizzaPartyGame> {
