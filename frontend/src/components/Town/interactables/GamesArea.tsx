@@ -27,10 +27,8 @@ import ConnectFourArea from './ConnectFour/ConnectFourArea';
 import GameAreaInteractable from './GameArea';
 import Leaderboard from './Leaderboard';
 import TicTacToeArea from './TicTacToe/TicTacToeArea';
-import PizzaPartyArea from './PizzaParty/PizzaPartyArea';
 
 export const INVALID_GAME_AREA_TYPE_MESSAGE = 'Invalid game area type';
-
 
 /**
  * A generic component that renders a game area.
@@ -102,10 +100,7 @@ function GameArea({ interactableID }: { interactableID: InteractableID }): JSX.E
             <ConnectFourArea interactableID={interactableID} />
           ) : gameAreaController.toInteractableAreaModel().type === 'TicTacToeArea' ? (
             <TicTacToeArea interactableID={interactableID} />
-          ) : gameAreaController.toInteractableAreaModel().type === 'PizzaPartyArea' ? (
-            <PizzaPartyArea interactableID={interactableID} />
-          ) :
-          (
+          ) : (
             <>{INVALID_GAME_AREA_TYPE_MESSAGE}</>
           )}
         </Box>
