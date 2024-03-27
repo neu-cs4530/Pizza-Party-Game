@@ -280,7 +280,7 @@ export interface PizzaPartyGameState extends WinnableGameState {
   difficulty: PizzaGameDifficultyLevel
 }
 
-export type PizzaGameDifficultyLevel = "level1" | "level2" | "level3"
+export type PizzaGameDifficultyLevel = 1 | 2 | 3
 
 export interface PizzaPartyGameMove {
   topping?: Topping,

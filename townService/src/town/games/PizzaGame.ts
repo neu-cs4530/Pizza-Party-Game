@@ -10,6 +10,10 @@ import {
   PizzaPartyGameMove,
   GameMove,
   Order,
+  Pizza,
+  Topping,
+  ToppingOptions,
+  Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
 
@@ -25,7 +29,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         toppings: [],
         cooked: false,
       },
-      difficulty: 'level1',
+      difficulty: 1,
     });
   }
 
@@ -81,4 +85,65 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       status: 'IN_PROGRESS',
     };
   }
+
+  protected TOPPINGS_LIST: ToppingOptions[] = [
+    'pepperoni',
+    'mushrooms',
+    'anchovies',
+    'olives',
+    'onions',
+    'peppers',
+    'sausage',
+  ];
+
+  protected getRandomInt = (min: number, max: number): number =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
+  protected generateRandomTopping = (): Topping => {
+    const toppingKind = this.TOPPINGS_LIST[Math.floor(Math.random() * this.TOPPINGS_LIST.length)];
+    return {
+      id: Math.floor(Math.random() * 1000),
+      kind: toppingKind,
+      appliedOnPizza: false,
+    };
+  };
+
+  protected generateRandomPizza = (): Pizza => {
+    // Edited to be variable based on the game's difficulty.
+    const numberOfToppings = this.getRandomInt(1, 2 * this.state.difficulty + 1);
+    const toppings: Topping[] = [];
+    for (let i = 0; i < numberOfToppings; i++) {
+      const randomTopping: Topping = this.generateRandomTopping();
+      toppings.push(randomTopping);
+    }
+    return {
+      id: this.getRandomInt(0, 1000),
+      toppings,
+      cooked: false,
+    };
+  };
+
+  protected generateRandomOrder = (): Order => {
+    const numberOfPizzas = this.getRandomInt(1, this.state.difficulty);
+    const pizzas: Pizza[] = [];
+    for (let i = 0; i < numberOfPizzas; i++) {
+      const randomPizza: Pizza = this.generateRandomPizza();
+      pizzas.push(randomPizza);
+    }
+    return {
+      pizzas,
+      pointValue: this.getRandomInt(1, 10),
+    };
+  };
+
+  protected generateRandomCustomer = (): Customer => {
+    const customer: Customer = {
+      id: this.getRandomInt(0, 1000),
+      name: 'Customer',
+      timeRemaining: 100 - 10 * (this.state.difficulty - 1),
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
 }
