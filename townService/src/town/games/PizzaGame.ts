@@ -1,13 +1,11 @@
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
-  PLAYER_ALREADY_IN_GAME_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
   GAME_NOT_STARTABLE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
 import { PizzaPartyGameState, PizzaPartyGameMove, GameMove } from '../../types/CoveyTownSocket';
-import { createLeaderboardEntry } from '../database/leaderboard/dao';
 import Game from './Game';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
