@@ -1,6 +1,6 @@
 import React from 'react';
 
-import pizzaPartyImage from '../,./../../../../../public/assets/pizza-party/background.png';
+import pizzaPartyImage from '../../../../../public/assets/pizza-party/background.png';
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 
