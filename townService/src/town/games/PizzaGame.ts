@@ -1,9 +1,10 @@
+import { ThisMonthInstance } from 'twilio/lib/rest/api/v2010/account/usage/record/thisMonth';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
-  PLAYER_ALREADY_IN_GAME_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
   GAME_NOT_STARTABLE_MESSAGE,
+  INVALID_MOVE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
 import {
@@ -32,6 +33,16 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+    }
+    if (move.move.moveType === 'placeTopping') {
+      if (move.move.topping === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      move.move.pizza?.toppings.push(move.move.topping);
+    } else if (move.move.moveType === 'moveToCustomer') {
+      // TODO: handle customer functionality (how do we give them stuff)
+    } else if (move.move.moveType === 'moveToOven') {
+      // TODO: figure out oven
     }
   }
 
