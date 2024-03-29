@@ -133,7 +133,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     }
     return {
       pizzas,
-      pointValue: this.getRandomInt(1, 10),
+      pointValue: numberOfPizzas,
     };
   };
 
