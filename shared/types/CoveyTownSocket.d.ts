@@ -291,7 +291,7 @@ export interface PizzaPartyGameMove {
 export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer"
 
 export interface Customer {
-  id: number
+  id: string
   name: string
   order: Order
   timeRemaining: number // in seconds

@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -138,7 +139,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
 
   protected generateRandomCustomer = (): Customer => {
     const customer: Customer = {
-      id: this.getRandomInt(0, 1000),
+      id: nanoid(),
       name: 'Customer',
       timeRemaining: 100 - 10 * (this.state.difficulty - 1),
       completed: false,
