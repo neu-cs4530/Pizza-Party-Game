@@ -277,7 +277,10 @@ export interface PizzaPartyGameState extends WinnableGameState {
   ovenFull: boolean 
   currentPizza: Pizza
   player?: PlayerID
+  difficulty: PizzaGameDifficultyLevel
 }
+
+export type PizzaGameDifficultyLevel = 1 | 2 | 3
 
 export interface PizzaPartyGameMove {
   topping?: Topping,
@@ -288,7 +291,7 @@ export interface PizzaPartyGameMove {
 export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer"
 
 export interface Customer {
-  id: number
+  id: string
   name: string
   order: Order
   timeRemaining: number // in seconds
