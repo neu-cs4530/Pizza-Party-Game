@@ -5,7 +5,6 @@ import {
   GAME_NOT_STARTABLE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import PizzaPartyGame from './PizzaGame';
-import { PizzaPartyGameMove } from '../../types/CoveyTownSocket';
 
 describe('PizzaPartyGame', () => {
   let game: PizzaPartyGame;
