@@ -274,7 +274,7 @@ export interface ClientToServerEvents {
 export interface PizzaPartyGameState extends WinnableGameState {
   currentScore: number
   currentCustomers: Customer[]
-  ovenFull: boolean 
+  oven: Oven
   currentPizza: Pizza
   player?: PlayerID
   difficulty: PizzaGameDifficultyLevel
@@ -285,10 +285,11 @@ export type PizzaGameDifficultyLevel = 1 | 2 | 3
 export interface PizzaPartyGameMove {
   topping?: Topping,
   pizza?: Pizza,
+  customer?: Customer,
   moveType: PizzaMoveType
 }
 
-export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer"
+export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer" | "throwOut"
 
 export interface Customer {
   id: string
@@ -317,4 +318,10 @@ export interface Pizza {
   id: number
   toppings: Topping[]
   cooked: boolean
+  isInOven: boolean
+}
+
+export interface Oven {
+  pizza?: Pizza
+  ovenFull: boolean
 }

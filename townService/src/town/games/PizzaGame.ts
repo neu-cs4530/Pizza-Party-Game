@@ -24,12 +24,15 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     super({
       status: 'WAITING_FOR_PLAYERS',
       currentScore: 0,
-      ovenFull: false,
+      oven: {
+        ovenFull: false,
+      },
       currentCustomers: [],
       currentPizza: {
         id: 0,
         toppings: [],
         cooked: false,
+        isInOven: false,
       },
       difficulty: 1,
     });
@@ -45,9 +48,28 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       }
       move.move.pizza?.toppings.push(move.move.topping);
     } else if (move.move.moveType === 'moveToCustomer') {
+      if (move.move.customer === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      if (!this.state.currentCustomers.includes(move.move.customer)) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
       // TODO: handle customer functionality (how do we give them stuff)
+      /**
+       * if move.pizza.toppings === customer.order.toppings:
+       *  update score
+       *  this.ovenFull = false
+       *  this.reset(currentPizza)
+       * else ()
+       */
     } else if (move.move.moveType === 'moveToOven') {
-      // TODO: figure out oven
+      if (this.state.oven.ovenFull || move.move.pizza?.isInOven) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      this.state.oven.pizza = move.move.pizza;
+      this.state.oven.ovenFull = true;
+    } else if (move.move.moveType === 'throwOut') {
+      this.resetPizza();
     }
   }
 
@@ -132,6 +154,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       id: this.getRandomInt(0, 1000),
       toppings,
       cooked: false,
+      isInOven: false,
     };
   };
 
@@ -157,5 +180,17 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       order: this.generateRandomOrder(),
     };
     return customer;
+  };
+
+  protected resetPizza = (): void => {
+    this.state = {
+      ...this.state,
+      currentPizza: {
+        id: 0,
+        toppings: [],
+        cooked: false,
+        isInOven: false,
+      },
+    };
   };
 }
