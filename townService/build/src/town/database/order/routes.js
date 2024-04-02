@@ -1,0 +1,15 @@
+import * as dao from './dao.js';
+function OrderRoutes(app) {
+    const createOrder = async (req, res) => {
+        const order = await dao.createOrder(req.body);
+        res.json(order);
+    };
+    const retrieveAllOrdersByCustomer = async (req, res) => {
+        const orders = await dao.retrieveAllOrdersByCustomer(req.body);
+        res.json(orders);
+    };
+    app.post('/api/order', createOrder);
+    app.get('/api/order/:customerId', retrieveAllOrdersByCustomer);
+}
+export default OrderRoutes;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2Uvb3JkZXIvcm91dGVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sS0FBSyxHQUFHLE1BQU0sVUFBVSxDQUFDO0FBRWhDLFNBQVMsV0FBVyxDQUFDLEdBQVE7SUFDM0IsTUFBTSxXQUFXLEdBQUcsS0FBSyxFQUFFLEdBQVEsRUFBRSxHQUFRLEVBQUUsRUFBRTtRQUMvQyxNQUFNLEtBQUssR0FBRyxNQUFNLEdBQUcsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQzlDLEdBQUcsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDbEIsQ0FBQyxDQUFDO0lBRUYsTUFBTSwyQkFBMkIsR0FBRyxLQUFLLEVBQUUsR0FBUSxFQUFFLEdBQVEsRUFBRSxFQUFFO1FBQy9ELE1BQU0sTUFBTSxHQUFHLE1BQU0sR0FBRyxDQUFDLDJCQUEyQixDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUMvRCxHQUFHLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQ25CLENBQUMsQ0FBQztJQUVGLEdBQUcsQ0FBQyxJQUFJLENBQUMsWUFBWSxFQUFFLFdBQVcsQ0FBQyxDQUFDO0lBQ3BDLEdBQUcsQ0FBQyxHQUFHLENBQUMsd0JBQXdCLEVBQUUsMkJBQTJCLENBQUMsQ0FBQztBQUNqRSxDQUFDO0FBRUQsZUFBZSxXQUFXLENBQUMifQ==

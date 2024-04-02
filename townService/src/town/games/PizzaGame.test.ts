@@ -5,6 +5,7 @@ import {
   GAME_NOT_STARTABLE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import PizzaPartyGame from './PizzaGame';
+import { PizzaPartyGameMove, PizzaMoveType } from '../../types/CoveyTownSocket';
 
 describe('PizzaPartyGame', () => {
   let game: PizzaPartyGame;
@@ -33,6 +34,25 @@ describe('PizzaPartyGame', () => {
       expect(game.state.status).toEqual('WAITING_TO_START');
     });
   });
+
+  describe('leaderboard entry creation', () => {
+    it('it should post to the server if the game is over', () => {
+      const player1 = createPlayerForTesting();
+      game.join(player1);
+      game.startGame(player1);
+      const oven = <PizzaMoveType>'moveToOven';
+      const move = {
+        playerID: player1.id,
+        gameID: game.id,
+        move: {
+          moveType: oven,
+        },
+      };
+      game.applyMove(move);
+      expect(game.state.currentScore).toEqual(30);
+    });
+  });
+
   describe('_startGame', () => {
     it('should set the game status to IN_PROGRESS', () => {
       const player1 = createPlayerForTesting();

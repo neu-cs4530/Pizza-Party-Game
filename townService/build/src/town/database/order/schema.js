@@ -1,0 +1,8 @@
+import mongoose from 'mongoose';
+const orderSchema = new mongoose.Schema({
+    _id: String,
+    customerId: String,
+    pointValue: Number,
+}, { collection: 'Order' });
+export default orderSchema;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2Uvb3JkZXIvc2NoZW1hLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUVoQyxNQUFNLFdBQVcsR0FBRyxJQUFJLFFBQVEsQ0FBQyxNQUFNLENBQ3JDO0lBQ0UsR0FBRyxFQUFFLE1BQU07SUFDWCxVQUFVLEVBQUUsTUFBTTtJQUNsQixVQUFVLEVBQUUsTUFBTTtDQUNuQixFQUNELEVBQUUsVUFBVSxFQUFFLE9BQU8sRUFBRSxDQUN4QixDQUFDO0FBQ0YsZUFBZSxXQUFXLENBQUMifQ==

@@ -1,0 +1,5 @@
+import mongoose from 'mongoose';
+import schema from './schema.js';
+const model = mongoose.model('Customer', schema);
+export default model;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kZWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9zcmMvdG93bi9kYXRhYmFzZS9jdXN0b21lci9tb2RlbC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLFFBQVEsTUFBTSxVQUFVLENBQUM7QUFDaEMsT0FBTyxNQUFNLE1BQU0sYUFBYSxDQUFDO0FBRWpDLE1BQU0sS0FBSyxHQUFHLFFBQVEsQ0FBQyxLQUFLLENBQUMsVUFBVSxFQUFFLE1BQU0sQ0FBQyxDQUFDO0FBQ2pELGVBQWUsS0FBSyxDQUFDIn0=

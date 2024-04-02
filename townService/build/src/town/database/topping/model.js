@@ -1,0 +1,5 @@
+import mongoose from 'mongoose';
+import schema from './schema.js';
+const model = mongoose.model('Topping', schema);
+export default model;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kZWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9zcmMvdG93bi9kYXRhYmFzZS90b3BwaW5nL21vZGVsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUNoQyxPQUFPLE1BQU0sTUFBTSxhQUFhLENBQUM7QUFFakMsTUFBTSxLQUFLLEdBQUcsUUFBUSxDQUFDLEtBQUssQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDLENBQUM7QUFDaEQsZUFBZSxLQUFLLENBQUMifQ==

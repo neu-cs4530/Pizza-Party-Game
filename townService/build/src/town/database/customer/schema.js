@@ -1,0 +1,8 @@
+import mongoose from 'mongoose';
+const customerSchema = new mongoose.Schema({
+    _id: String,
+    name: String,
+    playerId: String,
+}, { collection: 'Customer' });
+export default customerSchema;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvY3VzdG9tZXIvc2NoZW1hLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUVoQyxNQUFNLGNBQWMsR0FBRyxJQUFJLFFBQVEsQ0FBQyxNQUFNLENBQ3hDO0lBQ0UsR0FBRyxFQUFFLE1BQU07SUFDWCxJQUFJLEVBQUUsTUFBTTtJQUNaLFFBQVEsRUFBRSxNQUFNO0NBQ2pCLEVBQ0QsRUFBRSxVQUFVLEVBQUUsVUFBVSxFQUFFLENBQzNCLENBQUM7QUFDRixlQUFlLGNBQWMsQ0FBQyJ9

@@ -1,0 +1,15 @@
+import * as dao from './dao.js';
+function ToppingRoutes(app) {
+    const createTopping = async (req, res) => {
+        const topping = await dao.createTopping(req.body);
+        res.json(topping);
+    };
+    const retrieveAllToppingsByPizza = async (req, res) => {
+        const pizzas = await dao.retrieveAllToppingsByPizza(req.body);
+        res.json(pizzas);
+    };
+    app.post('/api/pizza', createTopping);
+    app.get('/api/order/:pizzaId', retrieveAllToppingsByPizza);
+}
+export default ToppingRoutes;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvdG9wcGluZy9yb3V0ZXMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxLQUFLLEdBQUcsTUFBTSxVQUFVLENBQUM7QUFFaEMsU0FBUyxhQUFhLENBQUMsR0FBUTtJQUM3QixNQUFNLGFBQWEsR0FBRyxLQUFLLEVBQUUsR0FBUSxFQUFFLEdBQVEsRUFBRSxFQUFFO1FBQ2pELE1BQU0sT0FBTyxHQUFHLE1BQU0sR0FBRyxDQUFDLGFBQWEsQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDbEQsR0FBRyxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQztJQUNwQixDQUFDLENBQUM7SUFFRixNQUFNLDBCQUEwQixHQUFHLEtBQUssRUFBRSxHQUFRLEVBQUUsR0FBUSxFQUFFLEVBQUU7UUFDOUQsTUFBTSxNQUFNLEdBQUcsTUFBTSxHQUFHLENBQUMsMEJBQTBCLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQzlELEdBQUcsQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLENBQUM7SUFDbkIsQ0FBQyxDQUFDO0lBRUYsR0FBRyxDQUFDLElBQUksQ0FBQyxZQUFZLEVBQUUsYUFBYSxDQUFDLENBQUM7SUFDdEMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxxQkFBcUIsRUFBRSwwQkFBMEIsQ0FBQyxDQUFDO0FBQzdELENBQUM7QUFFRCxlQUFlLGFBQWEsQ0FBQyJ9

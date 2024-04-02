@@ -1,0 +1,15 @@
+import * as dao from './dao.js';
+function PizzaRoutes(app) {
+    const createPizza = async (req, res) => {
+        const pizza = await dao.createPizza(req.body);
+        res.json(pizza);
+    };
+    const retrieveAllPizzasByOrder = async (req, res) => {
+        const pizzas = await dao.retrieveAllPizzasByOrder(req.body);
+        res.json(pizzas);
+    };
+    app.post('/api/pizza', createPizza);
+    app.get('/api/order/:orderId', retrieveAllPizzasByOrder);
+}
+export default PizzaRoutes;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvcGl6emEvcm91dGVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sS0FBSyxHQUFHLE1BQU0sVUFBVSxDQUFDO0FBRWhDLFNBQVMsV0FBVyxDQUFDLEdBQVE7SUFDM0IsTUFBTSxXQUFXLEdBQUcsS0FBSyxFQUFFLEdBQVEsRUFBRSxHQUFRLEVBQUUsRUFBRTtRQUMvQyxNQUFNLEtBQUssR0FBRyxNQUFNLEdBQUcsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQzlDLEdBQUcsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDbEIsQ0FBQyxDQUFDO0lBRUYsTUFBTSx3QkFBd0IsR0FBRyxLQUFLLEVBQUUsR0FBUSxFQUFFLEdBQVEsRUFBRSxFQUFFO1FBQzVELE1BQU0sTUFBTSxHQUFHLE1BQU0sR0FBRyxDQUFDLHdCQUF3QixDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUM1RCxHQUFHLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQ25CLENBQUMsQ0FBQztJQUVGLEdBQUcsQ0FBQyxJQUFJLENBQUMsWUFBWSxFQUFFLFdBQVcsQ0FBQyxDQUFDO0lBQ3BDLEdBQUcsQ0FBQyxHQUFHLENBQUMscUJBQXFCLEVBQUUsd0JBQXdCLENBQUMsQ0FBQztBQUMzRCxDQUFDO0FBRUQsZUFBZSxXQUFXLENBQUMifQ==

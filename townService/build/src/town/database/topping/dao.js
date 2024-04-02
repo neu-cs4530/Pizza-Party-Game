@@ -1,0 +1,4 @@
+import model from './model';
+export const createTopping = (topping) => model.create(topping);
+export const retrieveAllToppingsByPizza = (pizzaId) => model.find({ pizzaId });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFvLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvdG9wcGluZy9kYW8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxLQUFLLE1BQU0sU0FBUyxDQUFDO0FBRTVCLE1BQU0sQ0FBQyxNQUFNLGFBQWEsR0FBRyxDQUFDLE9BQVksRUFBRSxFQUFFLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxPQUFPLENBQUMsQ0FBQztBQUNyRSxNQUFNLENBQUMsTUFBTSwwQkFBMEIsR0FBRyxDQUFDLE9BQVksRUFBRSxFQUFFLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxFQUFFLE9BQU8sRUFBRSxDQUFDLENBQUMifQ==

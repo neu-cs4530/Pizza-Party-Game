@@ -17,6 +17,7 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
+import * as client from './client';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -37,6 +38,17 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+    }
+
+    if (this.state.currentScore === 0) {
+      this.state.status = 'OVER';
+    }
+
+    if (this.state.status === 'OVER') {
+      const entry = [nanoid(), this.state.player, this.state.currentScore];
+      await client.createLeaderboardEntry(entry);
+      const data = await client.getAllLeaderboardEntries();
+      console.log(data);
     }
   }
 
@@ -84,6 +96,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     this.state = {
       ...this.state,
       status: 'IN_PROGRESS',
+      currentScore: 0,
     };
   }
 

@@ -1,0 +1,8 @@
+import mongoose from 'mongoose';
+const toppingSchema = new mongoose.Schema({
+    _id: String,
+    pizzaId: String,
+    kind: String,
+}, { collection: 'Topping' });
+export default toppingSchema;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvdG9wcGluZy9zY2hlbWEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxRQUFRLE1BQU0sVUFBVSxDQUFDO0FBRWhDLE1BQU0sYUFBYSxHQUFHLElBQUksUUFBUSxDQUFDLE1BQU0sQ0FDdkM7SUFDRSxHQUFHLEVBQUUsTUFBTTtJQUNYLE9BQU8sRUFBRSxNQUFNO0lBQ2YsSUFBSSxFQUFFLE1BQU07Q0FDYixFQUNELEVBQUUsVUFBVSxFQUFFLFNBQVMsRUFBRSxDQUMxQixDQUFDO0FBQ0YsZUFBZSxhQUFhLENBQUMifQ==

@@ -1,0 +1,72 @@
+import assert from 'assert';
+import InvalidParametersError, { GAME_ID_MISSMATCH_MESSAGE, GAME_NOT_IN_PROGRESS_MESSAGE, INVALID_COMMAND_MESSAGE, } from '../../lib/InvalidParametersError';
+import GameArea from './GameArea';
+import TicTacToeGame from './TicTacToeGame';
+export default class TicTacToeGameArea extends GameArea {
+    getType() {
+        return 'TicTacToeArea';
+    }
+    _stateUpdated(updatedState) {
+        if (updatedState.state.status === 'OVER') {
+            const gameID = this._game?.id;
+            if (gameID && !this._history.find(eachResult => eachResult.gameID === gameID)) {
+                const { x, o } = updatedState.state;
+                if (x && o) {
+                    const xName = this._occupants.find(eachPlayer => eachPlayer.id === x)?.userName || x;
+                    const oName = this._occupants.find(eachPlayer => eachPlayer.id === o)?.userName || o;
+                    this._history.push({
+                        gameID,
+                        scores: {
+                            [xName]: updatedState.state.winner === x ? 1 : 0,
+                            [oName]: updatedState.state.winner === o ? 1 : 0,
+                        },
+                    });
+                }
+            }
+        }
+        this._emitAreaChanged();
+    }
+    handleCommand(command, player) {
+        if (command.type === 'GameMove') {
+            const game = this._game;
+            if (!game) {
+                throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+            }
+            if (this._game?.id !== command.gameID) {
+                throw new InvalidParametersError(GAME_ID_MISSMATCH_MESSAGE);
+            }
+            assert(command.move.gamePiece === 'X' || command.move.gamePiece === 'O', 'Invalid game piece');
+            game.applyMove({
+                gameID: command.gameID,
+                playerID: player.id,
+                move: command.move,
+            });
+            this._stateUpdated(game.toModel());
+            return undefined;
+        }
+        if (command.type === 'JoinGame') {
+            let game = this._game;
+            if (!game || game.state.status === 'OVER') {
+                game = new TicTacToeGame();
+                this._game = game;
+            }
+            game.join(player);
+            this._stateUpdated(game.toModel());
+            return { gameID: game.id };
+        }
+        if (command.type === 'LeaveGame') {
+            const game = this._game;
+            if (!game) {
+                throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+            }
+            if (this._game?.id !== command.gameID) {
+                throw new InvalidParametersError(GAME_ID_MISSMATCH_MESSAGE);
+            }
+            game.leave(player);
+            this._stateUpdated(game.toModel());
+            return undefined;
+        }
+        throw new InvalidParametersError(INVALID_COMMAND_MESSAGE);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGljVGFjVG9lR2FtZUFyZWEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvdG93bi9nYW1lcy9UaWNUYWNUb2VHYW1lQXJlYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLE1BQU0sTUFBTSxRQUFRLENBQUM7QUFDNUIsT0FBTyxzQkFBc0IsRUFBRSxFQUM3Qix5QkFBeUIsRUFDekIsNEJBQTRCLEVBQzVCLHVCQUF1QixHQUN4QixNQUFNLGtDQUFrQyxDQUFDO0FBUzFDLE9BQU8sUUFBUSxNQUFNLFlBQVksQ0FBQztBQUNsQyxPQUFPLGFBQWEsTUFBTSxpQkFBaUIsQ0FBQztBQU81QyxNQUFNLENBQUMsT0FBTyxPQUFPLGlCQUFrQixTQUFRLFFBQXVCO0lBQzFELE9BQU87UUFDZixPQUFPLGVBQWUsQ0FBQztJQUN6QixDQUFDO0lBRU8sYUFBYSxDQUFDLFlBQThDO1FBQ2xFLElBQUksWUFBWSxDQUFDLEtBQUssQ0FBQyxNQUFNLEtBQUssTUFBTSxFQUFFO1lBRXhDLE1BQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxLQUFLLEVBQUUsRUFBRSxDQUFDO1lBQzlCLElBQUksTUFBTSxJQUFJLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLEVBQUUsQ0FBQyxVQUFVLENBQUMsTUFBTSxLQUFLLE1BQU0sQ0FBQyxFQUFFO2dCQUM3RSxNQUFNLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxHQUFHLFlBQVksQ0FBQyxLQUFLLENBQUM7Z0JBQ3BDLElBQUksQ0FBQyxJQUFJLENBQUMsRUFBRTtvQkFDVixNQUFNLEtBQUssR0FBRyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsRUFBRSxDQUFDLFVBQVUsQ0FBQyxFQUFFLEtBQUssQ0FBQyxDQUFDLEVBQUUsUUFBUSxJQUFJLENBQUMsQ0FBQztvQkFDckYsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFVBQVUs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

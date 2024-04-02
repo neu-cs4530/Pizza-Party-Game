@@ -1,0 +1,8 @@
+import mongoose from 'mongoose';
+const leaderboardSchema = new mongoose.Schema({
+    _id: String,
+    playerId: String,
+    score: Number,
+}, { collection: 'Leaderboard' });
+export default leaderboardSchema;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vc3JjL3Rvd24vZGF0YWJhc2UvbGVhZGVyYm9hcmQvc2NoZW1hLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sUUFBUSxNQUFNLFVBQVUsQ0FBQztBQUVoQyxNQUFNLGlCQUFpQixHQUFHLElBQUksUUFBUSxDQUFDLE1BQU0sQ0FDM0M7SUFDRSxHQUFHLEVBQUUsTUFBTTtJQUNYLFFBQVEsRUFBRSxNQUFNO0lBQ2hCLEtBQUssRUFBRSxNQUFNO0NBQ2QsRUFDRCxFQUFFLFVBQVUsRUFBRSxhQUFhLEVBQUUsQ0FDOUIsQ0FBQztBQUNGLGVBQWUsaUJBQWlCLENBQUMifQ==

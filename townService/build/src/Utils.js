@@ -1,0 +1,7 @@
+export function removeThisFunctionCallWhenYouImplementThis(_args1, _args2) {
+    return new Error('Unimplemented');
+}
+export function logError(err) {
+    console.trace(err);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVXRpbHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvVXRpbHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBT0EsTUFBTSxVQUFVLDBDQUEwQyxDQUFDLE1BQVksRUFBRSxNQUFZO0lBQ25GLE9BQU8sSUFBSSxLQUFLLENBQUMsZUFBZSxDQUFDLENBQUM7QUFDcEMsQ0FBQztBQUdELE1BQU0sVUFBVSxRQUFRLENBQUMsR0FBUTtJQUUvQixPQUFPLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ3JCLENBQUMifQ==

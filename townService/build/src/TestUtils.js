@@ -1,0 +1,94 @@
+import { mock, mockDeep } from 'jest-mock-extended';
+import { nanoid } from 'nanoid';
+import Player from './lib/Player';
+export function createConversationForTesting(params) {
+    return {
+        id: params?.conversationID || nanoid(),
+        occupants: [],
+        topic: params?.conversationTopic || nanoid(),
+        type: 'ConversationArea',
+    };
+}
+export function defaultLocation() {
+    return { x: 0, y: 0, moving: false, rotation: 'front', interactableID: undefined };
+}
+export function clearEmittedEvents(mockEmitter, eventName) {
+    if (!eventName) {
+        mockEmitter.emit.mock.calls = [];
+    }
+    else {
+        mockEmitter.emit.mock.calls = mockEmitter.emit.mock.calls.filter(eachCall => eachCall[0] !== eventName);
+    }
+}
+export function getLastEmittedEvent(emitter, eventName, howFarBack = 0) {
+    const { calls } = emitter.emit.mock;
+    let nCallsToSkip = howFarBack;
+    for (let i = calls.length - 1; i >= 0; i--) {
+        if (calls[i][0] === eventName) {
+            if (nCallsToSkip === 0) {
+                const param = calls[i][1];
+                return param;
+            }
+            nCallsToSkip--;
+        }
+    }
+    throw new Error(`No ${eventName} could be found as emitted on this socket`);
+}
+export function extractSessionToken(player) {
+    return getLastEmittedEvent(player.socket, 'initialize').sessionToken;
+}
+export function getEventListener(mockSocket, eventName) {
+    const ret = mockSocket.on.mock.calls.find(eachCall => eachCall[0] === eventName);
+    if (ret) {
+        const param = ret[1];
+        if (param) {
+            return param;
+        }
+    }
+    throw new Error(`No event listener found for event ${eventName}`);
+}
+export class MockedPlayer {
+    socket;
+    socketToRoomMock;
+    userName;
+    townID;
+    player;
+    constructor(socket, socketToRoomMock, userName, townID, player) {
+        this.socket = socket;
+        this.socketToRoomMock = socketToRoomMock;
+        this.userName = userName;
+        this.townID = townID;
+        this.player = player;
+    }
+    moveTo(x, y, rotation = 'front', moving = false) {
+        const onMovementListener = getEventListener(this.socket, 'playerMovement');
+        onMovementListener({ x, y, rotation, moving });
+    }
+}
+export function mockPlayer(townID) {
+    const socket = mockDeep();
+    const userName = nanoid();
+    socket.handshake.auth = { userName, townID };
+    const socketToRoomMock = mock();
+    socket.to.mockImplementation((room) => {
+        if (townID === room) {
+            return socketToRoomMock;
+        }
+        throw new Error(`Tried to broadcast to ${room} but this player is in ${townID}`);
+    });
+    return new MockedPlayer(socket, socketToRoomMock, userName, townID, undefined);
+}
+export function createPlayerForTesting() {
+    return new Player(`username${nanoid()}`, mock());
+}
+export function expectArraysToContainSameMembers(actual, expected) {
+    expect(actual.length).toBe(expected.length);
+    expected.forEach(expectedVal => expect(actual.find(actualVal => actualVal === expectedVal)).toBeDefined());
+}
+export function isViewingArea(interactable) {
+    return 'isPlaying' in interactable;
+}
+export function isConversationArea(interactable) {
+    return 'topic' in interactable;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGVzdFV0aWxzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL1Rlc3RVdGlscy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFFQSxPQUFPLEVBQUUsSUFBSSxFQUFFLFFBQVEsRUFBYSxNQUFNLG9CQUFvQixDQUFDO0FBQy9ELE9BQU8sRUFBRSxNQUFNLEVBQUUsTUFBTSxRQUFRLENBQUM7QUFTaEMsT0FBTyxNQUFNLE1BQU0sY0FBYyxDQUFDO0FBb0JsQyxNQUFNLFVBQVUsNEJBQTRCLENBQUMsTUFJNUM7SUFDQyxPQUFPO1FBQ0wsRUFBRSxFQUFFLE1BQU0sRUFBRSxjQUFjLElBQUksTUFBTSxFQUFFO1FBQ3RDLFNBQVMsRUFBRSxFQUFFO1FBQ2IsS0FBSyxFQUFFLE1BQU0sRUFBRSxpQkFBaUIsSUFBSSxNQUFNLEVBQUU7UUFDNUMsSUFBSSxFQUFFLGtCQUFrQjtLQUN6QixDQUFDO0FBQ0osQ0FBQztBQUVELE1BQU0sVUFBVSxlQUFlO0lBQzdCLE9BQU8sRUFBRSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsTUFBTSxFQUFFLEtBQUssRUFBRSxRQUFRLEVBQUUsT0FBTyxFQUFFLGNBQWMsRUFBRSxTQUFTLEVBQUUsQ0FBQztBQUNyRixDQUFDO0FBWUQsTUFBTSxVQUFVLGtCQUFrQixDQUNoQyxXQUFtRSxFQUNuRSxTQUFjO0lBRWQsSUFBSSxDQUFDLFNBQVMsRUFBRTtRQUNkLFdBQVcsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssR0FBRyxFQUFFLENBQUM7S0FDbEM7U0FBTTtRQUNMLFdBQVcsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssR0FBRyxXQUFXLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxDQUM5RCxRQUFRLENBQUMsRUFBRSxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsS0FBSyxTQUFTLENBQ3RDLENBQUM7S0FDSDtBQUNILENBQUM7QUFT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

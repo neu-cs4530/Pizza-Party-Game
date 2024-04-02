@@ -1,0 +1,120 @@
+import { nanoid } from 'nanoid';
+import InvalidParametersError, { GAME_FULL_MESSAGE, GAME_NOT_IN_PROGRESS_MESSAGE, PLAYER_NOT_IN_GAME_MESSAGE, GAME_NOT_STARTABLE_MESSAGE, } from '../../lib/InvalidParametersError';
+import Game from './Game';
+import * as client from './client';
+export default class PizzaPartyGame extends Game {
+    constructor() {
+        super({
+            status: 'WAITING_FOR_PLAYERS',
+            currentScore: 0,
+            ovenFull: false,
+            currentCustomers: [],
+            currentPizza: {
+                id: 0,
+                toppings: [],
+                cooked: false,
+            },
+            difficulty: 1,
+        });
+    }
+    async applyMove(move) {
+        if (this.state.status !== 'IN_PROGRESS') {
+            throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
+        }
+        if (this.state.currentScore === 0) {
+            this.state.status = 'OVER';
+        }
+        if (this.state.status === 'OVER') {
+            const entry = [nanoid(), this.state.player, this.state.currentScore];
+            await client.createLeaderboardEntry(entry);
+            const data = await client.getAllLeaderboardEntries();
+            console.log(data);
+        }
+    }
+    _join(player) {
+        if (this.state.status !== 'WAITING_FOR_PLAYERS') {
+            throw new Error(GAME_FULL_MESSAGE);
+        }
+        this.state.player = player.id;
+        this.state.status = 'WAITING_TO_START';
+    }
+    _leave(player) {
+        if (!(player.id === this.state.player)) {
+            throw new Error(PLAYER_NOT_IN_GAME_MESSAGE);
+        }
+        if (this.state.status === 'IN_PROGRESS') {
+            this.state.status = 'OVER';
+        }
+        else if (this.state.status === 'WAITING_TO_START') {
+            this.state.status = 'WAITING_FOR_PLAYERS';
+        }
+        this.state.player = undefined;
+    }
+    startGame(player) {
+        if (this.state.status !== 'WAITING_TO_START') {
+            throw new InvalidParametersError(GAME_NOT_STARTABLE_MESSAGE);
+        }
+        if (!this.state.player) {
+            throw new InvalidParametersError(PLAYER_NOT_IN_GAME_MESSAGE);
+        }
+        this.state = {
+            ...this.state,
+            status: 'IN_PROGRESS',
+            currentScore: 0,
+        };
+    }
+    TOPPINGS_LIST = [
+        'pepperoni',
+        'mushrooms',
+        'anchovies',
+        'olives',
+        'onions',
+        'peppers',
+        'sausage',
+    ];
+    getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    generateRandomTopping = () => {
+        const toppingKind = this.TOPPINGS_LIST[Math.floor(Math.random() * this.TOPPINGS_LIST.length)];
+        return {
+            id: Math.floor(Math.random() * 1000),
+            kind: toppingKind,
+            appliedOnPizza: false,
+        };
+    };
+    generateRandomPizza = () => {
+        const numberOfToppings = this.getRandomInt(1, 2 * this.state.difficulty + 1);
+        const toppings = [];
+        for (let i = 0; i < numberOfToppings; i++) {
+            const randomTopping = this.generateRandomTopping();
+            toppings.push(randomTopping);
+        }
+        return {
+            id: this.getRandomInt(0, 1000),
+            toppings,
+            cooked: false,
+        };
+    };
+    generateRandomOrder = () => {
+        const numberOfPizzas = this.getRandomInt(1, this.state.difficulty);
+        const pizzas = [];
+        for (let i = 0; i < numberOfPizzas; i++) {
+            const randomPizza = this.generateRandomPizza();
+            pizzas.push(randomPizza);
+        }
+        return {
+            pizzas,
+            pointValue: numberOfPizzas,
+        };
+    };
+    generateRandomCustomer = () => {
+        const customer = {
+            id: nanoid(),
+            name: 'Customer',
+            timeRemaining: 100 - 10 * (this.state.difficulty - 1),
+            completed: false,
+            order: this.generateRandomOrder(),
+        };
+        return customer;
+    };
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGl6emFHYW1lLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vc3JjL3Rvd24vZ2FtZXMvUGl6emFHYW1lLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxNQUFNLEVBQUUsTUFBTSxRQUFRLENBQUM7QUFDaEMsT0FBTyxzQkFBc0IsRUFBRSxFQUM3QixpQkFBaUIsRUFDakIsNEJBQTRCLEVBQzVCLDBCQUEwQixFQUMxQiwwQkFBMEIsR0FDM0IsTUFBTSxrQ0FBa0MsQ0FBQztBQVkxQyxPQUFPLElBQUksTUFBTSxRQUFRLENBQUM7QUFDMUIsT0FBTyxLQUFLLE1BQU0sTUFBTSxVQUFVLENBQUM7QUFFbkMsTUFBTSxDQUFDLE9BQU8sT0FBTyxjQUFlLFNBQVEsSUFBNkM7SUFDdkY7UUFDRSxLQUFLLENBQUM7WUFDSixNQUFNLEVBQUUscUJBQXFCO1lBQzdCLFlBQVksRUFBRSxDQUFDO1lBQ2YsUUFBUSxFQUFFLEtBQUs7WUFDZixnQkFBZ0IsRUFBRSxFQUFFO1lBQ3BCLFlBQVksRUFBRTtnQkFDWixFQUFFLEVBQUUsQ0FBQztnQkFDTCxRQUFRLEVBQUUsRUFBRTtnQkFDWixNQUFNLEVBQUUsS0FBSzthQUNkO1lBQ0QsVUFBVSxFQUFFLENBQUM7U0FDZCxDQUFDLENBQUM7SUFDTCxDQUFDO0lBRU0sS0FBSyxDQUFDLFNBQVMsQ0FBQyxJQUFrQztRQUN2RCxJQUFJLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxLQUFLLGFBQWEsRUFBRTtZQUN2QyxNQUFNLElBQUksc0JBQXNCLENBQUMsNEJBQTRCLENBQUMsQ0FBQztTQUNoRTtRQUVELElBQUksSUFBSSxDQUFDLEtBQUssQ0FBQyxZQUFZLEtBQUssQ0FBQyxFQUFFO1lBQ2pDLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQztTQUM1QjtRQUVELElBQUksSUFBSSxDQUFDLEtBQUssQ0FBQyxNQUFNLEtBQUssTUFBTSxFQUFFO1lBQ2hD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
