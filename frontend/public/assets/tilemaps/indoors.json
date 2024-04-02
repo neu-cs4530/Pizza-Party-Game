@@ -489,12 +489,12 @@
                 {
                  "height":223.999666666667,
                  "id":30,
-                 "name":"Tic Tac Toe 1",
+                 "name":"PizzaParty",
                  "properties":[
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"TicTacToe"
+                         "value":"PizzaParty"
                         }],
                  "rotation":0,
                  "type":"GameArea",

@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { Customer, Order, Pizza, Topping, ToppingOptions } from '../../types/CoveyTownSocket';
 
 const TOPPINGS_LIST: ToppingOptions[] = [
@@ -51,7 +52,7 @@ export const generateRandomOrder = (): Order => {
 
 export const generateRandomCustomer = (): Customer => {
   const customer: Customer = {
-    id: getRandomInt(0, 1000),
+    id: nanoid(),
     name: 'Customer',
     timeRemaining: 100, // add time difficulty
     completed: false,
