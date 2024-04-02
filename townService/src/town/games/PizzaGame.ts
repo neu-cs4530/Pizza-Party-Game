@@ -4,6 +4,7 @@ import InvalidParametersError, {
   GAME_NOT_IN_PROGRESS_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
   GAME_NOT_STARTABLE_MESSAGE,
+  INVALID_MOVE_MESSAGE,
 } from '../../lib/InvalidParametersError';
 import Player from '../../lib/Player';
 import {
@@ -23,12 +24,15 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     super({
       status: 'WAITING_FOR_PLAYERS',
       currentScore: 0,
-      ovenFull: false,
+      oven: {
+        ovenFull: false,
+      },
       currentCustomers: [],
       currentPizza: {
         id: 0,
         toppings: [],
         cooked: false,
+        isInOven: false,
       },
       difficulty: 1,
     });
@@ -38,6 +42,46 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
+    if (move.move.moveType === 'placeTopping') {
+      if (move.move.topping === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      move.move.pizza?.toppings.push(move.move.topping);
+    } else if (move.move.moveType === 'moveToCustomer') {
+      if (move.move.customer === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      if (!this.state.currentCustomers.includes(move.move.customer)) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      if (move.move.pizza?.toppings === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      const validPizza: boolean = this.sameToppings(
+        move.move.pizza?.toppings,
+        move.move.customer.order.pizzas[0].toppings,
+      );
+      if (validPizza) {
+        this.state.currentScore += 1;
+      }
+      // TODO: handle customer functionality (how do we give them stuff)
+      /**
+       * if move.pizza.toppings === customer.order.toppings:
+       *  update score
+       *  this.ovenFull = false
+       *  this.reset(currentPizza)
+       * else ()
+       */
+    } else if (move.move.moveType === 'moveToOven') {
+      if (this.state.oven.ovenFull || move.move.pizza?.isInOven) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      this.state.oven.pizza = move.move.pizza;
+      this.state.oven.ovenFull = true;
+    } else if (move.move.moveType === 'throwOut') {
+      this.resetPizza();
+    }
+    this.checkDifficulty();
   }
 
   public _join(player: Player): void {
@@ -121,19 +165,17 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       id: this.getRandomInt(0, 1000),
       toppings,
       cooked: false,
+      isInOven: false,
     };
   };
 
   protected generateRandomOrder = (): Order => {
-    const numberOfPizzas = this.getRandomInt(1, this.state.difficulty);
     const pizzas: Pizza[] = [];
-    for (let i = 0; i < numberOfPizzas; i++) {
-      const randomPizza: Pizza = this.generateRandomPizza();
-      pizzas.push(randomPizza);
-    }
+    const randomPizza: Pizza = this.generateRandomPizza();
+    pizzas.push(randomPizza);
     return {
       pizzas,
-      pointValue: numberOfPizzas,
+      pointValue: this.state.difficulty,
     };
   };
 
@@ -147,4 +189,34 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     };
     return customer;
   };
+
+  protected resetPizza = (): void => {
+    this.state = {
+      ...this.state,
+      currentPizza: {
+        id: 0,
+        toppings: [],
+        cooked: false,
+        isInOven: false,
+      },
+    };
+  };
+
+  protected checkDifficulty = (): void => {
+    const score: number = this.state.currentScore;
+    switch (score) {
+      case 10:
+        this.state.difficulty = 2;
+        break;
+      case 20:
+        this.state.difficulty = 3;
+        break;
+      default:
+        break;
+    }
+  };
+
+  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean =>
+    pizzaToppings.length === orderToppings.length &&
+    pizzaToppings.every((topping, idx) => topping === orderToppings[idx]);
 }
