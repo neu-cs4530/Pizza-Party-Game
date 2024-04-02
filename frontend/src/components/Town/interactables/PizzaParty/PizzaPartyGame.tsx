@@ -11,7 +11,7 @@ export type PizzaPartyGameProps = {
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   return (
     <div>
-      <Image src='/assets/pizza-party/background.png' alt='Pizza Party Game' layout='fill' />
+      <Image src='/public/assets/pizza-party/background.png' alt='Pizza Party Game' layout='fill' />
     </div>
   );
 }
