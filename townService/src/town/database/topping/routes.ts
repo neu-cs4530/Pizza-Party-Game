@@ -7,12 +7,12 @@ function ToppingRoutes(app: any) {
   };
 
   const retrieveAllToppingsByPizza = async (req: any, res: any) => {
-    const pizzas = await dao.retrieveAllToppingsByPizza(req.body);
-    res.json(pizzas);
+    const toppings = await dao.retrieveAllToppingsByPizza(req.body);
+    res.json(toppings);
   };
 
-  app.post('/api/pizza', createTopping);
-  app.get('/api/order/:pizzaId', retrieveAllToppingsByPizza);
+  app.post('/api/topping', createTopping);
+  app.get('/api/topping/:pizzaId', retrieveAllToppingsByPizza);
 }
 
 export default ToppingRoutes;
