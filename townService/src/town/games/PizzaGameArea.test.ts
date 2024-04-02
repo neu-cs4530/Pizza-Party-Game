@@ -4,7 +4,6 @@ import Player from '../../lib/Player';
 import {
   PizzaPartyGameState,
   PizzaPartyGameMove,
-  GameInstanceID,
   GameMove,
   TownEmitter,
 } from '../../types/CoveyTownSocket';

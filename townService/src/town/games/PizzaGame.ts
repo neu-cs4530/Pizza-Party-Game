@@ -81,6 +81,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     } else if (move.move.moveType === 'throwOut') {
       this.resetPizza();
     }
+    this.checkDifficulty();
   }
 
   public _join(player: Player): void {
@@ -169,15 +170,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   };
 
   protected generateRandomOrder = (): Order => {
-    const numberOfPizzas = this.getRandomInt(1, this.state.difficulty);
     const pizzas: Pizza[] = [];
-    for (let i = 0; i < numberOfPizzas; i++) {
-      const randomPizza: Pizza = this.generateRandomPizza();
-      pizzas.push(randomPizza);
-    }
+    const randomPizza: Pizza = this.generateRandomPizza();
+    pizzas.push(randomPizza);
     return {
       pizzas,
-      pointValue: numberOfPizzas,
+      pointValue: this.state.difficulty,
     };
   };
 
@@ -202,6 +200,20 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         isInOven: false,
       },
     };
+  };
+
+  protected checkDifficulty = (): void => {
+    const score: number = this.state.currentScore;
+    switch (score) {
+      case 10:
+        this.state.difficulty = 2;
+        break;
+      case 20:
+        this.state.difficulty = 3;
+        break;
+      default:
+        break;
+    }
   };
 
   protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean =>
