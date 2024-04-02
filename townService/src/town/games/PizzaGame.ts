@@ -54,6 +54,16 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (!this.state.currentCustomers.includes(move.move.customer)) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+      if (move.move.pizza?.toppings === undefined) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
+      const validPizza: boolean = this.sameToppings(
+        move.move.pizza?.toppings,
+        move.move.customer.order.pizzas[0].toppings,
+      );
+      if (validPizza) {
+        this.state.currentScore += 1;
+      }
       // TODO: handle customer functionality (how do we give them stuff)
       /**
        * if move.pizza.toppings === customer.order.toppings:
@@ -193,4 +203,8 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       },
     };
   };
+
+  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean =>
+    pizzaToppings.length === orderToppings.length &&
+    pizzaToppings.every((topping, idx) => topping === orderToppings[idx]);
 }
