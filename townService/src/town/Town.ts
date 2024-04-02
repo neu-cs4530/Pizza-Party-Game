@@ -252,7 +252,7 @@ export default class Town {
       }
       const newInteractable = this._interactables.find(
         eachArea => eachArea.isActive && eachArea.contains(location),
-      );  
+      );
       if (newInteractable) {
         newInteractable.add(player);
       }

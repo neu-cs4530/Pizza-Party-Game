@@ -29,7 +29,7 @@ export default function GameAreaFactory(
     return new ConnectFourGameArea(name, rect, broadcastEmitter);
   }
   if (gameType === 'PizzaParty') {
-    console.log("Here in PizzaParty", gameType)
+    console.log('Here in PizzaParty', gameType);
     return new PizzaPartyGameArea(name, rect, broadcastEmitter);
   }
   throw new Error(`Unknown game area type ${mapObject.class}`);
