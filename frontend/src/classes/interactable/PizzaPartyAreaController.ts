@@ -27,7 +27,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
       cooked: false,
       isInOven: false,
     },
-    difficulty: 2,
+    difficulty: 1,
   };
 
   public isActive(): boolean {
