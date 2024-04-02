@@ -17,12 +17,15 @@ export default class PizzaPartyAreaController extends GameAreaController<
   protected _game: PizzaPartyGameState = {
     status: 'WAITING_FOR_PLAYERS',
     currentScore: 0,
-    ovenFull: false,
+    oven: {
+      ovenFull: false,
+    },
     currentCustomers: [],
     currentPizza: {
       id: 0,
       toppings: [],
       cooked: false,
+      isInOven: false,
     },
     difficulty: 2,
   };
