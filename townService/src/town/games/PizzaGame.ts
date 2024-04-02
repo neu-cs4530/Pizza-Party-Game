@@ -44,6 +44,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       this.state.status = 'OVER';
     }
 
+    // to check if leaderboard API is working
     if (this.state.status === 'OVER') {
       const entry = [nanoid(), this.state.player, this.state.currentScore];
       await client.createLeaderboardEntry(entry);

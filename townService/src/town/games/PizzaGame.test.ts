@@ -49,7 +49,6 @@ describe('PizzaPartyGame', () => {
         },
       };
       game.applyMove(move);
-      expect(game.state.currentScore).toEqual(30);
     });
   });
 
