@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useInteractableAreaController } from '../../../../classes/TownController';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import useTownController from '../../../../hooks/useTownController';
-import { InteractableID } from '../../../../types/CoveyTownSocket';
+import { GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaPartyGame';
+import { toast, useToast } from '@chakra-ui/react';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -14,6 +15,31 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
+  const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
+  const [score, setScore] = useState<number>(gameAreaController.currentScore);
+  const [player, setPlayer] = useState<string | undefined>(gameAreaController.player);
+  const toast = useToast();
+
+  useEffect(() => {
+    const updateGameState = () => {
+      setGameStatus(gameAreaController.status || 'WAITING_TO_START');
+      setScore(gameAreaController.score);
+      setPlayer(gameAreaController.player);
+    };
+    gameAreaController.addListener('gameUpdated', updateGameState);
+    const onGameEnd = () => {
+        toast({
+          title: 'Game over',
+          description: `You lost :(`,
+          status: 'error',
+        });
+    };
+    gameAreaController.addListener('gameEnd', onGameEnd);
+    return () => {
+      gameAreaController.removeListener('gameEnd', onGameEnd);
+      gameAreaController.removeListener('gameUpdated', updateGameState);
+    };
+  }, [townController, gameAreaController, toast]);
 
   return (
     <div>
