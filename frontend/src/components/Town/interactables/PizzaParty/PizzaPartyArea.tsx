@@ -16,15 +16,13 @@ export default function PizzaPartyArea({
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
-  const [score, setScore] = useState<number>(gameAreaController.currentScore);
-  const [player, setPlayer] = useState<string | undefined>(gameAreaController.player);
-  const toast = useToast();
-
+  const [score, setScore] = useState<number>(gameAreaController.game.currentScore);
+  const [player, setPlayer] = useState<string | undefined>(gameAreaController.game.player);
   useEffect(() => {
     const updateGameState = () => {
       setGameStatus(gameAreaController.status || 'WAITING_TO_START');
-      setScore(gameAreaController.score);
-      setPlayer(gameAreaController.player);
+      setScore(gameAreaController.game.currentScore);
+      setPlayer(gameAreaController.game.player);
     };
     gameAreaController.addListener('gameUpdated', updateGameState);
     const onGameEnd = () => {
