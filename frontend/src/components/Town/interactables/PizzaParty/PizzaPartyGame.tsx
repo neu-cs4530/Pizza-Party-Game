@@ -12,9 +12,14 @@ export type PizzaPartyGameProps = {
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   return (
-  <div>
-      <Image src={background} alt='Pizza Party Game' layout='fill' style={{ position: 'absolute', top: 0, left: 0 }} />
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+    <div>
+      <Image
+        src={background}
+        alt='Pizza Party Game'
+        layout='fill'
+        style={{ position: 'absolute', top: 0, left: 0 }}
+      />
+      <div style={{ position: 'absolute', top: 450, left: 300, width: '100%', height: '100%' }}>
         <Pizza pizza={gameAreaController.currentPizza} />
       </div>
     </div>
