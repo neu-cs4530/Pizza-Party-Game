@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import { Customer as CustomerType } from '../../../../types/CoveyTownSocket';
 import * as customerSprite from '../../../../../public/assets/pizza-party/customer.png';
@@ -9,5 +10,5 @@ export type CustomerProps = {
 
 export default function Customer({ customer }: CustomerProps): JSX.Element {
   const [currentCustomer, setCurrentCustomer] = useState<CustomerType>(customer);
-  return <Image src={customerSprite} alt='Customer'/>;
+  return <Image src={customerSprite} alt='Customer' />;
 }
