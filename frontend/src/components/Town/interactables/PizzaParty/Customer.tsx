@@ -37,8 +37,10 @@ export default function Customer({ customer }: CustomerProps): JSX.Element {
   const [currentCustomer, setCurrentCustomer] = useState<CustomerType>(customer);
   return (
     <div>
-  <Image src={customerSprite} alt='Customer' />
-<Order order={mockOrder} />
+      <Image src={customerSprite} alt='Customer' />
+      <div style={{ position: 'relative', top: '-10px' }}></div>
+        <Order order={mockOrder} />
+      </div>
     </div>
   );
 }
