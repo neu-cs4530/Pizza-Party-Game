@@ -68,8 +68,8 @@ export default function PizzaPartyArea({
       },
     }
     const game = new Phaser.Game(config);
-    const newGameScene = new PizzaPartyGameScene(gameAreaController);
-    ame.scene.add('coveyBoard', newGameScene, true);
+    const newGameScene = new PizzaPartyScene(gameAreaController);
+    game.scene.add('pizzaPartyGame', newGameScene, true);
     const pauseListener = newGameScene.pause.bind(newGameScene);
     const unPauseListener = newGameScene.resume.bind(newGameScene);
     gameAreaController.addListener('pause', pauseListener);
