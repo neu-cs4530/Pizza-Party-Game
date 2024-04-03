@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import * as background from '../../../../../public/assets/pizza-party/background.png';
 import Pizza from './Pizza';
+import Customer from './Customer';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
@@ -11,6 +12,16 @@ export type PizzaPartyGameProps = {
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
+  const [currentCustomers, setCurrentCustomers] = useState(
+    gameAreaController.game.currentCustomers,
+  );
+  useEffect(() => {
+    const addCustomer = newCustomer => {
+      setCurrentCustomers(prevCustomers => [...prevCustomers, newCustomer]);
+    };
+    // Call addCustomer with a new customer here
+  }, []);
+
   return (
     <div>
       <Image
@@ -19,8 +30,15 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         layout='fill'
         style={{ position: 'absolute', top: 0, left: 0 }}
       />
-      <div style={{ position: 'absolute', top: 450, left: 300, width: '100%', height: '100%' }}>
+      <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
         <Pizza pizza={gameAreaController.currentPizza} />
+      </div>
+      <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
+        {currentCustomers.map((customer, index) => (
+          <div style={{ marginRight: 30 }} key={index}>
+            <Customer customer={customer} />
+          </div>
+        ))}
       </div>
     </div>
   );

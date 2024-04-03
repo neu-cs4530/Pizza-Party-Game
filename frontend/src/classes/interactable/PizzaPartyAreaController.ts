@@ -42,30 +42,30 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return !this.isEmpty() && this._game.status !== 'WAITING_FOR_PLAYERS';
   }
 
-    /**
+  /**
    * Returns true if the current player is a player in this game
    */
-    get isPlayer(): boolean {
-      return this._model.game?.players.includes(this._townController.ourPlayer.id) || false;
-    }
+  get isPlayer(): boolean {
+    return this._model.game?.players.includes(this._townController.ourPlayer.id) || false;
+  }
 
   get game(): PizzaPartyGameState {
     return this._game;
   }
 
-    /**
+  /**
    * Returns the status of the game.
    * Defaults to 'WAITING_TO_START' if the game is not in progress
    */
-    get status(): GameStatus {
-      const status = this._model.game?.state.status;
-      if (!status) {
-        return 'WAITING_TO_START';
-      }
-      return status;
+  get status(): GameStatus {
+    const status = this._model.game?.state.status;
+    if (!status) {
+      return 'WAITING_TO_START';
     }
+    return status;
+  }
 
-      /**
+  /**
    * Sends a request to the server to make a move in the game
    *
    * If the game is not in progress, throws an error NO_GAME_IN_PROGRESS_ERROR

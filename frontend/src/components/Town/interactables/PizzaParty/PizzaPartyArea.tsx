@@ -28,11 +28,11 @@ export default function PizzaPartyArea({
     };
     gameAreaController.addListener('gameUpdated', updateGameState);
     const onGameEnd = () => {
-        toast({
-          title: 'Game over',
-          description: `You lost :(`,
-          status: 'error',
-        });
+      toast({
+        title: 'Game over',
+        description: `You lost :(`,
+        status: 'error',
+      });
     };
     gameAreaController.addListener('gameEnd', onGameEnd);
     return () => {
