@@ -27,7 +27,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       oven: {
         ovenFull: false,
       },
-      currentCustomers: [],
+      currentCustomers: [undefined, undefined, undefined, undefined, undefined, undefined],
       currentPizza: {
         id: 0,
         toppings: [],
@@ -128,6 +128,14 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     this.state = {
       ...this.state,
       status: 'IN_PROGRESS',
+      currentCustomers: [
+        this.generateRandomCustomer(),
+        this.generateRandomCustomer(),
+        this.generateRandomCustomer(),
+        undefined,
+        undefined,
+        undefined,
+      ],
     };
   }
 

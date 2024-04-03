@@ -4,8 +4,8 @@ import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import * as background from '../../../../../public/assets/pizza-party/background.png';
 import Pizza from './Pizza';
-import CustomerDisplay from './Customer';
-import { Customer } from '../../../../types/CoveyTownSocket';
+import Customer from './Customer';
+import { Customer as CustomerType } from '../../../../types/CoveyTownSocket';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
@@ -17,10 +17,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     gameAreaController.game.currentCustomers,
   );
   useEffect(() => {
-    const addCustomer = (newCustomer: Customer) => {
+    const addCustomer = (newCustomer: CustomerType) => {
       setCurrentCustomers(prevCustomers => [...prevCustomers, newCustomer]);
     };
-    // Call addCustomer with a new customer here
+    addCustomer(gameAreaController.game.currentCustomers[4]);
   }, []);
 
   return (
@@ -36,8 +36,8 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers.map((customer, index) => (
-          <div style={{ marginRight: 30 }} key={index}>
-            <CustomerDisplay customer={customer} />
+          <div style={{ marginRight: 30  }} key={index}>
+            <Customer customer={customer} />
           </div>
         ))}
       </div>

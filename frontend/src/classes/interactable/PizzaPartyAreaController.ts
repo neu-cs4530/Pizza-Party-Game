@@ -20,7 +20,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
     oven: {
       ovenFull: false,
     },
-    currentCustomers: [],
+    currentCustomers: [], // TODO: Get this from the backend,
     currentPizza: {
       id: 0,
       toppings: [],
