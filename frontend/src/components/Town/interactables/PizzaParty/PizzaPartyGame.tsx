@@ -2,7 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
-import background from '../../../../../public/assets/pizza-party/background.png';
+import * as background from '../../../../../public/assets/pizza-party/background.png';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
