@@ -41,6 +41,5 @@ export default function Customer({ customer }: CustomerProps): JSX.Element {
       <div style={{ position: 'relative', top: '-10px' }}></div>
         <Order order={mockOrder} />
       </div>
-    </div>
   );
 }
