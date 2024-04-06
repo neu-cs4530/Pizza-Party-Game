@@ -26,10 +26,6 @@ export default class PizzaPartyAreaController extends GameAreaController<
     difficulty: 1,
   };
 
-  get pizzaPartyGame(): PizzaPartyGameState {
-    return this._game;
-  }
-
   get currentPizza(): Pizza | undefined {
     return this._game.currentPizza;
   }

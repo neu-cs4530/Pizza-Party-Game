@@ -9,37 +9,14 @@ export type CustomerProps = {
   customer: CustomerType;
 };
 
-
-const mockOrder: OrderType = {
-  pizzas: [
-    {
-      id: 0,
-      toppings: [
-        {
-          id: 0,
-          kind: 'pepperoni',
-          appliedOnPizza:false
-        },
-        {
-          id: 0,
-          kind: "anchovies",
-          appliedOnPizza:false
-        },
-      ],
-      cooked: false,
-      isInOven: false,
-    },
-  ],
-};
-
-
 export default function Customer({ customer }: CustomerProps): JSX.Element {
   const [currentCustomer, setCurrentCustomer] = useState<CustomerType>(customer);
   return (
     <div>
       <Image src={customerSprite} alt='Customer' />
-      <div style={{ position: 'relative', top: '-10px' }}></div>
-        <Order order={mockOrder} />
+      <div style={{ position: 'relative', top: '-10px' }}>
+        <Order order={currentCustomer.order} />
       </div>
+    </div>
   );
 }
