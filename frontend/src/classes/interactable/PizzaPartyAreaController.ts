@@ -1,4 +1,5 @@
-import { GameStatus, Pizza, PizzaPartyGameState } from '../../types/CoveyTownSocket';
+import _ from 'lodash';
+import { GameArea, GameStatus, Pizza, PizzaPartyGameState } from '../../types/CoveyTownSocket';
 import GameAreaController, { GameEventTypes } from './GameAreaController';
 
 export type PizzaPartyEvents = GameEventTypes & {
@@ -15,18 +16,13 @@ export default class PizzaPartyAreaController extends GameAreaController<
   PizzaPartyEvents
 > {
   protected _game: PizzaPartyGameState = {
-    status: 'WAITING_FOR_PLAYERS',
+    status: 'WAITING_TO_START',
     currentScore: 0,
     oven: {
       ovenFull: false,
     },
-    currentCustomers: [], // TODO: Get this from the backend,
-    currentPizza: {
-      id: 0,
-      toppings: [],
-      cooked: false,
-      isInOven: false,
-    },
+    currentCustomers: undefined, // TODO: Get this from the backend,
+    currentPizza: undefined,
     difficulty: 1,
   };
 
@@ -34,7 +30,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return this._game;
   }
 
-  get currentPizza(): Pizza {
+  get currentPizza(): Pizza | undefined {
     return this._game.currentPizza;
   }
 
@@ -65,6 +61,41 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return status;
   }
 
+  public async startGame(): Promise<void> {
+    const instanceID = this._instanceID;
+
+    if (!instanceID || this._model.game?.state.status !== 'WAITING_TO_START') {
+      throw new Error("Game Not startable");
+    }
+    const response = await this._townController.sendInteractableCommand(this.id, {
+      gameID: instanceID,
+      type: 'StartGame',
+    });
+    this._updateFrom(response);
+  }
+
+    /**
+   * Updates the internal state of this ConnectFourAreaController based on the new model.
+   *
+   * Calls super._updateFrom, which updates the occupants of this game area and other
+   * common properties (including this._model)
+   *
+   * If the board has changed, emits a boardChanged event with the new board.
+   * If the board has not changed, does not emit a boardChanged event.
+   *
+   * If the turn has changed, emits a turnChanged event with the new turn (true if our turn, false otherwise)
+   * If the turn has not changed, does not emit a turnChanged event.
+   */
+    protected _updateFrom(newModel: GameArea<PizzaPartyGameState>): void {
+      super._updateFrom(newModel);
+      const newGame = newModel.game;
+      if (newGame) {
+        if (!_.isEqual(newGame, this._game)) {
+          this._game = newGame;
+          this.emit('gameChanged', this._game);
+        }
+      }
+    }
   /**
    * Sends a request to the server to make a move in the game
    *

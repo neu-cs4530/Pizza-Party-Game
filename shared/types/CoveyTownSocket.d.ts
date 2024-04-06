@@ -273,9 +273,9 @@ export interface ClientToServerEvents {
 // The following types are to support the Pizza Party game
 export interface PizzaPartyGameState extends WinnableGameState {
   currentScore: number
-  currentCustomers: [Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined]
+  currentCustomers: [Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined, Customer | undefined] | undefined
   oven: Oven
-  currentPizza: Pizza
+  currentPizza: Pizza | undefined
   player?: PlayerID
   difficulty: PizzaGameDifficultyLevel
 }

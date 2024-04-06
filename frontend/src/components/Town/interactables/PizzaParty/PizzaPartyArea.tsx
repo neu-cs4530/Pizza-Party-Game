@@ -15,7 +15,10 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
+  console.log(gameAreaController, "Game are a controller")
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
+  const [joiningGame, setJoiningGame] = useState(false);
+
   const [score, setScore] = useState<number>(gameAreaController.game.currentScore);
   const [player, setPlayer] = useState<string | undefined>(gameAreaController.game.player);
   useEffect(() => {
@@ -38,7 +41,28 @@ export default function PizzaPartyArea({
       gameAreaController.removeListener('gameUpdated', updateGameState);
     };
   }, [townController, gameAreaController, toast]);
-
+  if (gameStatus !== 'IN_PROGRESS') {
+    return (
+      <div>
+        <h1>Pizza Party Game</h1>
+        <p>Waiting to start game</p>
+        <button onClick={async () =>{
+          setJoiningGame(true);
+          try {
+            await gameAreaController.joinGame();
+            await gameAreaController.startGame();
+          } catch (err) {
+            toast({
+              title: 'Error joining game',
+              description: (err as Error).toString(),
+              status: 'error',
+            });
+          }
+          setJoiningGame(false);
+        } }>Start Game</button>
+      </div>
+    );
+  }
   return (
     <div>
       <h1>Pizza Party Game</h1>
