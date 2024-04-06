@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { Order as OrderType, Pizza, Topping } from '../../../../types/CoveyTownSocket';
 import * as speechBubble from '../../../../../public/assets/pizza-party/speech-bubble.png';
@@ -25,7 +26,7 @@ const pizzaDisplay = (pizza: Pizza) => {
 };
 
 export default function Order({ order }: OrderProps): JSX.Element {
-  const [currentOrder, _] = useState<OrderType>(order);
+  const [currentOrder, setCurrentOrder] = useState<OrderType>(order);
   return (
     <div
       style={{
