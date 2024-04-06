@@ -137,7 +137,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         undefined,
       ],
     };
-    console.log(this.state)
+    console.log(this.state);
     return this.state;
   }
 
