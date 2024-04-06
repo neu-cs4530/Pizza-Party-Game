@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { Order as OrderType, Pizza, Topping } from '../../../../types/CoveyTownSocket';
 import * as speechBubble from '../../../../../public/assets/pizza-party/speech-bubble.png';
@@ -15,10 +16,13 @@ const toppingsToString = (toppings: Topping[]): string[] => {
 };
 
 const pizzaDisplay = (pizza: Pizza) => {
-  const toppingsFormatted = toppingsToString(pizza.toppings);
+  const toppingsFormatted = pizza.toppings.map((topping) => {return topping.kind + "\n"})
   return (
     <div>
-      <h2>Pizza</h2>
+      <h2>Pizza with</h2>
+      {/* {toppingsFormatted.forEach(kind => (
+        <p>{kind}</p>
+      ))} */}
       <p>{toppingsFormatted}</p>
     </div>
   );

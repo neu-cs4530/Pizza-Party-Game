@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
-import * as background from '../../../../../public/assets/pizza-party/background.png';
+import * as background from '../../../../../public/assets/pizza-party/background2.png';
 import Pizza from './Pizza';
 import Customer from './Customer';
 import { Customer as CustomerType } from '../../../../types/CoveyTownSocket';
