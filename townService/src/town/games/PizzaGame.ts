@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { empty } from 'ramda';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -27,7 +28,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       oven: {
         ovenFull: false,
       },
-      currentCustomers: [undefined, undefined, undefined, undefined, undefined, undefined],
+      currentCustomers: [],
       currentPizza: {
         id: 0,
         toppings: [],
@@ -36,7 +37,30 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       },
       difficulty: 1,
     });
+
+    this.state = {
+      ...this.state,
+      currentCustomers: [
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+      ],
+    };
   }
+
+  protected generateEmptyCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Empty',
+      timeRemaining: 100000,
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
 
   public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
@@ -51,9 +75,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      if (!this.state.currentCustomers.includes(move.move.customer)) {
-        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      }
+      // if (!this.state.currentCustomers.includes(move.move.customer)) {
+      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      // }
       if (move.move.pizza?.toppings === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
@@ -118,7 +142,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
    *
    * @param player The player this method starts the game on behalf of.
    */
-  public startGame(player: Player): void {
+  public startGame(player: Player): PizzaPartyGameState {
     if (this.state.status !== 'WAITING_TO_START') {
       throw new InvalidParametersError(GAME_NOT_STARTABLE_MESSAGE);
     }
@@ -129,14 +153,29 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       ...this.state,
       status: 'IN_PROGRESS',
       currentCustomers: [
-        this.generateRandomCustomer(),
-        this.generateRandomCustomer(),
-        this.generateRandomCustomer(),
-        undefined,
-        undefined,
-        undefined,
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
       ],
     };
+    this.populateRestaurant();
+    return this.state;
+  }
+
+  protected populateRestaurant(): void {
+    const id = setInterval(() => {
+      const emptyCustomerIndex = this.state.currentCustomers.findIndex(
+        customer => customer.name === 'Empty',
+      );
+      console.log(emptyCustomerIndex);
+      if (emptyCustomerIndex === -1) {
+        clearInterval(id);
+      }
+      this.state.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
+    }, 5000);
   }
 
   protected TOPPINGS_LIST: ToppingOptions[] = [

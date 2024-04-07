@@ -13,15 +13,23 @@ export type PizzaPartyGameProps = {
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
-  const [currentCustomers, setCurrentCustomers] = useState(
-    gameAreaController.game.currentCustomers,
-  );
+  const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
+  const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
+  const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
+  const [currentGame, setCurrentGame] = useState(gameAreaController.game);
   useEffect(() => {
-    const addCustomer = (newCustomer: CustomerType) => {
-      setCurrentCustomers(prevCustomers => [...prevCustomers, newCustomer]);
+    gameAreaController.addListener('customerChanged', setCurrentCustomers);
+    gameAreaController.addListener('pizzaChanged', setCurrentPizza);
+    gameAreaController.addListener('scoreChanged', setCurrentScore);
+    gameAreaController.addListener('gameChanged', setCurrentGame);
+    console.log(gameAreaController.currentCustomers);
+    return () => {
+      gameAreaController.removeListener('customerChanged', setCurrentCustomers);
+      gameAreaController.removeListener('pizzaChanged', setCurrentPizza);
+      gameAreaController.removeListener('scoreChanged', setCurrentScore);
+      gameAreaController.removeListener('gameChanged', setCurrentGame);
     };
-    addCustomer(gameAreaController.game.currentCustomers[4]);
-  }, []);
+  }, [gameAreaController, gameAreaController.currentCustomers]);
 
   return (
     <div>
@@ -32,14 +40,18 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         style={{ position: 'absolute', top: 0, left: 0 }}
       />
       <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
-        <Pizza pizza={gameAreaController.currentPizza} />
+        <Pizza pizza={currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentCustomers.map((customer, index) => (
-          <div style={{ marginRight: 30  }} key={index}>
-            <Customer customer={customer} />
-          </div>
-        ))}
+        {currentGame?.currentCustomers?.map((customer, index) =>
+          customer.name !== 'Empty' ? (
+            <div style={{ marginRight: 30 }} key={index}>
+              <Customer customer={customer} />
+            </div>
+          ) : (
+            <div style={{ marginRight: 30 }} key={index}></div>
+          ),
+        )}
       </div>
     </div>
   );
