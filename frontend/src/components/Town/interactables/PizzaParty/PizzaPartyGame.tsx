@@ -43,7 +43,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Pizza pizza={currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentGame.currentCustomers?.map((customer, index) =>
+        {currentGame?.currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
             <div style={{ marginRight: 30 }} key={index}>
               <Customer customer={customer} />
