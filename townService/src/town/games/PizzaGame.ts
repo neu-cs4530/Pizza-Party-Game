@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { empty } from 'ramda';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -153,15 +154,28 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       status: 'IN_PROGRESS',
       currentCustomers: [
         this.generateEmptyCustomer(),
-        this.generateRandomCustomer(),
         this.generateEmptyCustomer(),
-        this.generateRandomCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
       ],
     };
-    // console.log(this.state);
+    this.populateRestaurant();
     return this.state;
+  }
+
+  protected populateRestaurant(): void {
+    const id = setInterval(() => {
+      const emptyCustomerIndex = this.state.currentCustomers.findIndex(
+        customer => customer.name === 'Empty',
+      );
+      console.log(emptyCustomerIndex);
+      if (emptyCustomerIndex === -1) {
+        clearInterval(id);
+      }
+      this.state.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
+    }, 5000);
   }
 
   protected TOPPINGS_LIST: ToppingOptions[] = [

@@ -98,7 +98,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
         this._game = newGame.state;
         this.emit('pizzaChanged', newGame.state.currentPizza);
         this.emit('gameChanged', newGame.state);
-        this.emit('customersChanged', newGame.state.currentCustomers);
+        this.emit('customerChanged', newGame.state.currentCustomers);
         this.emit('scoreChanged', newGame.state.currentScore);
       }
     }

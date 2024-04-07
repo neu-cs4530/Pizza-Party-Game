@@ -29,7 +29,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('scoreChanged', setCurrentScore);
       gameAreaController.removeListener('gameChanged', setCurrentGame);
     };
-  }, [gameAreaController]);
+  }, [gameAreaController, gameAreaController.currentCustomers]);
 
   return (
     <div>
