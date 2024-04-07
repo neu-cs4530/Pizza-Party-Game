@@ -27,7 +27,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       oven: {
         ovenFull: false,
       },
-      currentCustomers: [undefined, undefined, undefined, undefined, undefined, undefined],
+      currentCustomers: [],
       currentPizza: {
         id: 0,
         toppings: [],
@@ -36,7 +36,19 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       },
       difficulty: 1,
     });
+    this.resetPizza();
   }
+
+  protected generateEmptyCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Empty',
+      timeRemaining: 100000,
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
 
   public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
     if (this.state.status !== 'IN_PROGRESS') {
@@ -129,12 +141,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       ...this.state,
       status: 'IN_PROGRESS',
       currentCustomers: [
+        this.generateEmptyCustomer(),
         this.generateRandomCustomer(),
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+        this.generateEmptyCustomer(),
+        this.generateRandomCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
       ],
     };
     // console.log(this.state);

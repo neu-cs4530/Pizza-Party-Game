@@ -13,15 +13,13 @@ export type PizzaPartyGameProps = {
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
-  const [currentGame, setCurrentGame] = useState(
-    gameAreaController.game,
-  );
-  useEffect(() => {
-    gameAreaController.addListener('gameChanged', setCurrentGame);
-    return () => {
-      gameAreaController.removeListener('gameChanged', setCurrentGame);
-   };
-  }, [gameAreaController]);
+  const [currentGame, setCurrentGame] = useState(gameAreaController.game);
+  // useEffect(() => {
+  //   gameAreaController.addListener('gameChanged', setCurrentGame);
+  //   return () => {
+  //     gameAreaController.removeListener('gameChanged', setCurrentGame);
+  //   };
+  // }, [gameAreaController]);
 
   return (
     <div>
@@ -32,16 +30,16 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         style={{ position: 'absolute', top: 0, left: 0 }}
       />
       <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
-        <Pizza pizza={currentGame.state.currentPizza} />
+        <Pizza pizza={currentGame.currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentGame.state.currentCustomers.map((customer, index) => (
+        {currentGame.currentCustomers.map((customer, index) =>
           customer ? (
             <div style={{ marginRight: 30 }} key={index}>
               <Customer customer={customer} />
             </div>
-          ) : null
-        ))}
+          ) : null,
+        )}
       </div>
     </div>
   );

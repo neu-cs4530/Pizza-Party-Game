@@ -5,7 +5,7 @@ import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPart
 import useTownController from '../../../../hooks/useTownController';
 import { GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaPartyGame';
-import { toast, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -15,9 +15,10 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
-  console.log(gameAreaController, "Game are a controller")
+  console.log(gameAreaController, 'Game are a controller');
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
   const [joiningGame, setJoiningGame] = useState(false);
+  const toast = useToast();
 
   const [score, setScore] = useState<number>(gameAreaController.game.currentScore);
   const [player, setPlayer] = useState<string | undefined>(gameAreaController.game.player);
@@ -46,20 +47,23 @@ export default function PizzaPartyArea({
       <div>
         <h1>Pizza Party Game</h1>
         <p>Waiting to start game</p>
-        <button onClick={async () =>{
-          setJoiningGame(true);
-          try {
-            await gameAreaController.joinGame();
-            await gameAreaController.startGame();
-          } catch (err) {
-            toast({
-              title: 'Error joining game',
-              description: (err as Error).toString(),
-              status: 'error',
-            });
-          }
-          setJoiningGame(false);
-        } }>Start Game</button>
+        <button
+          onClick={async () => {
+            setJoiningGame(true);
+            try {
+              await gameAreaController.joinGame();
+              await gameAreaController.startGame();
+            } catch (err) {
+              toast({
+                title: 'Error joining game',
+                description: (err as Error).toString(),
+                status: 'error',
+              });
+            }
+            setJoiningGame(false);
+          }}>
+          Start Game
+        </button>
       </div>
     );
   }
