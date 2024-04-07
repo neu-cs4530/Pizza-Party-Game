@@ -13,19 +13,18 @@ export type PizzaPartyGameProps = {
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
-  const [currentCustomers, setCurrentCustomers] = useState(
-    gameAreaController.game.currentCustomers,
-  );
-  const [currentPizza, setCurrentPizza] = useState(gameAreaController.game.currentPizza);
-  const [currentScore, setCurrentScore] = useState(gameAreaController.game.currentScore);
+  const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
+  const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
+  const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
+  console.log(currentCustomers);
   useEffect(() => {
-    gameAreaController.addListener('gameChanged', setCurrentCustomers);
-    gameAreaController.addListener('gameChanged', setCurrentPizza);
-    gameAreaController.addListener('gameChanged', setCurrentScore);
+    gameAreaController.addListener('customerChanged', setCurrentCustomers);
+    gameAreaController.addListener('pizzaChanged', setCurrentPizza);
+    gameAreaController.addListener('scoreChanged', setCurrentScore);
     return () => {
-      gameAreaController.removeListener('gameChanged', setCurrentCustomers);
-      gameAreaController.removeListener('gameChanged', setCurrentPizza);
-      gameAreaController.removeListener('gameChanged', setCurrentScore);
+      gameAreaController.removeListener('customerChanged', setCurrentCustomers);
+      gameAreaController.removeListener('pizzaChanged', setCurrentPizza);
+      gameAreaController.removeListener('scoreChanged', setCurrentScore);
     };
   }, [gameAreaController]);
 
@@ -47,9 +46,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
               <Customer customer={customer} />
             </div>
           ) : (
-            <div style={{ marginRight: 30 }} key={index}>
-              <Customer customer={customer} />
-            </div>
+            <div style={{ marginRight: 30 }} key={index}></div>
           ),
         )}
       </div>

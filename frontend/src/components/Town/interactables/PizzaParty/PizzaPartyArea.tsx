@@ -52,7 +52,6 @@ export default function PizzaPartyArea({
             try {
               await gameAreaController.joinGame();
               await gameAreaController.startGame();
-              console.log('NSFJNDJSNDFNSKNSK');
             } catch (err) {
               toast({
                 title: 'Error joining game',

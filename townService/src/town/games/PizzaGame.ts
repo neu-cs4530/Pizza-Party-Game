@@ -48,7 +48,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
       ],
     };
-    console.log(this.state.currentCustomers);
   }
 
   protected generateEmptyCustomer = (): Customer => {

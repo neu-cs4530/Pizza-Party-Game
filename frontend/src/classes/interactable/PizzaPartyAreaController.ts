@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
 
 export type PizzaPartyEvents = GameEventTypes & {
   pizzaChanged: (currentPizza: Pizza) => void;
-  customerChanged: (currentCustomer: Customer) => void;
+  customerChanged: (currentCustomer: Customer[]) => void;
   scoreChanged: (currentScore: number) => void;
 };
 
@@ -109,7 +109,9 @@ export default class PizzaPartyAreaController extends GameAreaController<
       gameID: instanceID,
       type: 'StartGame',
     });
-    console.log('After error');
+
+    console.log(response);
+
     this._updateFrom(response);
   }
 
