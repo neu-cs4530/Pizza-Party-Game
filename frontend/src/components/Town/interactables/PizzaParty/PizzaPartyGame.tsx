@@ -14,14 +14,20 @@ export type PizzaPartyGameProps = {
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
+  console.log(currentCustomers);
   const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
   useEffect(() => {
     const intervalId = setInterval(() => {
-      gameAreaController.populateRestaurant();
-      console.log('hello');
-    }, 1000);
+      const index = gameAreaController.findEmptySeat();
+      console.log(index);
+      if (index !== -1 && index !== undefined && currentCustomers !== undefined) {
+        currentCustomers[index] = gameAreaController.generateRandomCustomer();
+        console.log('hello');
+        console.log(currentCustomers);
+      }
+    }, 3000);
     gameAreaController.addListener('customerChanged', setCurrentCustomers);
     gameAreaController.addListener('pizzaChanged', setCurrentPizza);
     gameAreaController.addListener('scoreChanged', setCurrentScore);
@@ -33,7 +39,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('gameChanged', setCurrentGame);
       clearInterval(intervalId);
     };
-  }, [gameAreaController, gameAreaController.currentCustomers]);
+  }, [currentGame, currentCustomers]);
 
   return (
     <div>

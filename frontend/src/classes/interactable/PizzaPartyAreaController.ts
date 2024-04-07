@@ -83,19 +83,15 @@ export default class PizzaPartyAreaController extends GameAreaController<
     console.log(this._game);
   }
 
-  public populateRestaurant(): void {
+  public findEmptySeat(): number | undefined {
     if (this.game !== undefined) {
       const emptyCustomerIndex = this.game.currentCustomers.findIndex(
         customer => customer.name === 'Empty',
       );
-      if (emptyCustomerIndex === -1) {
-        return;
-      }
 
-      this.game.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
-      this.emit('customerChanged', this.game.currentCustomers);
-      console.log(this.game.currentCustomers);
+      return emptyCustomerIndex;
     }
+    return undefined;
   }
 
   protected TOPPINGS_LIST: ToppingOptions[] = [
@@ -146,7 +142,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
     };
   };
 
-  protected generateRandomCustomer = (): Customer => {
+  public generateRandomCustomer = (): Customer => {
     const customer: Customer = {
       id: nanoid(),
       name: 'Customer',
