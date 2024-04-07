@@ -16,15 +16,18 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
   const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
-  console.log(currentCustomers);
+  const [currentGame, setCurrentGame] = useState(gameAreaController.game);
   useEffect(() => {
     gameAreaController.addListener('customerChanged', setCurrentCustomers);
     gameAreaController.addListener('pizzaChanged', setCurrentPizza);
     gameAreaController.addListener('scoreChanged', setCurrentScore);
+    gameAreaController.addListener('gameChanged', setCurrentGame);
+    console.log(gameAreaController.currentCustomers);
     return () => {
       gameAreaController.removeListener('customerChanged', setCurrentCustomers);
       gameAreaController.removeListener('pizzaChanged', setCurrentPizza);
       gameAreaController.removeListener('scoreChanged', setCurrentScore);
+      gameAreaController.removeListener('gameChanged', setCurrentGame);
     };
   }, [gameAreaController]);
 
@@ -40,7 +43,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Pizza pizza={currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentCustomers.map((customer, index) =>
+        {currentGame.currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
             <div style={{ marginRight: 30 }} key={index}>
               <Customer customer={customer} />

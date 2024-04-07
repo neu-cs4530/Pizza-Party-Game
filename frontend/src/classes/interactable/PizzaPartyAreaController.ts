@@ -24,43 +24,6 @@ export default class PizzaPartyAreaController extends GameAreaController<
   PizzaPartyGameState,
   PizzaPartyEvents
 > {
-  protected generateEmptyCustomer = (): Customer => {
-    const customer: Customer = {
-      id: nanoid(),
-      name: 'Empty',
-      timeRemaining: 100000,
-      completed: false,
-      order: {
-        pizzas: [],
-        pointValue: 0,
-      },
-    };
-    return customer;
-  };
-
-  // protected _game: PizzaPartyGameState = {
-  //   status: 'WAITING_TO_START',
-  //   currentScore: 0,
-  //   oven: {
-  //     ovenFull: false,
-  //   },
-  //   currentCustomers: [
-  //     this.generateEmptyCustomer(),
-  //     this.generateEmptyCustomer(),
-  //     this.generateEmptyCustomer(),
-  //     this.generateEmptyCustomer(),
-  //     this.generateEmptyCustomer(),
-  //     this.generateEmptyCustomer(),
-  //   ],
-  //   currentPizza: {
-  //     id: 0,
-  //     toppings: [],
-  //     cooked: false,
-  //     isInOven: false,
-  //   },
-  //   difficulty: 1,
-  // };
-
   protected _game: PizzaPartyGameState | undefined = this._model.game?.state;
 
   get currentPizza(): Pizza | undefined {
@@ -130,11 +93,11 @@ export default class PizzaPartyAreaController extends GameAreaController<
     super._updateFrom(newModel);
     const newGame = newModel.game;
     if (newGame) {
-      if (!_.isEqual(newGame, this._game)) {
+      if (!_.isEqual(newGame.state, this._game)) {
         this._game = newGame.state;
         this.emit('pizzaChanged', newGame.state.currentPizza);
-        this.emit('gameChanged');
-        this.emit('customersChanged');
+        this.emit('gameChanged', newGame);
+        this.emit('customersChanged', newGame.state.currentCustomers);
         this.emit('scoreChanged', newGame.state.currentScore);
       }
     }
