@@ -13,13 +13,21 @@ export type PizzaPartyGameProps = {
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
-  const [currentGame, setCurrentGame] = useState(gameAreaController.game);
-  // useEffect(() => {
-  //   gameAreaController.addListener('gameChanged', setCurrentGame);
-  //   return () => {
-  //     gameAreaController.removeListener('gameChanged', setCurrentGame);
-  //   };
-  // }, [gameAreaController]);
+  const [currentCustomers, setCurrentCustomers] = useState(
+    gameAreaController.game.currentCustomers,
+  );
+  const [currentPizza, setCurrentPizza] = useState(gameAreaController.game.currentPizza);
+  const [currentScore, setCurrentScore] = useState(gameAreaController.game.currentScore);
+  useEffect(() => {
+    gameAreaController.addListener('gameChanged', setCurrentCustomers);
+    gameAreaController.addListener('gameChanged', setCurrentPizza);
+    gameAreaController.addListener('gameChanged', setCurrentScore);
+    return () => {
+      gameAreaController.removeListener('gameChanged', setCurrentCustomers);
+      gameAreaController.removeListener('gameChanged', setCurrentPizza);
+      gameAreaController.removeListener('gameChanged', setCurrentScore);
+    };
+  }, [gameAreaController]);
 
   return (
     <div>
@@ -30,15 +38,17 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         style={{ position: 'absolute', top: 0, left: 0 }}
       />
       <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
-        <Pizza pizza={currentGame.currentPizza} />
+        <Pizza pizza={currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentGame.currentCustomers.map((customer, index) =>
-          customer ? (
+        {currentCustomers.map((customer, index) =>
+          customer.name !== 'Empty' ? (
             <div style={{ marginRight: 30 }} key={index}>
               <Customer customer={customer} />
             </div>
-          ) : null,
+          ) : (
+            <div style={{ marginRight: 30 }} key={index}></div>
+          ),
         )}
       </div>
     </div>

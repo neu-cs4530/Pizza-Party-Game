@@ -11,6 +11,7 @@ export type CustomerProps = {
 
 export default function Customer({ customer }: CustomerProps): JSX.Element {
   const [currentCustomer, setCurrentCustomer] = useState<CustomerType>(customer);
+
   return (
     <div>
       <Image src={customerSprite} alt='Customer' />

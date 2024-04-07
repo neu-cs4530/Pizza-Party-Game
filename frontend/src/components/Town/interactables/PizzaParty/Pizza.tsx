@@ -9,6 +9,7 @@ export type PizzaProps = {
 };
 
 export default function Pizza({ pizza }: PizzaProps): JSX.Element {
+  console.log(pizza);
   const [currentPizza, setCurrentPizza] = useState<PizzaType>(pizza);
   return <Image src={pizzaBase} alt='Pizza base' width={200} height={100} />;
 }
