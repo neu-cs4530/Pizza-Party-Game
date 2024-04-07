@@ -14,16 +14,23 @@ export type PizzaPartyGameProps = {
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
-  console.log(currentCustomers);
   const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
   useEffect(() => {
     const intervalId = setInterval(() => {
       const index = gameAreaController.findEmptySeat();
-      console.log(index);
-      if (index !== -1 && index !== undefined && currentCustomers !== undefined) {
-        currentCustomers[index] = gameAreaController.generateRandomCustomer();
+      if (
+        index !== -1 &&
+        index !== undefined &&
+        currentCustomers !== undefined &&
+        gameAreaController.currentCustomers !== undefined
+      ) {
+        const newCustomers = [...currentCustomers];
+        const customer = gameAreaController.generateRandomCustomer();
+        newCustomers[index] = customer;
+        gameAreaController.currentCustomers[index] = customer;
+        setCurrentCustomers(newCustomers);
         console.log('hello');
         console.log(currentCustomers);
       }
@@ -53,7 +60,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Pizza pizza={currentPizza} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentGame?.currentCustomers?.map((customer, index) =>
+        {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
             <div style={{ marginRight: 30 }} key={index}>
               <Customer customer={customer} />
