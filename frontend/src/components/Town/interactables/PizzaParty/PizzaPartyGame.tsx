@@ -18,6 +18,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      gameAreaController.populateRestaurant();
+      console.log('hello');
+    }, 1000);
     gameAreaController.addListener('customerChanged', setCurrentCustomers);
     gameAreaController.addListener('pizzaChanged', setCurrentPizza);
     gameAreaController.addListener('scoreChanged', setCurrentScore);
@@ -27,6 +31,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('pizzaChanged', setCurrentPizza);
       gameAreaController.removeListener('scoreChanged', setCurrentScore);
       gameAreaController.removeListener('gameChanged', setCurrentGame);
+      clearInterval(intervalId);
     };
   }, [gameAreaController, gameAreaController.currentCustomers]);
 

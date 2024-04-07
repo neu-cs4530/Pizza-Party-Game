@@ -3,8 +3,11 @@ import {
   Customer,
   GameArea,
   GameStatus,
+  Order,
   Pizza,
   PizzaPartyGameState,
+  Topping,
+  ToppingOptions,
 } from '../../types/CoveyTownSocket';
 import GameAreaController, { GameEventTypes } from './GameAreaController';
 import { nanoid } from 'nanoid';
@@ -79,6 +82,107 @@ export default class PizzaPartyAreaController extends GameAreaController<
 
     console.log(this._game);
   }
+
+  public populateRestaurant(): void {
+    if (this.game !== undefined) {
+      const emptyCustomerIndex = this.game.currentCustomers.findIndex(
+        customer => customer.name === 'Empty',
+      );
+      if (emptyCustomerIndex === -1) {
+        return;
+      }
+
+      this.game.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
+      this.emit('customerChanged', this.game.currentCustomers);
+      console.log(this.game.currentCustomers);
+    }
+  }
+
+  protected TOPPINGS_LIST: ToppingOptions[] = [
+    'pepperoni',
+    'mushrooms',
+    'anchovies',
+    'olives',
+    'onions',
+    'peppers',
+    'sausage',
+  ];
+
+  protected getRandomInt = (min: number, max: number): number =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
+  protected generateRandomTopping = (): Topping => {
+    const toppingKind = this.TOPPINGS_LIST[Math.floor(Math.random() * this.TOPPINGS_LIST.length)];
+    return {
+      id: Math.floor(Math.random() * 1000),
+      kind: toppingKind,
+      appliedOnPizza: false,
+    };
+  };
+
+  protected generateRandomPizza = (): Pizza => {
+    // Edited to be variable based on the game's difficulty.
+    const numberOfToppings = this.getRandomInt(1, 2 * (this.game?.difficulty ?? 0) + 1);
+    const toppings: Topping[] = [];
+    for (let i = 0; i < numberOfToppings; i++) {
+      const randomTopping: Topping = this.generateRandomTopping();
+      toppings.push(randomTopping);
+    }
+    return {
+      id: this.getRandomInt(0, 1000),
+      toppings,
+      cooked: false,
+      isInOven: false,
+    };
+  };
+
+  protected generateRandomOrder = (): Order => {
+    const pizzas: Pizza[] = [];
+    const randomPizza: Pizza = this.generateRandomPizza();
+    pizzas.push(randomPizza);
+    return {
+      pizzas,
+      pointValue: this.game?.difficulty ?? 0,
+    };
+  };
+
+  protected generateRandomCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Customer',
+      timeRemaining: 100 - 10 * ((this.game?.difficulty ?? 1) - 1),
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
+
+  protected resetPizza = (): void => {
+    if (this.game !== undefined) {
+      this.game.currentPizza = {
+        id: 0,
+        toppings: [],
+        cooked: false,
+        isInOven: false,
+      };
+    }
+  };
+
+  protected checkDifficulty = (): void => {
+    if (this.game !== undefined) {
+      const score: number = this.game.currentScore;
+      switch (score) {
+        case 10:
+          this.game.difficulty = 2;
+          break;
+        case 20:
+          this.game.difficulty = 3;
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   /**
    * Updates the internal state of this ConnectFourAreaController based on the new model.

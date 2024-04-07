@@ -161,21 +161,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
       ],
     };
-    await this.populateRestaurant();
     return this.state;
-  }
-
-  protected async populateRestaurant(): Promise<void> {
-    const id = setInterval(() => {
-      const emptyCustomerIndex = this.state.currentCustomers.findIndex(
-        customer => customer.name === 'Empty',
-      );
-      if (emptyCustomerIndex === -1) {
-        clearInterval(id);
-      }
-
-      this.state.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
-    }, 5000);
   }
 
   protected TOPPINGS_LIST: ToppingOptions[] = [
