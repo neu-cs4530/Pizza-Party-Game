@@ -38,43 +38,45 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return customer;
   };
 
-  protected _game: PizzaPartyGameState = {
-    status: 'WAITING_TO_START',
-    currentScore: 0,
-    oven: {
-      ovenFull: false,
-    },
-    currentCustomers: [
-      this.generateEmptyCustomer(),
-      this.generateEmptyCustomer(),
-      this.generateEmptyCustomer(),
-      this.generateEmptyCustomer(),
-      this.generateEmptyCustomer(),
-      this.generateEmptyCustomer(),
-    ],
-    currentPizza: {
-      id: 0,
-      toppings: [],
-      cooked: false,
-      isInOven: false,
-    },
-    difficulty: 1,
-  };
+  // protected _game: PizzaPartyGameState = {
+  //   status: 'WAITING_TO_START',
+  //   currentScore: 0,
+  //   oven: {
+  //     ovenFull: false,
+  //   },
+  //   currentCustomers: [
+  //     this.generateEmptyCustomer(),
+  //     this.generateEmptyCustomer(),
+  //     this.generateEmptyCustomer(),
+  //     this.generateEmptyCustomer(),
+  //     this.generateEmptyCustomer(),
+  //     this.generateEmptyCustomer(),
+  //   ],
+  //   currentPizza: {
+  //     id: 0,
+  //     toppings: [],
+  //     cooked: false,
+  //     isInOven: false,
+  //   },
+  //   difficulty: 1,
+  // };
 
-  get currentPizza(): Pizza {
-    return this._game.currentPizza;
+  protected _game: PizzaPartyGameState | undefined = this._model.game?.state;
+
+  get currentPizza(): Pizza | undefined {
+    return this._game?.currentPizza;
   }
 
-  get currentScore(): number {
-    return this._game.currentScore;
+  get currentScore(): number | undefined {
+    return this._game?.currentScore;
   }
 
-  get currentCustomers(): Customer[] {
-    return this._game.currentCustomers;
+  get currentCustomers(): Customer[] | undefined {
+    return this._game?.currentCustomers;
   }
 
   public isActive(): boolean {
-    return !this.isEmpty() && this._game.status !== 'WAITING_FOR_PLAYERS';
+    return !this.isEmpty() && this._game?.status !== 'WAITING_FOR_PLAYERS';
   }
 
   /**
@@ -84,7 +86,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return this._model.game?.players.includes(this._townController.ourPlayer.id) || false;
   }
 
-  get game(): PizzaPartyGameState {
+  get game(): PizzaPartyGameState | undefined {
     return this._game;
   }
 
@@ -105,14 +107,11 @@ export default class PizzaPartyAreaController extends GameAreaController<
     if (!instanceID || this._model.game?.state.status !== 'WAITING_TO_START') {
       throw new Error('Game Not startable');
     }
-    const response = await this._townController.sendInteractableCommand(this.id, {
+
+    await this._townController.sendInteractableCommand(this.id, {
       gameID: instanceID,
       type: 'StartGame',
     });
-
-    console.log(response);
-
-    this._updateFrom(response);
   }
 
   /**
@@ -133,7 +132,10 @@ export default class PizzaPartyAreaController extends GameAreaController<
     if (newGame) {
       if (!_.isEqual(newGame, this._game)) {
         this._game = newGame.state;
+        this.emit('pizzaChanged', newGame.state.currentPizza);
         this.emit('gameChanged');
+        this.emit('customersChanged');
+        this.emit('scoreChanged', newGame.state.currentScore);
       }
     }
   }
