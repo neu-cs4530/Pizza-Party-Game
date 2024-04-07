@@ -10,6 +10,7 @@ import GameAreaController, { GameEventTypes } from './GameAreaController';
 import { nanoid } from 'nanoid';
 
 export type PizzaPartyEvents = GameEventTypes & {
+  gameChanged: (currentGame: PizzaPartyGameState) => void;
   pizzaChanged: (currentPizza: Pizza) => void;
   customerChanged: (currentCustomer: Customer[]) => void;
   scoreChanged: (currentScore: number) => void;
@@ -96,7 +97,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
       if (!_.isEqual(newGame.state, this._game)) {
         this._game = newGame.state;
         this.emit('pizzaChanged', newGame.state.currentPizza);
-        this.emit('gameChanged', newGame);
+        this.emit('gameChanged', newGame.state);
         this.emit('customersChanged', newGame.state.currentCustomers);
         this.emit('scoreChanged', newGame.state.currentScore);
       }

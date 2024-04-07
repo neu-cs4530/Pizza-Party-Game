@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useInteractableAreaController } from '../../../../classes/TownController';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import useTownController from '../../../../hooks/useTownController';
-import { GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
+import { Customer, GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaPartyGame';
 import { useToast } from '@chakra-ui/react';
+import PlayerController from '../../../../classes/PlayerController';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -18,14 +19,17 @@ export default function PizzaPartyArea({
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
   const [joiningGame, setJoiningGame] = useState(false);
   const toast = useToast();
-
-  const [score, setScore] = useState<number>(gameAreaController.game.currentScore);
-  const [player, setPlayer] = useState<string | undefined>(gameAreaController.game.player);
+  const [customers, setCustomers] = useState<Customer[] | undefined>(
+    gameAreaController.currentCustomers,
+  );
+  const [score, setScore] = useState<number | undefined>(gameAreaController.currentScore);
+  const [player, setPlayer] = useState<PlayerController | undefined>(gameAreaController.players[0]);
   useEffect(() => {
     const updateGameState = () => {
+      setCustomers(gameAreaController.currentCustomers);
       setGameStatus(gameAreaController.status || 'WAITING_TO_START');
-      setScore(gameAreaController.game.currentScore);
-      setPlayer(gameAreaController.game.player);
+      setScore(gameAreaController.currentScore);
+      setPlayer(gameAreaController.players[0]);
     };
     gameAreaController.addListener('gameUpdated', updateGameState);
     const onGameEnd = () => {
