@@ -36,7 +36,19 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       },
       difficulty: 1,
     });
-    this.resetPizza();
+
+    this.state = {
+      ...this.state,
+      currentCustomers: [
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
+      ],
+    };
+    console.log(this.state.currentCustomers);
   }
 
   protected generateEmptyCustomer = (): Customer => {

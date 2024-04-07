@@ -38,7 +38,7 @@ export default function Order({ order }: OrderProps): JSX.Element {
         textAlign: 'center',
       }}>
       <h1 style={{ fontSize: 'small' }}>Order</h1>
-      <div>{order.pizzas.map(pizza => pizzaDisplay(pizza))}</div>
+      <div>{pizzaDisplay(order.pizzas[0])}</div>
     </div>
   );
 }

@@ -1,9 +1,18 @@
 import _ from 'lodash';
-import { GameArea, GameStatus, Pizza, PizzaPartyGameState } from '../../types/CoveyTownSocket';
+import {
+  Customer,
+  GameArea,
+  GameStatus,
+  Pizza,
+  PizzaPartyGameState,
+} from '../../types/CoveyTownSocket';
 import GameAreaController, { GameEventTypes } from './GameAreaController';
+import { nanoid } from 'nanoid';
 
 export type PizzaPartyEvents = GameEventTypes & {
-  gameChanged: () => void; // TO-DO: Add actual game movement
+  pizzaChanged: (currentPizza: Pizza) => void;
+  customerChanged: (currentCustomer: Customer) => void;
+  scoreChanged: (currentScore: number) => void;
 };
 
 // TO-DO: Add functionality
@@ -15,13 +24,34 @@ export default class PizzaPartyAreaController extends GameAreaController<
   PizzaPartyGameState,
   PizzaPartyEvents
 > {
+  protected generateEmptyCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Empty',
+      timeRemaining: 100000,
+      completed: false,
+      order: {
+        pizzas: [],
+        pointValue: 0,
+      },
+    };
+    return customer;
+  };
+
   protected _game: PizzaPartyGameState = {
     status: 'WAITING_TO_START',
     currentScore: 0,
     oven: {
       ovenFull: false,
     },
-    currentCustomers: [], // TODO: Get this from the backend,
+    currentCustomers: [
+      this.generateEmptyCustomer(),
+      this.generateEmptyCustomer(),
+      this.generateEmptyCustomer(),
+      this.generateEmptyCustomer(),
+      this.generateEmptyCustomer(),
+      this.generateEmptyCustomer(),
+    ],
     currentPizza: {
       id: 0,
       toppings: [],
@@ -31,8 +61,16 @@ export default class PizzaPartyAreaController extends GameAreaController<
     difficulty: 1,
   };
 
-  get currentPizza(): Pizza | undefined {
+  get currentPizza(): Pizza {
     return this._game.currentPizza;
+  }
+
+  get currentScore(): number {
+    return this._game.currentScore;
+  }
+
+  get currentCustomers(): Customer[] {
+    return this._game.currentCustomers;
   }
 
   public isActive(): boolean {
@@ -64,7 +102,6 @@ export default class PizzaPartyAreaController extends GameAreaController<
 
   public async startGame(): Promise<void> {
     const instanceID = this._instanceID;
-
     if (!instanceID || this._model.game?.state.status !== 'WAITING_TO_START') {
       throw new Error('Game Not startable');
     }
@@ -72,6 +109,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
       gameID: instanceID,
       type: 'StartGame',
     });
+    console.log('After error');
     this._updateFrom(response);
   }
 

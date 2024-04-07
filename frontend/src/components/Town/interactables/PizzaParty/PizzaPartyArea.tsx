@@ -15,7 +15,6 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
-  console.log(gameAreaController, 'Game are a controller');
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
   const [joiningGame, setJoiningGame] = useState(false);
   const toast = useToast();
@@ -53,6 +52,7 @@ export default function PizzaPartyArea({
             try {
               await gameAreaController.joinGame();
               await gameAreaController.startGame();
+              console.log('NSFJNDJSNDFNSKNSK');
             } catch (err) {
               toast({
                 title: 'Error joining game',
