@@ -22,7 +22,6 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     gameAreaController.addListener('pizzaChanged', setCurrentPizza);
     gameAreaController.addListener('scoreChanged', setCurrentScore);
     gameAreaController.addListener('gameChanged', setCurrentGame);
-    console.log(gameAreaController.currentCustomers);
     return () => {
       gameAreaController.removeListener('customerChanged', setCurrentCustomers);
       gameAreaController.removeListener('pizzaChanged', setCurrentPizza);

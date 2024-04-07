@@ -142,7 +142,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
    *
    * @param player The player this method starts the game on behalf of.
    */
-  public startGame(player: Player): PizzaPartyGameState {
+  public async startGame(player: Player): Promise<PizzaPartyGameState> {
     if (this.state.status !== 'WAITING_TO_START') {
       throw new InvalidParametersError(GAME_NOT_STARTABLE_MESSAGE);
     }
@@ -161,19 +161,19 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
       ],
     };
-    this.populateRestaurant();
+    await this.populateRestaurant();
     return this.state;
   }
 
-  protected populateRestaurant(): void {
+  protected async populateRestaurant(): Promise<void> {
     const id = setInterval(() => {
       const emptyCustomerIndex = this.state.currentCustomers.findIndex(
         customer => customer.name === 'Empty',
       );
-      console.log(emptyCustomerIndex);
       if (emptyCustomerIndex === -1) {
         clearInterval(id);
       }
+
       this.state.currentCustomers[emptyCustomerIndex] = this.generateRandomCustomer();
     }, 5000);
   }

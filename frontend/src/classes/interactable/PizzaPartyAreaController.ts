@@ -76,6 +76,8 @@ export default class PizzaPartyAreaController extends GameAreaController<
       gameID: instanceID,
       type: 'StartGame',
     });
+
+    console.log(this._game);
   }
 
   /**
