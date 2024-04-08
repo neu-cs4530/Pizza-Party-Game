@@ -5,11 +5,15 @@ import {
   GameStatus,
   Order,
   Pizza,
+  PizzaPartyGameMove,
   PizzaPartyGameState,
   Topping,
   ToppingOptions,
 } from '../../types/CoveyTownSocket';
-import GameAreaController, { GameEventTypes } from './GameAreaController';
+import GameAreaController, {
+  GameEventTypes,
+  NO_GAME_IN_PROGRESS_ERROR,
+} from './GameAreaController';
 import { nanoid } from 'nanoid';
 
 export type PizzaPartyEvents = GameEventTypes & {
@@ -205,6 +209,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
       }
     }
   }
+
   /**
    * Sends a request to the server to make a move in the game
    *
@@ -213,19 +218,15 @@ export default class PizzaPartyAreaController extends GameAreaController<
    * @param row Row of the move
    * @param col Column of the move
    */
-  // public async makeMove(row: TicTacToeGridPosition, col: TicTacToeGridPosition) {
-  //   const instanceID = this._instanceID;
-  //   if (!instanceID || this._model.game?.state.status !== 'IN_PROGRESS') {
-  //     throw new Error(NO_GAME_IN_PROGRESS_ERROR);
-  //   }
-  //   await this._townController.sendInteractableCommand(this.id, {
-  //     type: 'GameMove',
-  //     gameID: instanceID,
-  //     move: {
-  //       row,
-  //       col,
-  //       gamePiece: this.gamePiece,
-  //     },
-  //   });
-  // }
+  public async makeMove(move: PizzaPartyGameMove) {
+    const instanceID = this._instanceID;
+    if (!instanceID || this._model.game?.state.status !== 'IN_PROGRESS') {
+      throw new Error(NO_GAME_IN_PROGRESS_ERROR);
+    }
+    await this._townController.sendInteractableCommand(this.id, {
+      type: 'GameMove',
+      gameID: instanceID,
+      move: move,
+    });
+  }
 }
