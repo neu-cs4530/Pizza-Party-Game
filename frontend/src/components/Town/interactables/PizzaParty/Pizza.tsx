@@ -6,11 +6,15 @@ import { useState } from 'react';
 import Topping from './Topping';
 
 export type PizzaProps = {
-  pizza: PizzaType;
+  pizza: PizzaType | undefined;
 };
 
 export default function Pizza({ pizza }: PizzaProps): JSX.Element {
-  const [currentPizza, setCurrentPizza] = useState<PizzaType>(pizza);
+  const [currentPizza, setCurrentPizza] = useState<PizzaType | undefined>(pizza);
+
+  if (!currentPizza) {
+    return <div />;
+  }
   return (
     <div>
       <Image src={pizzaBase} alt='Pizza base' width={200} height={100} />
