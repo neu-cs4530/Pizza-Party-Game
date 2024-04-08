@@ -16,7 +16,12 @@ export default function Pizza({ pizza }: PizzaProps): JSX.Element {
   }
   return (
     <div>
-      <Image src={'/assets/pizza-party/raw-pizzas/dough.png'} alt='Pizza base' width={200} height={100} />
+      <Image
+        src={'/assets/pizza-party/raw-pizzas/dough.png'}
+        alt='Pizza base'
+        width={200}
+        height={100}
+      />
       {currentPizza.toppings.map((topping, index) => (
         <Topping key={index} topping={topping} />
       ))}
