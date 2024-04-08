@@ -312,7 +312,7 @@ export interface Topping {
 
 
 // All the toppings available in the game. Subject to change
-export type ToppingOptions = "pepperoni" | "mushrooms" | "anchovies" | "olives" | "onions" | "peppers" | "sausage" 
+export type ToppingOptions = "pepperoni" | "mushrooms" | "anchovies" | "olives" | "onions" | "peppers" | "sausage" | "sauce" | "cheese"
 
 export interface Pizza {
   id: number
