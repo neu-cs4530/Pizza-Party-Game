@@ -13,7 +13,7 @@ export default function Customer({ customer }: CustomerProps): JSX.Element {
 
   return (
     <div>
-      <Image src={'/assets/pizza-party/customer.png'} alt='Customer' />
+      <Image src={'/assets/pizza-party/customer.png'} alt='Customer' width={50} height={100} />
       <div style={{ position: 'relative', top: '-10px' }}>
         <Order order={currentCustomer.order} />
       </div>
