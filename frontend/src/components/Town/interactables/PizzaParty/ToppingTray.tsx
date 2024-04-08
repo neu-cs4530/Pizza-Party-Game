@@ -29,6 +29,12 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
     case 'sausage':
       imageSource = '/assets/pizza-party/food-bins-toppings/sausage.png';
       break;
+    case 'cheese':
+      imageSource = '/assets/pizza-party/food-bins-toppings/cheese.png';
+      break;
+    case 'sauce':
+      imageSource = '/assets/pizza-party/food-bins-toppings/sauce.png';
+      break;
   }
 
   return (

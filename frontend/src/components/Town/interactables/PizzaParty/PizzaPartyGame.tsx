@@ -28,7 +28,6 @@ export const toppings: ToppingType[] = [
 
 const toppingOptionsList: ToppingOptions[] = ["pepperoni", "mushrooms", "anchovies", "olives", "onions", "peppers", "sausage"];
 
-
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
@@ -104,6 +103,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
             )
           })
         }
+      </div>
+      <div style={{display: "flex", flexDirection: 'column', position: 'absolute', top: 400,  }}>
+      <ToppingTray topping={"sauce"} />
+        <ToppingTray topping={"cheese"} />
       </div>
     </div>
   );
