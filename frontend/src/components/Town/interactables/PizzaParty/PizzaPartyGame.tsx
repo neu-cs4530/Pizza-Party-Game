@@ -10,6 +10,7 @@ import Topping from './Topping';
 import { ToppingOptions } from '../../../../types/CoveyTownSocket';
 import ToppingTray from './ToppingTray';
 import Oven from './Oven';
+import Trash from './Trash';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
@@ -90,7 +91,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{position: 'absolute',top: 350, left: 480 }}>
         <Oven />
       </div>
-      <div>
+      <div style={{position: 'absolute',top: 430, left: 410 }}>
+        <Trash  />
+      </div>
+      <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {
           toppingOptionsList.map((topping) => {
             <div style={{ marginRight: 30 }}>
