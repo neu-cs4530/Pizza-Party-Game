@@ -6,7 +6,6 @@ export type ToppingProps = {
 };
 
 export default function Topping({ topping }: ToppingProps): JSX.Element {
-  console.log(topping, "Toppinh")
   let imageSource = '';
   switch (topping) {
     case 'pepperoni':
@@ -36,7 +35,9 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
     <button
     onClick={() => console.log('Topping clicked')}
     >
+      <div style={{backgroundColor: "silver"}}>
       <Image src={imageSource} alt={topping} width={20} height={40} />
+      </div>
     </button>
   )
 }

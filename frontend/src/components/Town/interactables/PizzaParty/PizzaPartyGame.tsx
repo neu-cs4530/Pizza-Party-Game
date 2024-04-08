@@ -94,12 +94,14 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{position: 'absolute',top: 430, left: 410 }}>
         <Trash  />
       </div>
-      <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
+      <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
         {
           toppingOptionsList.map((topping) => {
-            <div style={{ marginRight: 30 }}>
+            return(
+              <div style={{ marginRight: 30 }}>
               <ToppingTray topping={topping} /> 
             </div>
+            )
           })
         }
       </div>
