@@ -69,6 +69,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+      if (!move.move.pizza) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
       move.move.pizza?.toppings.push(move.move.topping);
     } else if (move.move.moveType === 'moveToCustomer') {
       if (move.move.customer === undefined) {

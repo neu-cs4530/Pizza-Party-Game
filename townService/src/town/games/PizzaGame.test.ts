@@ -1,4 +1,4 @@
-import { createPlayerForTesting, createPizzaForTesting, createOrderForTesting, createCustomerForTesting } from '../../TestUtils';
+import { createPlayerForTesting, createPizzaForTesting, createOrderForTesting, createCustomerForTesting, expectArraysToContainSameMembers } from '../../TestUtils';
 import {
   GAME_FULL_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
@@ -112,17 +112,37 @@ describe('PizzaPartyGame', () => {
       });
       it('should throw an error if move is type placeTopping and topping is undefined', async () => {
         game.startGame(player1);
+        const pizza1 = createPizzaForTesting();
         await expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
               moveType: 'placeTopping',
+              pizza: pizza1,
               topping: undefined,
             },
           }),
         ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
       });
+      it('should throw an error if move is type placeTopping and pizza is undefined', async () => {
+        game.startGame(player1);
+        await expect(() =>
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'placeTopping',
+              topping: {
+                id: 1,
+                kind: 'olives',
+                appliedOnPizza: false
+              },
+              pizza: undefined,
+            },
+          }),
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);        
+      })
       it('should throw an error if move is of type moveToCustomer and customer is undefined', async () => {
         const pizza1: Pizza = createPizzaForTesting();
         game.startGame(player1);
@@ -131,7 +151,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              moveType: 'moveToCustomer',
               pizza: pizza1,
               customer: undefined,
             },
@@ -148,7 +168,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              moveType: 'moveToCustomer',
               customer: customer1,
               pizza: undefined,
             },
@@ -168,7 +188,93 @@ describe('PizzaPartyGame', () => {
           })
         ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
       });
-      // it('should throw an error if move is of type moveToOven and oven is full')
+      it('should throw an error if move is of type moveToOven and oven is full', async () => {
+        const pizza1 = createPizzaForTesting();
+        game.startGame(player1);
+        game.state.oven.ovenFull = true;
+        await expect(() => 
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'moveToOven',
+              pizza: pizza1,
+            }
+          })
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      });
+      it('should throw an error if move is of type moveToOven and pizza is in oven', async () => {
+        const pizza1 = createPizzaForTesting();
+        game.startGame(player1);
+        pizza1.isInOven = true;
+        await expect(() => 
+        game.applyMove({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            moveType: 'moveToOven',
+            pizza: pizza1,
+          }
+        })
+      ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      })
+    });
+    describe ('when given a placeTopping move', () => {
+      it('should reflect in the pizza\'s topping list (1 topping)', () => {
+        const pizza1 = createPizzaForTesting([]);
+        expect(pizza1.toppings.length).toEqual(0);
+        game.startGame(player1);
+        game.applyMove({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            moveType: 'placeTopping',
+            topping: {
+              id: 1,
+              kind: 'olives',
+              appliedOnPizza: false
+            },
+            pizza: pizza1
+          }
+        });
+        expect(pizza1.toppings.length).toEqual(1);
+        expect(pizza1.toppings[0].kind).toBe('olives');
+      });
+      it('should reflect in the pizza\'s topping list (2 toppings)', () => {
+        const pizza1 = createPizzaForTesting([]);
+        expect(pizza1.toppings.length).toEqual(0);
+        game.startGame(player1);
+        game.applyMove({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            moveType: 'placeTopping',
+            topping: {
+              id: 1,
+              kind: 'olives',
+              appliedOnPizza: false
+            },
+            pizza: pizza1
+          }
+        });
+        expect(pizza1.toppings.length).toEqual(1);
+        game.applyMove({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            moveType: 'placeTopping',
+            topping: {
+              id: 2,
+              kind: 'onions',
+              appliedOnPizza: false
+            },
+            pizza: pizza1
+          }
+        });
+        expect(pizza1.toppings.length).toEqual(2);
+        expect(pizza1.toppings[0].kind).toBe('olives');
+        expect(pizza1.toppings[1].kind).toBe('onions');
+      });
     });
   });
 });
