@@ -7,6 +7,7 @@ import { Customer, GameStatus, InteractableID } from '../../../../types/CoveyTow
 import PizzaPartyGame from './PizzaPartyGame';
 import { useToast } from '@chakra-ui/react';
 import PlayerController from '../../../../classes/PlayerController';
+import LeaderBoard from './Leaderboard';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -69,6 +70,11 @@ export default function PizzaPartyArea({
         </button>
       </div>
     );
+  }
+  if (gameStatus === "OVER") {
+    return(
+      <LeaderBoard />
+    )
   }
   return (
     <div>
