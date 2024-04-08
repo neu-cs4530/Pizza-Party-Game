@@ -8,6 +8,8 @@ import Customer from './Customer';
 import { Customer as CustomerType, Topping as ToppingType} from '../../../../types/CoveyTownSocket';
 import Topping from './Topping';
 import { ToppingOptions } from '../../../../types/CoveyTownSocket';
+import ToppingTray from './ToppingTray';
+import Oven from './Oven';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
@@ -22,6 +24,9 @@ export const toppings: ToppingType[] = [
   { id: 6, kind: "peppers", appliedOnPizza: false },
   { id: 7, kind: "sausage", appliedOnPizza: false },
 ];
+
+const toppingOptionsList: ToppingOptions[] = ["pepperoni", "mushrooms", "anchovies", "olives", "onions", "peppers", "sausage"];
+
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
@@ -82,12 +87,15 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
           ),
         )}
       </div>
+      <div style={{position: 'absolute',top: 350, left: 480 }}>
+        <Oven />
+      </div>
       <div>
         {
-          toppings.map((topping, index) => {
-            return(
-              <Topping topping={topping} />
-            )
+          toppingOptionsList.map((topping) => {
+            <div style={{ marginRight: 30 }}>
+              <ToppingTray topping={topping} /> 
+            </div>
           })
         }
       </div>
