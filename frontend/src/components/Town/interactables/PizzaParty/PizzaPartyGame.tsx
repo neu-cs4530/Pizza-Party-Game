@@ -14,13 +14,12 @@ import { ToppingOptions } from '../../../../types/CoveyTownSocket';
 import ToppingTray from './ToppingTray';
 import Oven from './Oven';
 import Trash from './Trash';
-import { nanoid } from 'nanoid';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
 };
 
-export const toppings: ToppingType[] = [
+export const TOPPINGS: ToppingType[] = [
   { id: 1, kind: 'pepperoni', appliedOnPizza: false },
   { id: 2, kind: 'mushrooms', appliedOnPizza: false },
   { id: 3, kind: 'anchovies', appliedOnPizza: false },
@@ -30,7 +29,7 @@ export const toppings: ToppingType[] = [
   { id: 7, kind: 'sausage', appliedOnPizza: false },
 ];
 
-const toppingOptionsList: ToppingOptions[] = [
+const TOPPINGS_OPTIONS_LIST: ToppingOptions[] = [
   'pepperoni',
   'mushrooms',
   'anchovies',
@@ -46,22 +45,6 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
-
-  function applyTopping(topping: ToppingOptions): void {
-    const top = {
-      id: Math.floor(Math.random() * 1000),
-      kind: topping,
-      appliedOnPizza: false,
-    };
-    gameAreaController.makeMove({
-      topping: top,
-      pizza: currentPizza,
-      customer: undefined,
-      moveType: 'placeTopping',
-    });
-
-    console.log(currentPizza);
-  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -94,6 +77,21 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     };
   }, [currentGame, currentCustomers, currentPizza]);
 
+  function applyTopping(topp: ToppingOptions): void {
+    const top = {
+      id: Math.floor(Math.random() * 1000),
+      kind: topp,
+      appliedOnPizza: false,
+    };
+    gameAreaController.makeMove({
+      topping: top,
+      pizza: currentPizza,
+      customer: undefined,
+      gamePiece: 'placeTopping',
+    });
+    console.log(currentPizza);
+  }
+
   return (
     <div>
       <Image
@@ -123,10 +121,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Trash />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
-        {toppingOptionsList.map(topping => {
+        {TOPPINGS_OPTIONS_LIST.map((topping, index) => {
           return (
-            <div style={{ marginRight: 30 }}>
-              <ToppingTray topping={topping} onClick={applyTopping(topping)} />
+            <div style={{ marginRight: 30 }} key={index} onClick={() => applyTopping(topping)}>
+              <ToppingTray topping={topping} />
             </div>
           );
         })}

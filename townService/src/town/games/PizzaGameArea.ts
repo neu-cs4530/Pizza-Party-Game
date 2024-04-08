@@ -1,3 +1,4 @@
+import assert from 'assert';
 import InvalidParametersError, {
   GAME_ID_MISSMATCH_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -6,10 +7,12 @@ import InvalidParametersError, {
 import Player from '../../lib/Player';
 import {
   PizzaPartyGameState,
+  PizzaPartyGameMove,
   GameInstance,
   InteractableCommand,
   InteractableCommandReturnType,
   InteractableType,
+  GameMove,
 } from '../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaGame';
 import GameArea from './GameArea';
@@ -121,7 +124,20 @@ export default class PizzaPartyGameArea extends GameArea<PizzaPartyGame> {
       if (this._game?.id !== command.gameID) {
         throw new InvalidParametersError(GAME_ID_MISSMATCH_MESSAGE);
       }
-      game.applyMove(command.move);
+
+      assert(
+        command.move.gamePiece === 'placeTopping' ||
+          command.move.gamePiece === 'moveToOven' ||
+          command.move.gamePiece === 'moveToCustomer' ||
+          command.move.gamePiece === 'throwOut',
+        'Invalid game piece',
+      );
+
+      game.applyMove({
+        gameID: command.gameID,
+        playerID: player.id,
+        move: command.move,
+      });
       this._stateUpdated(game.toModel());
       return undefined as InteractableCommandReturnType<CommandType>;
     }

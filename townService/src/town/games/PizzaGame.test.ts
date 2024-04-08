@@ -1,4 +1,9 @@
-import { createPlayerForTesting, createPizzaForTesting, createOrderForTesting, createCustomerForTesting } from '../../TestUtils';
+import {
+  createPlayerForTesting,
+  createPizzaForTesting,
+  createOrderForTesting,
+  createCustomerForTesting,
+} from '../../TestUtils';
 import {
   GAME_FULL_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
@@ -105,7 +110,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
             },
           }),
         ).rejects.toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
@@ -117,7 +122,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               topping: undefined,
             },
           }),
@@ -131,7 +136,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               pizza: pizza1,
               customer: undefined,
             },
@@ -148,7 +153,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               customer: customer1,
               pizza: undefined,
             },
@@ -157,15 +162,15 @@ describe('PizzaPartyGame', () => {
       });
       it('should throw an error if move is of type moveToOven and pizza is undefined', async () => {
         game.startGame(player1);
-        await expect(() => 
+        await expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: undefined,
-            }
-          })
+            },
+          }),
         ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
       });
       // it('should throw an error if move is of type moveToOven and oven is full')
