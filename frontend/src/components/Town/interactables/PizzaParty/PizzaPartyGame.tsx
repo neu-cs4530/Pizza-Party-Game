@@ -5,7 +5,10 @@ import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPart
 import * as background from '../../../../../public/assets/pizza-party/background.png';
 import Pizza from './Pizza';
 import Customer from './Customer';
-import { Customer as CustomerType, Topping as ToppingType} from '../../../../types/CoveyTownSocket';
+import {
+  Customer as CustomerType,
+  Topping as ToppingType,
+} from '../../../../types/CoveyTownSocket';
 import Topping from './Topping';
 import { ToppingOptions } from '../../../../types/CoveyTownSocket';
 import ToppingTray from './ToppingTray';
@@ -16,17 +19,15 @@ export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
 };
 
-export const toppings: ToppingType[] = [
-  { id: 1, kind: "pepperoni", appliedOnPizza: false },
-  { id: 2, kind: "mushrooms", appliedOnPizza: false },
-  { id: 3, kind: "anchovies", appliedOnPizza: false },
-  { id: 4, kind: "olives", appliedOnPizza: false },
-  { id: 5, kind: "onions", appliedOnPizza: false },
-  { id: 6, kind: "peppers", appliedOnPizza: false },
-  { id: 7, kind: "sausage", appliedOnPizza: false },
+const TOPPINGS_LIST: ToppingOptions[] = [
+  'pepperoni',
+  'mushrooms',
+  'anchovies',
+  'olives',
+  'onions',
+  'peppers',
+  'sausage',
 ];
-
-const toppingOptionsList: ToppingOptions[] = ["pepperoni", "mushrooms", "anchovies", "olives", "onions", "peppers", "sausage"];
 
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
@@ -87,26 +88,24 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
           ),
         )}
       </div>
-      <div style={{position: 'absolute',top: 350, left: 480 }}>
+      <div style={{ position: 'absolute', top: 350, left: 480 }}>
         <Oven />
       </div>
-      <div style={{position: 'absolute',top: 430, left: 410 }}>
-        <Trash  />
+      <div style={{ position: 'absolute', top: 430, left: 410 }}>
+        <Trash />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
-        {
-          toppingOptionsList.map((topping) => {
-            return(
-              <div style={{ marginRight: 30 }}>
-              <ToppingTray topping={topping} /> 
+        {TOPPINGS_LIST.map(topping => {
+          return (
+            <div key={topping} style={{ marginRight: 30 }}>
+              <ToppingTray key={topping} topping={topping} />
             </div>
-            )
-          })
-        }
+          );
+        })}
       </div>
-      <div style={{display: "flex", flexDirection: 'column', position: 'absolute', top: 400,  }}>
-        <ToppingTray topping={"sauce"} />
-        <ToppingTray topping={"cheese"} />
+      <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
+        <ToppingTray topping={'sauce'} />
+        <ToppingTray topping={'cheese'} />
       </div>
     </div>
   );
