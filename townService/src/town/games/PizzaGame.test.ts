@@ -1,4 +1,9 @@
-import { createPlayerForTesting, createPizzaForTesting, createOrderForTesting, createCustomerForTesting } from '../../TestUtils';
+import {
+  createPlayerForTesting,
+  createPizzaForTesting,
+  createOrderForTesting,
+  createCustomerForTesting,
+} from '../../TestUtils';
 import {
   GAME_FULL_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
@@ -157,15 +162,15 @@ describe('PizzaPartyGame', () => {
       });
       it('should throw an error if move is of type moveToOven and pizza is undefined', async () => {
         game.startGame(player1);
-        await expect(() => 
+        await expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
               moveType: 'moveToOven',
               pizza: undefined,
-            }
-          })
+            },
+          }),
         ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
       });
       // it('should throw an error if move is of type moveToOven and oven is full')
