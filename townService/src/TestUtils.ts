@@ -10,6 +10,7 @@ import {
   ReservedOrUserListener,
   TypedEventBroadcaster,
 } from 'socket.io/dist/typed-events';
+import e from 'express';
 import Player from './lib/Player';
 import {
   BoundingBox,
@@ -30,7 +31,6 @@ import {
   Order,
 } from './types/CoveyTownSocket';
 import { createOrder } from './town/database/order/dao';
-import e from 'express';
 
 /**
  * Create a new conversation area using some random defaults
@@ -208,15 +208,15 @@ export function createPlayerForTesting(): Player {
 export function createPizzaForTesting(toppings?: ToppingOptions[]): Pizza {
   let toppingsList: Topping[] = [];
   if (toppings) {
-    let toppingID: number = 0;
+    let toppingID = 0;
     toppings.forEach(() => {
       toppingsList.push({
         id: toppingID,
         kind: 'anchovies',
-        appliedOnPizza: true,        
-      })
+        appliedOnPizza: true,
+      });
       toppingID++;
-    })
+    });
   } else {
     toppingsList = [
       {
@@ -246,11 +246,11 @@ export function createCustomerForTesting(order: Order): Customer {
     timeRemaining: 1000,
     completed: false,
     order,
-  }
+  };
 }
 
 /**
- * Creates a simple one-point order for an anchovy pizza. 
+ * Creates a simple one-point order for an anchovy pizza.
  * @param pizzas: The pizzas we want to be in the order (at this stage, we only want one pizza per order but we're keeping the list for any potential future expansion.)
  * @returns A 1-point order for an anchovy pizza.
  */
@@ -258,7 +258,7 @@ export function createOrderForTesting(pizzas: Pizza[]): Order {
   return {
     pizzas,
     pointValue: 1,
-  }
+  };
 }
 
 /**

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { Order as OrderType, Pizza, Topping } from '../../../../types/CoveyTownSocket';
-import * as speechBubble from '../../../../../public/assets/pizza-party/speech-bubble.png';
 
 export interface OrderProps {
   order: OrderType;
@@ -30,7 +29,7 @@ export default function Order({ order }: OrderProps): JSX.Element {
   return (
     <div
       style={{
-        backgroundImage: speechBubble,
+        backgroundImage: '/assets/pizza-party/speech-bubble.png',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundColor: 'white',
