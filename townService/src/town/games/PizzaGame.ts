@@ -18,6 +18,7 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
+import orderSchema from '../database/order/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -85,7 +86,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         move.move.customer.order.pizzas[0].toppings,
       );
       if (validPizza) {
-        this.state.currentScore += 1;
+        this.state.currentScore += move.move.customer.order.pointValue;
       }
       // TODO: handle customer functionality (how do we give them stuff)
       /**
@@ -105,7 +106,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       this.state.oven.pizza = move.move.pizza;
       this.state.oven.ovenFull = true;
     } else if (move.move.moveType === 'throwOut') {
-      this.resetPizza();
+      if (move.move.pizza === this.state.currentPizza) {
+        this.resetPizza();
+      } else if (move.move.pizza === this.state.oven.pizza) {
+        this.state.oven.pizza = undefined;
+        this.state.oven.ovenFull = false;
+      }
     }
     this.checkDifficulty();
   }
