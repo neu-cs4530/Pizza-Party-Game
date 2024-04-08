@@ -1,9 +1,13 @@
-import { createPlayerForTesting } from '../../TestUtils';
+import { createPlayerForTesting, createPizzaForTesting, createOrderForTesting, createCustomerForTesting } from '../../TestUtils';
 import {
   GAME_FULL_MESSAGE,
   PLAYER_NOT_IN_GAME_MESSAGE,
   GAME_NOT_STARTABLE_MESSAGE,
+  GAME_NOT_IN_PROGRESS_MESSAGE,
+  INVALID_MOVE_MESSAGE,
 } from '../../lib/InvalidParametersError';
+import Player from '../../lib/Player';
+import { Customer, Order, Pizza } from '../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaGame';
 
 describe('PizzaPartyGame', () => {
@@ -41,15 +45,15 @@ describe('PizzaPartyGame', () => {
       game.startGame(player1);
       expect(game.state.status).toEqual('IN_PROGRESS');
     });
-    it('should throw an error if the status is not WAITING_TO_START', () => {
+    it('should throw an error if the status is not WAITING_TO_START', async () => {
       const player1 = createPlayerForTesting();
-      expect(() => game.startGame(player1)).toThrowError(GAME_NOT_STARTABLE_MESSAGE);
+      await expect(() => game.startGame(player1)).rejects.toThrowError(GAME_NOT_STARTABLE_MESSAGE);
     });
-    it('should throw an error if the player is not in the game', () => {
+    it('should throw an error if the player is not in the game', async () => {
       const player1 = createPlayerForTesting();
       game.join(player1);
       game.state.player = undefined;
-      expect(() => game.startGame(player1)).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
+      await expect(() => game.startGame(player1)).rejects.toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
     });
   });
   describe('_leave', () => {
@@ -85,6 +89,86 @@ describe('PizzaPartyGame', () => {
         game.leave(player1);
         expect(game.state.player).toEqual(undefined);
       });
+    });
+  });
+  describe('applyMove', () => {
+    let player1: Player;
+
+    beforeEach(() => {
+      player1 = createPlayerForTesting();
+      game.join(player1);
+    });
+    describe('when given an invalid move', () => {
+      it('should throw an error if the game is not in progress', async () => {
+        await expect(() =>
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'moveToOven',
+            },
+          }),
+        ).rejects.toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
+      });
+      it('should throw an error if move is type placeTopping and topping is undefined', async () => {
+        game.startGame(player1);
+        await expect(() =>
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'placeTopping',
+              topping: undefined,
+            },
+          }),
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      });
+      it('should throw an error if move is of type moveToCustomer and customer is undefined', async () => {
+        const pizza1: Pizza = createPizzaForTesting();
+        game.startGame(player1);
+        await expect(() =>
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'placeTopping',
+              pizza: pizza1,
+              customer: undefined,
+            },
+          }),
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      });
+      it('should throw an error if move is of type moveToCustomer and pizza is undefined', async () => {
+        const pizza1: Pizza = createPizzaForTesting();
+        const order1: Order = createOrderForTesting([pizza1]);
+        const customer1: Customer = createCustomerForTesting(order1);
+        game.startGame(player1);
+        await expect(() =>
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'placeTopping',
+              customer: customer1,
+              pizza: undefined,
+            },
+          }),
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      });
+      it('should throw an error if move is of type moveToOven and pizza is undefined', async () => {
+        game.startGame(player1);
+        await expect(() => 
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: {
+              moveType: 'moveToOven',
+              pizza: undefined,
+            }
+          })
+        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+      });
+      // it('should throw an error if move is of type moveToOven and oven is full')
     });
   });
 });
