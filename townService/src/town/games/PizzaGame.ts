@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import { empty } from 'ramda';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -75,10 +74,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      // if (!this.state.currentCustomers.includes(move.move.customer)) {
-      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      // }
-      if (move.move.pizza?.toppings === undefined) {
+      if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
       const validPizza: boolean = this.sameToppings(
@@ -97,6 +93,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
        * else ()
        */
     } else if (move.move.moveType === 'moveToOven') {
+      if (!move.move.pizza) {
+        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      }
       if (this.state.oven.ovenFull || move.move.pizza?.isInOven) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }

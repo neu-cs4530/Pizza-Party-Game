@@ -18,12 +18,19 @@ import {
   CoveyTownSocket,
   Direction,
   Interactable,
+  Pizza,
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
   TownEmitter,
   ViewingArea,
+  ToppingOptions,
+  Topping,
+  Customer,
+  Order,
 } from './types/CoveyTownSocket';
+import { createOrder } from './town/database/order/dao';
+import e from 'express';
 
 /**
  * Create a new conversation area using some random defaults
@@ -191,6 +198,67 @@ export function mockPlayer(townID: string): MockedPlayer {
  */
 export function createPlayerForTesting(): Player {
   return new Player(`username${nanoid()}`, mock<TownEmitter>());
+}
+
+/**
+ * Creates a pizza for testing, not connected to any town. Will be an anchovy pizza by default, but can be given toppings.
+ * @param toppings Optional param just in case we want to create a pizza with toppings that aren't just anchovies.
+ * @returns The pizza with the given toppings.
+ */
+export function createPizzaForTesting(toppings?: ToppingOptions[]): Pizza {
+  let toppingsList: Topping[] = [];
+  if (toppings) {
+    let toppingID: number = 0;
+    toppings.forEach(() => {
+      toppingsList.push({
+        id: toppingID,
+        kind: 'anchovies',
+        appliedOnPizza: true,        
+      })
+      toppingID++;
+    })
+  } else {
+    toppingsList = [
+      {
+        id: 1,
+        kind: 'anchovies',
+        appliedOnPizza: true,
+      },
+    ];
+  }
+  return {
+    id: 1,
+    cooked: true,
+    toppings: toppingsList,
+    isInOven: false,
+  };
+}
+
+/**
+ * Creates a customer with the given order.
+ * @param order The customer's order that we give when calling this function.
+ * @returns A customer with the given order.
+ */
+export function createCustomerForTesting(order: Order): Customer {
+  return {
+    id: nanoid(),
+    name: 'bob',
+    timeRemaining: 1000,
+    completed: false,
+    order,
+  }
+}
+
+/**
+ * Creates a simple one-point order for an anchovy pizza. 
+ * @param pizzas: The pizzas we want to be in the order (at this stage, we only want one pizza per order but we're keeping the list for any potential future expansion.)
+ * @returns A 1-point order for an anchovy pizza.
+ */
+export function createOrderForTesting(pizzas: Pizza[]): Order {
+  return {
+    pizzas,
+    pointValue: 1,
+  }
 }
 
 /**

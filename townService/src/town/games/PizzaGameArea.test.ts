@@ -22,7 +22,7 @@ class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
     super({
       status: 'WAITING_TO_START',
       currentScore: 0,
-      currentCustomers: [undefined, undefined, undefined, undefined, undefined, undefined],
+      currentCustomers: [],
       currentPizza: {
         id: 0,
         toppings: [],
