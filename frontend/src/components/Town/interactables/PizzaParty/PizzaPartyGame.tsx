@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
-import * as background from '../../../../../public/assets/pizza-party/background.png';
 import Pizza from './Pizza';
 import Customer from './Customer';
 import {
@@ -19,17 +18,7 @@ export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
 };
 
-export const TOPPINGS: ToppingType[] = [
-  { id: 1, kind: 'pepperoni', appliedOnPizza: false },
-  { id: 2, kind: 'mushrooms', appliedOnPizza: false },
-  { id: 3, kind: 'anchovies', appliedOnPizza: false },
-  { id: 4, kind: 'olives', appliedOnPizza: false },
-  { id: 5, kind: 'onions', appliedOnPizza: false },
-  { id: 6, kind: 'peppers', appliedOnPizza: false },
-  { id: 7, kind: 'sausage', appliedOnPizza: false },
-];
-
-const TOPPINGS_OPTIONS_LIST: ToppingOptions[] = [
+const TOPPINGS_LIST: ToppingOptions[] = [
   'pepperoni',
   'mushrooms',
   'anchovies',
@@ -95,7 +84,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   return (
     <div>
       <Image
-        src={background}
+        src={'/assets/pizza-party/background.png'}
         alt='Pizza Party Game'
         layout='fill'
         style={{ position: 'absolute', top: 0, left: 0 }}
@@ -121,13 +110,17 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Trash />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
-        {TOPPINGS_OPTIONS_LIST.map((topping, index) => {
+        {TOPPINGS_LIST.map((topping, index) => {
           return (
-            <div style={{ marginRight: 30 }} key={index} onClick={() => applyTopping(topping)}>
+            <div key={index} style={{ marginRight: 30 }} onClick={() => applyTopping(topping)}>
               <ToppingTray topping={topping} />
             </div>
           );
         })}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
+        <ToppingTray topping={'sauce'} />
+        <ToppingTray topping={'cheese'} />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
+
 import { Pizza, ToppingOptions } from '../../../../types/CoveyTownSocket';
 import Image from 'next/image';
-import React from 'react';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
+import React from 'react';
+import { ToppingOptions } from '../../../../types/CoveyTownSocket';
 
 export type ToppingProps = {
   topping: ToppingOptions;
@@ -30,6 +32,12 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
       break;
     case 'sausage':
       imageSource = '/assets/pizza-party/food-bins-toppings/sausage.png';
+      break;
+    case 'cheese':
+      imageSource = '/assets/pizza-party/food-bins-toppings/cheese.png';
+      break;
+    case 'sauce':
+      imageSource = '/assets/pizza-party/food-bins-toppings/sauce.png';
       break;
   }
 
