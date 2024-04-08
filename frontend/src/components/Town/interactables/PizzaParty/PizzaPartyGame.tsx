@@ -105,7 +105,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         }
       </div>
       <div style={{display: "flex", flexDirection: 'column', position: 'absolute', top: 400,  }}>
-      <ToppingTray topping={"sauce"} />
+        <ToppingTray topping={"sauce"} />
         <ToppingTray topping={"cheese"} />
       </div>
     </div>
