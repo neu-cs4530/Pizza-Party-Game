@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { Customer as CustomerType, Order as OrderType } from '../../../../types/CoveyTownSocket';
-import * as customerSprite from '../../../../../public/assets/pizza-party/customer.png';
 import { useState } from 'react';
 import Order from './Order';
 
@@ -14,7 +13,7 @@ export default function Customer({ customer }: CustomerProps): JSX.Element {
 
   return (
     <div>
-      <Image src={customerSprite} alt='Customer' />
+      <Image src={'/assets/pizza-party/customer.png'} alt='Customer' />
       <div style={{ position: 'relative', top: '-10px' }}>
         <Order order={currentCustomer.order} />
       </div>

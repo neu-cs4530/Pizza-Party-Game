@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
-import * as background from '../../../../../public/assets/pizza-party/background.png';
 import Pizza from './Pizza';
 import Customer from './Customer';
 import {
@@ -69,7 +68,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   return (
     <div>
       <Image
-        src={background}
+        src={'/assets/pizza-party/background.png'}
         alt='Pizza Party Game'
         layout='fill'
         style={{ position: 'absolute', top: 0, left: 0 }}
