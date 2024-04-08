@@ -1,40 +1,42 @@
-import { Topping } from "../../../../types/CoveyTownSocket";
-import { Button } from "@chakra-ui/react";
+import { Topping as ToppingType } from "../../../../types/CoveyTownSocket";
+import Image from "next/image"
 
 export type ToppingProps = {
-  topping: Topping;
+  topping: ToppingType;
 };
 
 export default function Topping({ topping }: ToppingProps): JSX.Element {
   let imageSource = '';
   switch (topping.kind) {
     case 'pepperoni':
-      imageSource = '/path/to/pepperoni_image.png';
+      imageSource = "/assets/pizza-party/pizza-toppings/pepperoni.png";
       break;
     case 'mushrooms':
-      imageSource = '/path/to/mushrooms_image.png';
+      imageSource = "/assets/pizza-party/pizza-toppings/mushrooms.png";
       break;
     case 'anchovies':
-      imageSource = '/path/to/anchovies_image.png';
+      imageSource = '/assets/pizza-party/pizza-toppings/anchovies.png';
       break;
     case 'olives':
-      imageSource = '/path/to/olives_image.png';
+      imageSource = "/assets/pizza-party/pizza-toppings/olives.png";
       break;
     case 'onions':
-      imageSource = '/path/to/onions_image.png';
+      imageSource = '/assets/pizza-party/pizza-toppings/onions.png';
       break;
     case 'peppers':
-      imageSource = '/path/to/peppers_image.png';
+      imageSource = '/assets/pizza-party/pizza-toppings/peppers.png';
       break;
     case 'sausage':
-      imageSource = '/path/to/sausage_image.png';
+      imageSource = '/assets/pizza-party/pizza-toppings/sausage.png';
       break;
   }
 
   return (
-    <Button>
-      <img src={imageSource} alt={topping} />
-    </Button>
+    <button
+    onClick={() => console.log('Topping clicked')}
+    >
+      <Image src={imageSource} alt={topping.kind} width={200} height={200} />
+    </button>
   )
 }
 
