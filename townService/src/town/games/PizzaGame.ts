@@ -74,7 +74,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           toppings: [...this.state.currentPizza.toppings, move.move.topping],
         },
       };
-<<<<<<< HEAD
       move.move.topping.appliedOnPizza = true;
     } else if (move.move.gamePiece === 'throwOut') {
       console.log("remove toppings")
@@ -98,10 +97,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         console.log("hi")
       }
       console.log("end of move")
-=======
-      // move.move.pizza?.toppings.push(move.move.topping);
-      // move.move.topping.appliedOnPizza = true;
->>>>>>> sho-r1024/applyMoveTesting
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
