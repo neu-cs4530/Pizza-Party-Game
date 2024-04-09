@@ -29,7 +29,6 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
             {hasCheese && !hasSauce && (
         <Image
           src={'/assets/pizza-party/raw-pizzas/cheese.png'}
-          alt='Pizza with Cheese'
           width={200}
           height={100}
         />
@@ -37,7 +36,6 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
       {hasSauce && !hasCheese && (
         <Image
           src={'/assets/pizza-party/raw-pizzas/sauce.png'}
-          alt='Pizza with Sauce'
           width={200}
           height={100}
         />
@@ -45,7 +43,6 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
       {hasSauce && hasCheese && (
         <Image
           src={'/assets/pizza-party/raw-pizzas/cheese-and-sauce.png'}
-          alt='Pizza with Sauce and Cheese'
           width={200}
           height={100}
         />
@@ -53,7 +50,6 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
       {!hasSauce && !hasCheese && (
         <Image
           src={'/assets/pizza-party/raw-pizzas/dough.png'}
-          alt='Pizza Base'
           width={200}
           height={100}
         />
