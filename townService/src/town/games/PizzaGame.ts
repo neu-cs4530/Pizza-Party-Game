@@ -55,6 +55,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   };
 
   public applyMove(move: GameMove<PizzaPartyGameMove>): void {
+    console.log('Applying move', move);
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
@@ -70,6 +71,28 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         },
       };
       move.move.topping.appliedOnPizza = true;
+    } else if (move.move.gamePiece === 'throwOut') {
+      console.log("remove toppings")
+      try {
+        if(this.state.currentPizza.toppings.length > 0) {
+          this.state.currentPizza.toppings.forEach(topping =>
+            topping.appliedOnPizza = false
+          );
+        }
+        this.state = {
+          ...this.state,
+          currentPizza: {
+            ...this.state.currentPizza,
+            toppings: [],
+            cooked: false,
+            isInOven: false,
+          },
+        };
+      } catch(e: any) {
+        console.log((e as Error).message);
+        console.log("hi")
+      }
+      console.log("end of move")
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
