@@ -80,6 +80,9 @@ export default function PizzaPartyArea({
     <div>
       <h1>Pizza Party Game</h1>
       <PizzaPartyGame gameAreaController={gameAreaController} />
+      <div>
+        
+      </div>
     </div>
   );
 }
