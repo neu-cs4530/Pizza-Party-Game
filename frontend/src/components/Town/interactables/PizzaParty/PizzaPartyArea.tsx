@@ -19,7 +19,7 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
-  const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
+  const [gameStatus, setGameStatus] = useState<GameStatus>("WAITING_FOR_PLAYERS");
   const [joiningGame, setJoiningGame] = useState(false);
   const toast = useToast();
   const [customers, setCustomers] = useState<Customer[] | undefined>(
@@ -69,8 +69,7 @@ export default function PizzaPartyArea({
       </div>
     );
   }
-
-  if (gameStatus === 'IN_PROGRESS') {
+  else if (gameStatus === 'IN_PROGRESS') {
     return (
       <div>
         <h1>Pizza Party Game</h1>
