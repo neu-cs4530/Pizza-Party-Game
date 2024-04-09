@@ -76,27 +76,26 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       };
       move.move.topping.appliedOnPizza = true;
     } else if (move.move.gamePiece === 'throwOut') {
-      console.log("remove toppings")
-      try {
-        if(this.state.currentPizza.toppings.length > 0) {
-          this.state.currentPizza.toppings.forEach(topping =>
-            topping.appliedOnPizza = false
-          );
-        }
-        this.state = {
-          ...this.state,
-          currentPizza: {
-            ...this.state.currentPizza,
-            toppings: [],
-            cooked: false,
-            isInOven: false,
-          },
-        };
-      } catch(e: any) {
-        console.log((e as Error).message);
-        console.log("hi")
+      console.log('remove toppings');
+      if (this.state.currentPizza.toppings.length > 0) {
+        this.state.currentPizza.toppings.forEach(topping => {
+          topping.appliedOnPizza = false;
+        });
       }
-      console.log("end of move")
+      this.state = {
+        ...this.state,
+        currentPizza: {
+          ...this.state.currentPizza,
+          toppings: [],
+          cooked: false,
+          isInOven: false,
+        },
+        oven: {
+          ...this.state.oven,
+          pizza: undefined,
+          ovenFull: false,
+        },
+      };
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
@@ -140,14 +139,15 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       }
       this.state.oven.pizza = move.move.pizza;
       this.state.oven.ovenFull = true;
-    } else if (move.move.gamePiece === 'throwOut') {
-      if (move.move.pizza === this.state.currentPizza) {
-        this.resetPizza();
-      } else if (move.move.pizza === this.state.oven.pizza) {
-        this.state.oven.pizza = undefined;
-        this.state.oven.ovenFull = false;
-      }
     }
+    // else if (move.move.gamePiece === 'throwOut') {
+    //   if (move.move.pizza === this.state.currentPizza) {
+    //     this.resetPizza();
+    //   } else if (move.move.pizza === this.state.oven.pizza) {
+    //     this.state.oven.pizza = undefined;
+    //     this.state.oven.ovenFull = false;
+    //   }
+    // }
     this.checkDifficulty();
   }
 
