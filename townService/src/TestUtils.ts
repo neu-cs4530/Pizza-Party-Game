@@ -209,10 +209,10 @@ export function createPizzaForTesting(toppings?: ToppingOptions[]): Pizza {
   let toppingsList: Topping[] = [];
   if (toppings) {
     let toppingID = 0;
-    toppings.forEach(() => {
+    toppings.forEach(topping => {
       toppingsList.push({
         id: toppingID,
-        kind: 'anchovies',
+        kind: topping,
         appliedOnPizza: true,
       });
       toppingID++;

@@ -18,6 +18,7 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
+import pizzaSchema from '../database/pizza/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -63,6 +64,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+      // if (move.move.pizza === undefined) {
+      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      // }
       this.state = {
         ...this.state,
         currentPizza: {
@@ -70,6 +74,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           toppings: [...this.state.currentPizza.toppings, move.move.topping],
         },
       };
+<<<<<<< HEAD
       move.move.topping.appliedOnPizza = true;
     } else if (move.move.gamePiece === 'throwOut') {
       console.log("remove toppings")
@@ -93,6 +98,10 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         console.log("hi")
       }
       console.log("end of move")
+=======
+      // move.move.pizza?.toppings.push(move.move.topping);
+      // move.move.topping.appliedOnPizza = true;
+>>>>>>> sho-r1024/applyMoveTesting
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
@@ -100,12 +109,24 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+
       const validPizza: boolean = this.sameToppings(
         move.move.pizza?.toppings,
         move.move.customer.order.pizzas[0].toppings,
       );
       if (validPizza) {
-        this.state.currentScore += 1;
+        this.state.currentScore += move.move.customer.order.pointValue;
+        if (move.move.pizza === this.state.currentPizza) {
+          this.resetPizza();
+        }
+        if (move.move.pizza === this.state.oven.pizza) {
+          this.state.oven.pizza = undefined;
+          this.state.oven.ovenFull = false;
+        }
+        const satisfiedCustomerIndex = this.state.currentCustomers.findIndex(
+          customer => customer.id === move.move.customer?.id,
+        );
+        this.state.currentCustomers[satisfiedCustomerIndex] = this.generateEmptyCustomer();
       }
       // TODO: handle customer functionality (how do we give them stuff)
       /**
@@ -125,7 +146,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       this.state.oven.pizza = move.move.pizza;
       this.state.oven.ovenFull = true;
     } else if (move.move.gamePiece === 'throwOut') {
-      this.resetPizza();
+      if (move.move.pizza === this.state.currentPizza) {
+        this.resetPizza();
+      } else if (move.move.pizza === this.state.oven.pizza) {
+        this.state.oven.pizza = undefined;
+        this.state.oven.ovenFull = false;
+      }
     }
     this.checkDifficulty();
   }
@@ -271,7 +297,14 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     }
   };
 
-  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean =>
-    pizzaToppings.length === orderToppings.length &&
-    pizzaToppings.every((topping, idx) => topping === orderToppings[idx]);
+  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean => {
+    const pizzaOptions = pizzaToppings.map(topping => topping.kind);
+    const orderOptions = orderToppings.map(topping => topping.kind);
+
+    return (
+      pizzaOptions.length === orderOptions.length &&
+      pizzaOptions.every(topping => orderOptions.includes(topping)) &&
+      orderOptions.every(topping => pizzaOptions.includes(topping))
+    );
+  };
 }
