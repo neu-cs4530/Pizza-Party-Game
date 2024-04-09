@@ -110,7 +110,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
             },
           }),
         ).rejects.toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
@@ -122,7 +122,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               topping: undefined,
             },
           }),
@@ -136,7 +136,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               pizza: pizza1,
               customer: undefined,
             },
@@ -153,7 +153,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               customer: customer1,
               pizza: undefined,
             },
@@ -167,7 +167,7 @@ describe('PizzaPartyGame', () => {
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: undefined,
             },
           }),

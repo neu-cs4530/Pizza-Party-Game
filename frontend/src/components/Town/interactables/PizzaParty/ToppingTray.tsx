@@ -1,6 +1,9 @@
+
+import { Pizza, ToppingOptions } from '../../../../types/CoveyTownSocket';
+import Image from 'next/image';
+import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import React from 'react';
 import { ToppingOptions } from '../../../../types/CoveyTownSocket';
-import Image from 'next/image';
 
 export type ToppingProps = {
   topping: ToppingOptions;
@@ -39,7 +42,7 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
   }
 
   return (
-    <button onClick={() => console.log('Topping clicked')}>
+    <button>
       <div style={{ backgroundColor: 'silver' }}>
         <Image src={imageSource} alt={topping} width={20} height={40} />
       </div>
