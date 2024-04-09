@@ -70,7 +70,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         },
       };
       move.move.topping.appliedOnPizza = true;
-      console.log(this.state);
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
