@@ -18,6 +18,7 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
+import pizzaSchema from '../database/pizza/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -62,18 +63,18 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      if (move.move.pizza === undefined) {
-        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      }
-      // this.state = {
-      //   ...this.state,
-      //   currentPizza: {
-      //     ...this.state.currentPizza,
-      //     toppings: [...this.state.currentPizza.toppings, move.move.topping],
-      //   },
-      // };
-      move.move.pizza?.toppings.push(move.move.topping);
-      move.move.topping.appliedOnPizza = true;
+      // if (move.move.pizza === undefined) {
+      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
+      // }
+      this.state = {
+        ...this.state,
+        currentPizza: {
+          ...this.state.currentPizza,
+          toppings: [...this.state.currentPizza.toppings, move.move.topping],
+        },
+      };
+      // move.move.pizza?.toppings.push(move.move.topping);
+      // move.move.topping.appliedOnPizza = true;
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
@@ -88,6 +89,17 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       );
       if (validPizza) {
         this.state.currentScore += move.move.customer.order.pointValue;
+        if (move.move.pizza === this.state.currentPizza) {
+          this.resetPizza();
+        }
+        if (move.move.pizza === this.state.oven.pizza) {
+          this.state.oven.pizza = undefined;
+          this.state.oven.ovenFull = false;
+        }
+        const satisfiedCustomerIndex = this.state.currentCustomers.findIndex(
+          customer => customer.id === move.move.customer?.id,
+        );
+        this.state.currentCustomers[satisfiedCustomerIndex] = this.generateEmptyCustomer();
       }
       // TODO: handle customer functionality (how do we give them stuff)
       /**

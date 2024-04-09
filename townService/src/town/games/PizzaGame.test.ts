@@ -130,24 +130,24 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is type placeTopping and pizza is undefined', () => {
-        game.startGame(player1);
-        expect(() =>
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: {
-              gamePiece: 'placeTopping',
-              topping: {
-                id: 1,
-                kind: 'olives',
-                appliedOnPizza: false,
-              },
-              pizza: undefined,
-            },
-          }),
-        ).toThrowError(INVALID_MOVE_MESSAGE);
-      });
+      // it('should throw an error if move is type placeTopping and pizza is undefined', () => {
+      //   game.startGame(player1);
+      //   expect(() =>
+      //     game.applyMove({
+      //       gameID: game.id,
+      //       playerID: player1.id,
+      //       move: {
+      //         gamePiece: 'placeTopping',
+      //         topping: {
+      //           id: 1,
+      //           kind: 'olives',
+      //           appliedOnPizza: false,
+      //         },
+      //         pizza: undefined,
+      //       },
+      //     }),
+      //   ).toThrowError(INVALID_MOVE_MESSAGE);
+      // });
       it('should throw an error if move is of type moveToCustomer and customer is undefined', () => {
         const pizza1: Pizza = createPizzaForTesting();
         game.startGame(player1);
@@ -227,7 +227,8 @@ describe('PizzaPartyGame', () => {
     describe('when given a placeTopping move', () => {
       it("should reflect in the pizza's topping list (1 topping)", () => {
         const pizza1 = createPizzaForTesting([]);
-        expect(pizza1.toppings.length).toEqual(0);
+        game.state.currentPizza = pizza1;
+        expect(game.state.currentPizza.toppings.length).toEqual(0);
         game.startGame(player1);
         game.applyMove({
           gameID: game.id,
@@ -239,15 +240,16 @@ describe('PizzaPartyGame', () => {
               kind: 'olives',
               appliedOnPizza: false,
             },
-            pizza: pizza1,
+            // pizza: pizza1,
           },
         });
-        expect(pizza1.toppings.length).toEqual(1);
-        expect(pizza1.toppings[0].kind).toBe('olives');
+        expect(game.state.currentPizza.toppings.length).toEqual(1);
+        expect(game.state.currentPizza.toppings[0].kind).toBe('olives');
       });
       it("should reflect in the pizza's topping list (2 toppings)", () => {
         const pizza1 = createPizzaForTesting([]);
-        expect(pizza1.toppings.length).toEqual(0);
+        game.state.currentPizza = pizza1;
+        expect(game.state.currentPizza.toppings.length).toEqual(0);
         game.startGame(player1);
         game.applyMove({
           gameID: game.id,
@@ -259,10 +261,10 @@ describe('PizzaPartyGame', () => {
               kind: 'olives',
               appliedOnPizza: false,
             },
-            pizza: pizza1,
+            // pizza: pizza1,
           },
         });
-        expect(pizza1.toppings.length).toEqual(1);
+        expect(game.state.currentPizza.toppings.length).toEqual(1);
         game.applyMove({
           gameID: game.id,
           playerID: player1.id,
@@ -276,9 +278,9 @@ describe('PizzaPartyGame', () => {
             pizza: pizza1,
           },
         });
-        expect(pizza1.toppings.length).toEqual(2);
-        expect(pizza1.toppings[0].kind).toBe('olives');
-        expect(pizza1.toppings[1].kind).toBe('onions');
+        expect(game.state.currentPizza.toppings.length).toEqual(2);
+        expect(game.state.currentPizza.toppings[0].kind).toBe('olives');
+        expect(game.state.currentPizza.toppings[1].kind).toBe('onions');
       });
     });
     describe('when given a dropPizza move', () => {
@@ -396,7 +398,6 @@ describe('PizzaPartyGame', () => {
       it("doesn't increase the score if the customer order and pizza DON'T match", () => {
         const pizza1 = createPizzaForTesting();
         const pizza2 = createPizzaForTesting(['olives']);
-        console.log(`pizza2 toppings ${pizza2.toppings[0].kind}`);
         const order1 = createOrderForTesting([pizza1]);
         const customer1 = createCustomerForTesting(order1);
         game.startGame(player1);
@@ -421,7 +422,7 @@ describe('PizzaPartyGame', () => {
 
         expect(game.state.currentScore).toBe(0);
       });
-      it('sets the customer at the location to a brand new empty if their order was fulfilled', () => {
+      it('sets the customer at the location to a brand new empty customer if their order was fulfilled', () => {
         const pizza1 = createPizzaForTesting();
         const pizza2 = createPizzaForTesting();
         const order1 = createOrderForTesting([pizza1]);
