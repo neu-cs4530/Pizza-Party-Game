@@ -3,16 +3,16 @@ import axios from 'axios';
 export const BASE_API = process.env.REACT_APP_BASE_API_URL || 'http://localhost:8081';
 
 export const createLeaderboardEntry = async (entry: any) => {
-  const response = await axios.post(`${BASE_API}/leaderboard`, entry);
+  const response = await axios.post(`${BASE_API}/api/leaderboard`, entry);
   return response.data;
 };
 
 export const retrieveAllLeaderboardData = async () => {
-  const response = await axios.get(`${BASE_API}/leaderboard`);
+  const response = await axios.get(`${BASE_API}/api/leaderboard`);
   return response.data;
 };
 
 export const retieveScoresByPlayer = async (playerId: any) => {
-  const response = await axios.get(`${BASE_API}/leaderboard/${playerId}`);
+  const response = await axios.get(`${BASE_API}/api/leaderboard/${playerId}`);
   return response.data;
 };
