@@ -113,6 +113,22 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       customer: undefined,
     });
   }
+  function bakeCurrentPizza(): void {
+    gameAreaController.makeMove({
+      topping: undefined,
+      pizza: currentPizza,
+      customer: undefined,
+      gamePiece: 'moveToOven',
+    });
+  }
+  function giveToCustomer(cust: CustomerType): void {
+    gameAreaController.makeMove({
+      topping: undefined,
+      pizza: currentPizza,
+      customer: cust,
+      gamePiece: 'moveToCustomer',
+    });
+  }
   return (
     <StyledPizzaGameBoard>
       <Image
@@ -127,7 +143,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index}>
+            <div style={{ marginRight: 30 }} key={index} onClick={() => giveToCustomer(customer)}>
               <Customer customer={customer} />
             </div>
           ) : (
