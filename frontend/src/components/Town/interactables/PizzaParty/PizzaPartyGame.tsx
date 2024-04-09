@@ -83,6 +83,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
 
   return (
     <div>
+      <div>
       <Image
         src={'/assets/pizza-party/background.png'}
         alt='Pizza Party Game'
@@ -123,5 +124,15 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <ToppingTray topping={'cheese'} />
       </div>
     </div>
+    <div>
+      <div>
+        Instructions
+      </div>
+      <div>
+
+      </div>
+    </div>
+  </div>
+    
   );
 }
