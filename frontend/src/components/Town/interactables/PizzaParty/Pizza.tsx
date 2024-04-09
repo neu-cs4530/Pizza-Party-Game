@@ -1,14 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
-import { Pizza as PizzaType } from '../../../../types/CoveyTownSocket';
+import { Pizza as PizzaType, Topping as ToppingType } from '../../../../types/CoveyTownSocket';
 import { useState } from 'react';
 import Topping from './Topping';
 
 export type PizzaProps = {
   pizza: PizzaType | undefined;
+  toppings: ToppingType[] | undefined;
 };
 
-export default function Pizza({ pizza }: PizzaProps): JSX.Element {
+export default function Pizza({ pizza, toppings }: PizzaProps): JSX.Element {
   const [currentPizza, setCurrentPizza] = useState<PizzaType | undefined>(pizza);
 
   if (!currentPizza) {
@@ -22,7 +23,7 @@ export default function Pizza({ pizza }: PizzaProps): JSX.Element {
         width={200}
         height={100}
       />
-      {currentPizza.toppings.map((topping, index) => (
+      {toppings.map((topping, index) => (
         <Topping key={index} topping={topping} />
       ))}
     </div>

@@ -1,9 +1,7 @@
-
 import { Pizza, ToppingOptions } from '../../../../types/CoveyTownSocket';
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import React from 'react';
-import { ToppingOptions } from '../../../../types/CoveyTownSocket';
 
 export type ToppingProps = {
   topping: ToppingOptions;

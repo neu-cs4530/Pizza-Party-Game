@@ -64,7 +64,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('gameChanged', setCurrentGame);
       clearInterval(intervalId);
     };
-  }, [currentGame, currentCustomers, currentPizza]);
+  }, [currentGame, currentCustomers, currentPizza, gameAreaController]);
 
   function applyTopping(topp: ToppingOptions): void {
     const top = {
@@ -83,44 +83,50 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
 
   return (
     <div>
-      <Image
-        src={'/assets/pizza-party/background.png'}
-        alt='Pizza Party Game'
-        layout='fill'
-        style={{ position: 'absolute', top: 0, left: 0 }}
-      />
-      <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
-        <Pizza pizza={currentPizza} />
+      <div>
+        <Image
+          src={'/assets/pizza-party/background.png'}
+          alt='Pizza Party Game'
+          layout='fill'
+          style={{ position: 'absolute', top: 0, left: 0 }}
+        />
+        <div style={{ position: 'absolute', top: 425, left: 55, width: '100%', height: '100%' }}>
+          <Pizza pizza={currentPizza} toppings={currentPizza?.toppings} />
+        </div>
+        <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
+          {currentCustomers?.map((customer, index) =>
+            customer.name !== 'Empty' ? (
+              <div style={{ marginRight: 30 }} key={index}>
+                <Customer customer={customer} />
+              </div>
+            ) : (
+              <div style={{ marginRight: 30 }} key={index}></div>
+            ),
+          )}
+        </div>
+        <div style={{ position: 'absolute', top: 350, left: 480 }}>
+          <Oven />
+        </div>
+        <div style={{ position: 'absolute', top: 430, left: 410 }}>
+          <Trash />
+        </div>
+        <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
+          {TOPPINGS_LIST.map((topping, index) => {
+            return (
+              <div key={index} style={{ marginRight: 30 }} onClick={() => applyTopping(topping)}>
+                <ToppingTray topping={topping} />
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
+          <ToppingTray topping={'sauce'} />
+          <ToppingTray topping={'cheese'} />
+        </div>
       </div>
-      <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
-        {currentCustomers?.map((customer, index) =>
-          customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index}>
-              <Customer customer={customer} />
-            </div>
-          ) : (
-            <div style={{ marginRight: 30 }} key={index}></div>
-          ),
-        )}
-      </div>
-      <div style={{ position: 'absolute', top: 350, left: 480 }}>
-        <Oven />
-      </div>
-      <div style={{ position: 'absolute', top: 430, left: 410 }}>
-        <Trash />
-      </div>
-      <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
-        {TOPPINGS_LIST.map((topping, index) => {
-          return (
-            <div key={index} style={{ marginRight: 30 }} onClick={() => applyTopping(topping)}>
-              <ToppingTray topping={topping} />
-            </div>
-          );
-        })}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
-        <ToppingTray topping={'sauce'} />
-        <ToppingTray topping={'cheese'} />
+      <div>
+        <div>Instructions</div>
+        <div></div>
       </div>
     </div>
   );
