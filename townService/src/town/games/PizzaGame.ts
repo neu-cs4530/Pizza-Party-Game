@@ -18,7 +18,6 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
-import orderSchema from '../database/order/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -261,11 +260,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
 
   protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean => {
     const pizzaOptions = pizzaToppings.map(topping => topping.kind);
-    const orderOptions = pizzaToppings.map(topping => topping.kind);
+    const orderOptions = orderToppings.map(topping => topping.kind);
 
     return (
       pizzaOptions.length === orderOptions.length &&
-      pizzaOptions.every(topping => orderOptions.includes(topping))
+      pizzaOptions.every(topping => orderOptions.includes(topping)) &&
+      orderOptions.every(topping => pizzaOptions.includes(topping))
     );
   };
 }

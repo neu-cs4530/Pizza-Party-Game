@@ -14,7 +14,6 @@ import {
 import Player from '../../lib/Player';
 import { Customer, Order, Pizza } from '../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaGame';
-import pizzaSchema from '../database/pizza/schema';
 
 describe('PizzaPartyGame', () => {
   let game: PizzaPartyGame;
@@ -397,6 +396,7 @@ describe('PizzaPartyGame', () => {
       it("doesn't increase the score if the customer order and pizza DON'T match", () => {
         const pizza1 = createPizzaForTesting();
         const pizza2 = createPizzaForTesting(['olives']);
+        console.log(`pizza2 toppings ${pizza2.toppings[0].kind}`);
         const order1 = createOrderForTesting([pizza1]);
         const customer1 = createCustomerForTesting(order1);
         game.startGame(player1);
@@ -418,6 +418,7 @@ describe('PizzaPartyGame', () => {
             customer: customer1,
           },
         });
+
         expect(game.state.currentScore).toBe(0);
       });
       it('sets the customer at the location to a brand new empty if their order was fulfilled', () => {
