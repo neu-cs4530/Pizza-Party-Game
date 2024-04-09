@@ -72,16 +72,15 @@ export default function PizzaPartyArea({
     return (
       <div>
         <h1>Pizza Party Game</h1>
-        <PizzaPartyGame gameAreaController={gameAreaController} />
-        <div style={{ position: 'absolute', top: 700 }}>
-          <button
-            onClick={async () => {
-              await gameAreaController.endGame();
-              setGameStatus('OVER');
-            }}>
-            End Game
-          </button>
+        <div style={{ position: "absolute", top: 570, backgroundColor: "beige", width: "100%", textAlign: "center", padding: "20px", zIndex: 20 }}>
+          <div style={{ marginBottom: "20px" }}>
+            <h2>Player: {player?.userName}</h2>
+            <h2>Score: {score}</h2>
+          </div>
+          <button style={{ display: "inline-block", backgroundColor: "red" }} onClick={async () => { await gameAreaController.endGame()}} >End Game</button>
         </div>
+        <PizzaPartyGame gameAreaController={gameAreaController} />
+  
       </div>
     );
   } else if (gameStatus === 'OVER') {
