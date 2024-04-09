@@ -112,7 +112,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       pizza: currentPizza,
       customer: undefined,
     });
-  };
+  }
   return (
     <StyledPizzaGameBoard>
       <Image
@@ -151,11 +151,11 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         })}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
-        <div onClick={() => applyTopping("sauce")}>
-        <ToppingTray topping={'sauce'} />
+        <div onClick={() => applyTopping('sauce')}>
+          <ToppingTray topping={'sauce'} />
         </div>
-        <div onClick={() => applyTopping("cheese")}>
-        <ToppingTray topping={'cheese'} />
+        <div onClick={() => applyTopping('cheese')}>
+          <ToppingTray topping={'cheese'} />
         </div>
       </div>
     </StyledPizzaGameBoard>

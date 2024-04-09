@@ -19,7 +19,7 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
-  const [gameStatus, setGameStatus] = useState<GameStatus>("WAITING_FOR_PLAYERS");
+  const [gameStatus, setGameStatus] = useState<GameStatus>('WAITING_FOR_PLAYERS');
   const [joiningGame, setJoiningGame] = useState(false);
   const toast = useToast();
   const [customers, setCustomers] = useState<Customer[] | undefined>(
@@ -68,8 +68,7 @@ export default function PizzaPartyArea({
         </button>
       </div>
     );
-  }
-  else if (gameStatus === 'IN_PROGRESS') {
+  } else if (gameStatus === 'IN_PROGRESS') {
     return (
       <div>
         <h1>Pizza Party Game</h1>
@@ -98,15 +97,29 @@ export default function PizzaPartyArea({
   return (
     <div>
       <h1>Pizza Party Game</h1>
-      <div style={{ position: "absolute", top: 570, backgroundColor: "beige", width: "100%", textAlign: "center", padding: "20px", zIndex: 20 }}>
-        <div style={{ marginBottom: "20px" }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: 570,
+          backgroundColor: 'beige',
+          width: '100%',
+          textAlign: 'center',
+          padding: '20px',
+          zIndex: 20,
+        }}>
+        <div style={{ marginBottom: '20px' }}>
           <h2>Player: {player?.userName}</h2>
           <h2>Score: {score}</h2>
         </div>
-        <button style={{ display: "inline-block", backgroundColor: "red" }} onClick={async () => { await gameAreaController.endGame()}} >End Game</button>
+        <button
+          style={{ display: 'inline-block', backgroundColor: 'red' }}
+          onClick={async () => {
+            await gameAreaController.endGame();
+          }}>
+          End Game
+        </button>
       </div>
       <PizzaPartyGame gameAreaController={gameAreaController} />
-
     </div>
   );
 }
