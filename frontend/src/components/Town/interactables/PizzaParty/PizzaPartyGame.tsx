@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Pizza, Pizza as PizzaType} from '../../../../types/CoveyTownSocket';
+import { Pizza, Pizza as PizzaType } from '../../../../types/CoveyTownSocket';
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
 import PizzaSprite from './Pizza';
@@ -45,8 +45,12 @@ const TOPPINGS_LIST: ToppingOptions[] = [
 // To-Do: Add controller functionality in here
 export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGameProps): JSX.Element {
   const [currentCustomers, setCurrentCustomers] = useState(gameAreaController.currentCustomers);
-  const [currentPizza, setCurrentPizza] = useState<Pizza | undefined>(gameAreaController.currentPizza);
-  const [currentToppings, setCurrentToppings] = useState<ToppingType[] | undefined>(currentPizza?.toppings);
+  const [currentPizza, setCurrentPizza] = useState<Pizza | undefined>(
+    gameAreaController.currentPizza,
+  );
+  const [currentToppings, setCurrentToppings] = useState<ToppingType[] | undefined>(
+    currentPizza?.toppings,
+  );
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
 
@@ -55,25 +59,24 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       // if (currentCustomers && currentCustomers.length >= 3) {
       //   clearInterval(intervalId);
       // } else {
-        const index = gameAreaController.findEmptySeat();
-        if (
-          index !== -1 &&
-          index !== undefined &&
-          currentCustomers !== undefined &&
-          gameAreaController.currentCustomers !== undefined
-        ) {
-          const newCustomers = [...currentCustomers];
-          const customer = gameAreaController.generateRandomCustomer();
-          newCustomers[index] = customer;
-          gameAreaController.currentCustomers[index] = customer;
-          setCurrentCustomers(newCustomers);
-        }
-        gameAreaController.addListener('customerChanged', setCurrentCustomers);
-
+      const index = gameAreaController.findEmptySeat();
+      if (
+        index !== -1 &&
+        index !== undefined &&
+        currentCustomers !== undefined &&
+        gameAreaController.currentCustomers !== undefined
+      ) {
+        const newCustomers = [...currentCustomers];
+        const customer = gameAreaController.generateRandomCustomer();
+        newCustomers[index] = customer;
+        gameAreaController.currentCustomers[index] = customer;
+        setCurrentCustomers(newCustomers);
+      }
+      gameAreaController.addListener('customerChanged', setCurrentCustomers);
     }, 3000);
     return () => {
-    gameAreaController.removeListener('customerChanged', setCurrentCustomers);  
-    clearInterval(intervalId);
+      gameAreaController.removeListener('customerChanged', setCurrentCustomers);
+      clearInterval(intervalId);
     };
   }, [gameAreaController, currentCustomers]);
 
@@ -103,14 +106,13 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     });
   }
   function handleTrashClick(): void {
-    console.log("Trash clicked");
+    console.log('Trash clicked');
     gameAreaController.makeMove({
       gamePiece: 'throwOut',
       pizza: currentPizza,
       customer: undefined,
     });
   };
-  console.log(currentPizza, "PIZZA");
   return (
     <StyledPizzaGameBoard>
       <Image
@@ -119,7 +121,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         layout='fill'
         style={{ position: 'absolute', top: 0, left: 0 }}
       />
-      <div style={{ position: 'absolute', top: 450, left:55,  width: '100%', height: '100%'}}>
+      <div style={{ position: 'absolute', top: 450, left: 55, width: '100%', height: '100%' }}>
         <PizzaSprite pizza={currentPizza} toppings={currentPizza?.toppings} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
@@ -137,7 +139,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Oven />
       </div>
       <div style={{ position: 'absolute', top: 430, left: 410 }}>
-        <Trash onClick={() => handleTrashClick()}/>
+        <Trash onClick={() => handleTrashClick()} />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
         {TOPPINGS_LIST.map((topping, index) => {

@@ -8,6 +8,8 @@ import PizzaPartyGame from './PizzaPartyGame';
 import { Button, useToast } from '@chakra-ui/react';
 import PlayerController from '../../../../classes/PlayerController';
 import LeaderBoard from './Leaderboard';
+import * as client from './client';
+import { nanoid } from 'nanoid';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -17,7 +19,7 @@ export default function PizzaPartyArea({
   const gameAreaController =
     useInteractableAreaController<PizzaPartyAreaController>(interactableID);
   const townController = useTownController();
-  const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
+  const [gameStatus, setGameStatus] = useState<GameStatus>("WAITING_FOR_PLAYERS");
   const [joiningGame, setJoiningGame] = useState(false);
   const toast = useToast();
   const [customers, setCustomers] = useState<Customer[] | undefined>(
@@ -42,7 +44,7 @@ export default function PizzaPartyArea({
       gameAreaController.removeListener('gameUpdated', updateGameState);
     };
   }, [townController, gameAreaController, toast]);
-  if (gameStatus !== 'IN_PROGRESS') {
+  if (gameStatus === 'WAITING_FOR_PLAYERS' || gameStatus === 'WAITING_TO_START') {
     return (
       <div>
         <h1>Pizza Party Game</h1>
@@ -67,7 +69,30 @@ export default function PizzaPartyArea({
       </div>
     );
   }
-  if (gameStatus === 'OVER') {
+  else if (gameStatus === 'IN_PROGRESS') {
+    return (
+      <div>
+        <h1>Pizza Party Game</h1>
+        <PizzaPartyGame gameAreaController={gameAreaController} />
+        <div style={{ position: 'absolute', top: 700 }}>
+          <button
+            onClick={async () => {
+              await gameAreaController.endGame();
+              setGameStatus('OVER');
+            }}>
+            End Game
+          </button>
+        </div>
+      </div>
+    );
+  } else if (gameStatus === 'OVER') {
+    const entry = {
+      _id: nanoid(),
+      playerId: gameAreaController.game?.player,
+      score: gameAreaController.currentScore,
+    };
+    console.log(entry);
+    client.createLeaderboardEntry(entry);
     return <LeaderBoard />;
   }
   return (
