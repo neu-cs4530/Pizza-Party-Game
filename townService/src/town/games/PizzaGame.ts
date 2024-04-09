@@ -81,6 +81,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+
       const validPizza: boolean = this.sameToppings(
         move.move.pizza?.toppings,
         move.move.customer.order.pizzas[0].toppings,
@@ -257,7 +258,13 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     }
   };
 
-  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean =>
-    pizzaToppings.length === orderToppings.length &&
-    pizzaToppings.every((topping, idx) => topping === orderToppings[idx]);
+  protected sameToppings = (pizzaToppings: Topping[], orderToppings: Topping[]): boolean => {
+    const pizzaOptions = pizzaToppings.map(topping => topping.kind);
+    const orderOptions = pizzaToppings.map(topping => topping.kind);
+
+    return (
+      pizzaOptions.length === orderOptions.length &&
+      pizzaOptions.every(topping => orderOptions.includes(topping))
+    );
+  };
 }
