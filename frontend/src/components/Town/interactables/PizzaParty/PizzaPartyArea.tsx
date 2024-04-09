@@ -71,18 +71,14 @@ export default function PizzaPartyArea({
       </div>
     );
   }
-  if (gameStatus === "OVER") {
-    return(
-      <LeaderBoard />
-    )
+  if (gameStatus === 'OVER') {
+    return <LeaderBoard />;
   }
   return (
     <div>
       <h1>Pizza Party Game</h1>
       <PizzaPartyGame gameAreaController={gameAreaController} />
-      <div>
-        
-      </div>
+      <div></div>
     </div>
   );
 }
