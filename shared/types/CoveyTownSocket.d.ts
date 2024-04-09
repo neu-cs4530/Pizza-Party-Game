@@ -216,7 +216,7 @@ interface InteractableCommandBase {
   type: string;
 }
 
-export type InteractableCommand =  ViewingAreaUpdateCommand | JoinGameCommand | GameMoveCommand<TicTacToeMove> | GameMoveCommand<ConnectFourMove> | StartGameCommand | LeaveGameCommand;
+export type InteractableCommand =  ViewingAreaUpdateCommand | JoinGameCommand | GameMoveCommand<TicTacToeMove> | GameMoveCommand<ConnectFourMove> | GameMoveCommand<PizzaPartyGameMove> | StartGameCommand | LeaveGameCommand;
 export interface ViewingAreaUpdateCommand  {
   type: 'ViewingAreaUpdate';
   update: ViewingArea;
@@ -283,10 +283,10 @@ export interface PizzaPartyGameState extends WinnableGameState {
 export type PizzaGameDifficultyLevel = 1 | 2 | 3
 
 export interface PizzaPartyGameMove {
+  gamePiece: PizzaMoveType,
   topping?: Topping,
   pizza?: Pizza,
   customer?: Customer,
-  moveType: PizzaMoveType
 }
 
 export type PizzaMoveType = "placeTopping" | "moveToOven" | "moveToCustomer" | "throwOut"

@@ -105,40 +105,40 @@ describe('PizzaPartyGame', () => {
       game.join(player1);
     });
     describe('when given an invalid move', () => {
-      it('should throw an error if the game is not in progress', async () => {
-        await expect(() =>
+      it('should throw an error if the game is not in progress', () => {
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
             },
           }),
-        ).rejects.toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
+        ).toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
       });
-      it('should throw an error if move is type placeTopping and topping is undefined', async () => {
+      it('should throw an error if move is type placeTopping and topping is undefined', () => {
         game.startGame(player1);
         const pizza1 = createPizzaForTesting();
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               pizza: pizza1,
               topping: undefined,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is type placeTopping and pizza is undefined', async () => {
+      it('should throw an error if move is type placeTopping and pizza is undefined', () => {
         game.startGame(player1);
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'placeTopping',
+              gamePiece: 'placeTopping',
               topping: {
                 id: 1,
                 kind: 'olives',
@@ -147,82 +147,82 @@ describe('PizzaPartyGame', () => {
               pizza: undefined,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is of type moveToCustomer and customer is undefined', async () => {
+      it('should throw an error if move is of type moveToCustomer and customer is undefined', () => {
         const pizza1: Pizza = createPizzaForTesting();
         game.startGame(player1);
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToCustomer',
+              gamePiece: 'moveToCustomer',
               pizza: pizza1,
               customer: undefined,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is of type moveToCustomer and pizza is undefined', async () => {
+      it('should throw an error if move is of type moveToCustomer and pizza is undefined', () => {
         const pizza1: Pizza = createPizzaForTesting();
         const order1: Order = createOrderForTesting([pizza1]);
         const customer1: Customer = createCustomerForTesting(order1);
         game.startGame(player1);
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToCustomer',
+              gamePiece: 'moveToCustomer',
               customer: customer1,
               pizza: undefined,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is of type moveToOven and pizza is undefined', async () => {
+      it('should throw an error if move is of type moveToOven and pizza is undefined', () => {
         game.startGame(player1);
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: undefined,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is of type moveToOven and oven is full', async () => {
+      it('should throw an error if move is of type moveToOven and oven is full', () => {
         const pizza1 = createPizzaForTesting();
         game.startGame(player1);
         game.state.oven.ovenFull = true;
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: pizza1,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      it('should throw an error if move is of type moveToOven and pizza is in oven', async () => {
+      it('should throw an error if move is of type moveToOven and pizza is in oven', () => {
         const pizza1 = createPizzaForTesting();
         game.startGame(player1);
         pizza1.isInOven = true;
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: pizza1,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
     });
     describe('when given a placeTopping move', () => {
@@ -234,7 +234,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'placeTopping',
+            gamePiece: 'placeTopping',
             topping: {
               id: 1,
               kind: 'olives',
@@ -254,7 +254,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'placeTopping',
+            gamePiece: 'placeTopping',
             topping: {
               id: 1,
               kind: 'olives',
@@ -268,7 +268,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'placeTopping',
+            gamePiece: 'placeTopping',
             topping: {
               id: 2,
               kind: 'onions',
@@ -293,7 +293,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'throwOut',
+            gamePiece: 'throwOut',
             pizza: pizza1,
           },
         });
@@ -313,7 +313,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'throwOut',
+            gamePiece: 'throwOut',
             pizza: pizza2,
           },
         });
@@ -332,14 +332,14 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: pizza1,
           },
         });
         expect(game.state.oven.pizza).toBe(pizza1);
         expect(game.state.oven.ovenFull).toBe(true);
       });
-      it("doesn't allow for two pizzas to be placed in the oven at the same time", async () => {
+      it("doesn't allow for two pizzas to be placed in the oven at the same time", () => {
         const pizza1 = createPizzaForTesting();
         const pizza2 = createPizzaForTesting(['cheese', 'mushrooms']);
         expect(game.state.oven.pizza).toBeUndefined();
@@ -349,22 +349,22 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: pizza1,
           },
         });
         expect(game.state.oven.pizza).toBe(pizza1);
         expect(game.state.oven.ovenFull).toBe(true);
-        await expect(() =>
+        expect(() =>
           game.applyMove({
             gameID: game.id,
             playerID: player1.id,
             move: {
-              moveType: 'moveToOven',
+              gamePiece: 'moveToOven',
               pizza: pizza2,
             },
           }),
-        ).rejects.toThrowError(INVALID_MOVE_MESSAGE);
+        ).toThrowError(INVALID_MOVE_MESSAGE);
       });
     });
     describe('when given a moveToCustomer move', () => {
@@ -379,7 +379,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: game.state.currentPizza,
           },
         });
@@ -387,7 +387,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToCustomer',
+            gamePiece: 'moveToCustomer',
             pizza: pizza2,
             customer: customer1,
           },
@@ -405,7 +405,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: game.state.currentPizza,
           },
         });
@@ -413,7 +413,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToCustomer',
+            gamePiece: 'moveToCustomer',
             pizza: pizza2,
             customer: customer1,
           },
@@ -425,15 +425,15 @@ describe('PizzaPartyGame', () => {
         const pizza2 = createPizzaForTesting();
         const order1 = createOrderForTesting([pizza1]);
         const customer1 = createCustomerForTesting(order1);
-        game.state.currentCustomers[0] = customer1;
-        expect(game.state.currentCustomers[0].name).toBe('Customer');
         game.startGame(player1);
+        game.state.currentCustomers[0] = customer1;
+        expect(game.state.currentCustomers[0].name).toBe('bob');
         game.state.currentPizza = pizza2;
         game.applyMove({
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: game.state.currentPizza,
           },
         });
@@ -441,7 +441,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToCustomer',
+            gamePiece: 'moveToCustomer',
             pizza: pizza2,
             customer: customer1,
           },
@@ -459,7 +459,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToOven',
+            gamePiece: 'moveToOven',
             pizza: game.state.currentPizza,
           },
         });
@@ -467,7 +467,7 @@ describe('PizzaPartyGame', () => {
           gameID: game.id,
           playerID: player1.id,
           move: {
-            moveType: 'moveToCustomer',
+            gamePiece: 'moveToCustomer',
             pizza: pizza2,
             customer: customer1,
           },

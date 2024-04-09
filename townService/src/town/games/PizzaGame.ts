@@ -40,14 +40,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
 
     this.state = {
       ...this.state,
-      currentCustomers: [
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-      ],
+      currentCustomers: [],
     };
   }
 
@@ -62,19 +55,27 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     return customer;
   };
 
-  public async applyMove(move: GameMove<PizzaPartyGameMove>): Promise<void> {
+  public applyMove(move: GameMove<PizzaPartyGameMove>): void {
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
-    if (move.move.moveType === 'placeTopping') {
+    if (move.move.gamePiece === 'placeTopping') {
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      if (!move.move.pizza) {
+      if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
+      // this.state = {
+      //   ...this.state,
+      //   currentPizza: {
+      //     ...this.state.currentPizza,
+      //     toppings: [...this.state.currentPizza.toppings, move.move.topping],
+      //   },
+      // };
       move.move.pizza?.toppings.push(move.move.topping);
-    } else if (move.move.moveType === 'moveToCustomer') {
+      move.move.topping.appliedOnPizza = true;
+    } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
@@ -97,7 +98,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
        *  this.reset(currentPizza)
        * else ()
        */
-    } else if (move.move.moveType === 'moveToOven') {
+    } else if (move.move.gamePiece === 'moveToOven') {
       if (!move.move.pizza) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
@@ -106,7 +107,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       }
       this.state.oven.pizza = move.move.pizza;
       this.state.oven.ovenFull = true;
-    } else if (move.move.moveType === 'throwOut') {
+    } else if (move.move.gamePiece === 'throwOut') {
       if (move.move.pizza === this.state.currentPizza) {
         this.resetPizza();
       } else if (move.move.pizza === this.state.oven.pizza) {

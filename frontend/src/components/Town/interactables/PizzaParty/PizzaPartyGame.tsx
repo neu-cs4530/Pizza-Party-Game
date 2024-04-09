@@ -34,6 +34,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentPizza, setCurrentPizza] = useState(gameAreaController.currentPizza);
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const index = gameAreaController.findEmptySeat();
@@ -63,7 +64,22 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('gameChanged', setCurrentGame);
       clearInterval(intervalId);
     };
-  }, [currentGame, currentCustomers]);
+  }, [currentGame, currentCustomers, currentPizza]);
+
+  function applyTopping(topp: ToppingOptions): void {
+    const top = {
+      id: Math.floor(Math.random() * 1000),
+      kind: topp,
+      appliedOnPizza: false,
+    };
+    gameAreaController.makeMove({
+      topping: top,
+      pizza: currentPizza,
+      customer: undefined,
+      gamePiece: 'placeTopping',
+    });
+    console.log(currentPizza);
+  }
 
   return (
     <div>
@@ -94,10 +110,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         <Trash />
       </div>
       <div style={{ display: 'flex', position: 'absolute', left: 7, top: 350 }}>
-        {TOPPINGS_LIST.map(topping => {
+        {TOPPINGS_LIST.map((topping, index) => {
           return (
-            <div key={topping} style={{ marginRight: 30 }}>
-              <ToppingTray key={topping} topping={topping} />
+            <div key={index} style={{ marginRight: 30 }} onClick={() => applyTopping(topping)}>
+              <ToppingTray topping={topping} />
             </div>
           );
         })}
