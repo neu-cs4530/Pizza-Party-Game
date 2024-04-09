@@ -104,11 +104,11 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   }
   function handleTrashClick(): void {
     console.log("Trash clicked");
-    // gameAreaController.makeMove({
-    //   gamePiece: 'throwOut',
-    //   pizza: currentPizza,
-    //   customer: undefined,
-    // });
+    gameAreaController.makeMove({
+      gamePiece: 'throwOut',
+      pizza: currentPizza,
+      customer: undefined,
+    });
     console.log("move made");
   };
 
