@@ -106,6 +106,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     });
   }
   function submitToCustomer(currentCustomer: CustomerType): void {
+    console.log('Customer clicked', currentCustomer)
     gameAreaController.makeMove({
       gamePiece: 'moveToCustomer',
       pizza: currentPizza,
@@ -134,9 +135,9 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index} onClick={() => submitToCustomer(customer)}>
+            <button style={{ marginRight: 30, zIndex: 999 }} key={index} onClick={() => submitToCustomer(customer)}>
               <Customer customer={customer} />
-            </div>
+            </button>
           ) : (
             <div style={{ marginRight: 30 }} key={index}></div>
           ),
