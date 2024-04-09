@@ -112,7 +112,23 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       pizza: currentPizza,
       customer: undefined,
     });
-  };
+  }
+  function bakeCurrentPizza(): void {
+    gameAreaController.makeMove({
+      topping: undefined,
+      pizza: currentPizza,
+      customer: undefined,
+      gamePiece: 'moveToOven',
+    });
+  }
+  function giveToCustomer(cust: CustomerType): void {
+    gameAreaController.makeMove({
+      topping: undefined,
+      pizza: currentPizza,
+      customer: cust,
+      gamePiece: 'moveToCustomer',
+    });
+  }
   return (
     <StyledPizzaGameBoard>
       <Image
@@ -127,7 +143,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index}>
+            <div style={{ marginRight: 30 }} key={index} onClick={() => giveToCustomer(customer)}>
               <Customer customer={customer} />
             </div>
           ) : (
@@ -151,11 +167,11 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         })}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 400 }}>
-        <div onClick={() => applyTopping("sauce")}>
-        <ToppingTray topping={'sauce'} />
+        <div onClick={() => applyTopping('sauce')}>
+          <ToppingTray topping={'sauce'} />
         </div>
-        <div onClick={() => applyTopping("cheese")}>
-        <ToppingTray topping={'cheese'} />
+        <div onClick={() => applyTopping('cheese')}>
+          <ToppingTray topping={'cheese'} />
         </div>
       </div>
     </StyledPizzaGameBoard>
