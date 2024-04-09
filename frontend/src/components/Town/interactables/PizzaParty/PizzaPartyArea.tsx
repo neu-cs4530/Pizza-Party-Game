@@ -5,7 +5,7 @@ import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPart
 import useTownController from '../../../../hooks/useTownController';
 import { Customer, GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
 import PizzaPartyGame from './PizzaPartyGame';
-import { useToast } from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 import PlayerController from '../../../../classes/PlayerController';
 import LeaderBoard from './Leaderboard';
 
@@ -34,11 +34,7 @@ export default function PizzaPartyArea({
     };
     gameAreaController.addListener('gameUpdated', updateGameState);
     const onGameEnd = () => {
-      toast({
-        title: 'Game over',
-        description: `You lost :(`,
-        status: 'error',
-      });
+      setGameStatus('OVER');
     };
     gameAreaController.addListener('gameEnd', onGameEnd);
     return () => {
@@ -78,7 +74,9 @@ export default function PizzaPartyArea({
     <div>
       <h1>Pizza Party Game</h1>
       <PizzaPartyGame gameAreaController={gameAreaController} />
-      <div></div>
+      <div style={{position: "absolute", top: 700}}>
+        <button onClick={async () => { await gameAreaController.endGame(); setGameStatus("OVER")}} >End Game</button>
+      </div>
     </div>
   );
 }

@@ -87,6 +87,22 @@ export default class PizzaPartyAreaController extends GameAreaController<
     console.log(this._game);
   }
 
+  public async endGame(): Promise<void> {
+    const instanceID = this._instanceID;
+    console.log(this._model.game?.state.status, "GAME STATUS");
+    console.log(instanceID, "INSTANCE ID")
+    if (!instanceID || this._model.game?.state.status !== 'IN_PROGRESS') {
+      throw new Error('Game Not endable');
+    }
+
+    await this._townController.sendInteractableCommand(this.id, {
+      gameID: instanceID,
+      type: 'LeaveGame',
+    });
+    console.log(this._model.game?.state.status, "GAME STATUS AFTER END GAME");
+
+  }
+
   public findEmptySeat(): number | undefined {
     if (this.game !== undefined) {
       const emptyCustomerIndex = this.game.currentCustomers.findIndex(
