@@ -6,16 +6,18 @@ import {
   PizzaPartyGameMove,
   GameMove,
   TownEmitter,
+  GameInstanceID,
 } from '../../types/CoveyTownSocket';
 import PizzaPartyGameArea from './PizzaGameArea';
 import * as PizzaPartyGameModule from './PizzaGame';
 import Game from './Game';
-import { createPlayerForTesting } from '../../TestUtils';
+import { createPizzaForTesting, createPlayerForTesting } from '../../TestUtils';
 import {
   GAME_ID_MISSMATCH_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
   INVALID_COMMAND_MESSAGE,
 } from '../../lib/InvalidParametersError';
+import { generateRandomTopping } from './PizzaGameHelpers';
 
 class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -38,11 +40,10 @@ class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
 
   public applyMove(move: GameMove<PizzaPartyGameMove>): void {}
 
-  public endGame(winner?: string) {
+  public endGame() {
     this.state = {
       ...this.state,
       status: 'OVER',
-      winner,
     };
   }
 
@@ -226,6 +227,97 @@ describe('ConnectFourGameArea', () => {
         expect(leaveSpy).toHaveBeenCalledWith(player1);
         expect(interactableUpdateSpy).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('[T3.3] GameMove command', () => {
+    it('should throw an error if there is no game in progress and not call _emitAreaChanged', () => {
+      interactableUpdateSpy.mockClear();
+
+      expect(() =>
+        gameArea.handleCommand(
+          {
+            type: 'GameMove',
+            move: { topping: generateRandomTopping(), gamePiece: 'placeTopping' },
+            gameID: nanoid(),
+          },
+          player1,
+        ),
+      ).toThrowError(GAME_NOT_IN_PROGRESS_MESSAGE);
+      expect(interactableUpdateSpy).not.toHaveBeenCalled();
+    });
+    describe('when there is a game in progress', () => {
+      let gameID: GameInstanceID;
+      beforeEach(() => {
+        gameID = gameArea.handleCommand({ type: 'JoinGame' }, player1).gameID;
+        interactableUpdateSpy.mockClear();
+      });
+      it('should throw an error if the gameID does not match the game and not call _emitAreaChanged', () => {
+        expect(() =>
+          gameArea.handleCommand(
+            { type: 'GameMove', move: { col: 0, row: 0, gamePiece: 'Yellow' }, gameID: nanoid() },
+            player1,
+          ),
+        ).toThrowError(GAME_ID_MISSMATCH_MESSAGE);
+      });
+      it('should call applyMove on the game and call _emitAreaChanged', () => {
+        const move: PizzaPartyGameMove = {
+          topping: generateRandomTopping(),
+          gamePiece: 'placeTopping',
+        };
+        const applyMoveSpy = jest.spyOn(game, 'applyMove');
+        gameArea.handleCommand({ type: 'GameMove', move, gameID }, player1);
+        expect(applyMoveSpy).toHaveBeenCalledWith({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            ...move,
+            gamePiece: 'placeTopping',
+          },
+        });
+        expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
+      });
+      it('should not call _emitAreaChanged if the game throws an error', () => {
+        const move: PizzaPartyGameMove = { gamePiece: 'placeTopping' };
+        const applyMoveSpy = jest.spyOn(game, 'applyMove');
+        applyMoveSpy.mockImplementationOnce(() => {
+          throw new Error('Test Error');
+        });
+        expect(() =>
+          gameArea.handleCommand({ type: 'GameMove', move, gameID }, player1),
+        ).toThrowError('Test Error');
+        expect(applyMoveSpy).toHaveBeenCalledWith({
+          gameID: game.id,
+          playerID: player1.id,
+          move: {
+            ...move,
+            gamePiece: 'placeTopping',
+          },
+        });
+        expect(interactableUpdateSpy).not.toHaveBeenCalled();
+      });
+      // describe('when the game ends', () => {
+      //   test('when the game state is over', () => {
+      //     const finalMove: PizzaPartyGameMove = {
+      //       gamePiece: 'placeTopping',
+      //       topping: generateRandomTopping(),
+      //     };
+      //     jest.spyOn(game, 'applyMove').mockImplementationOnce(() => {
+      //       game.state.currentScore += 25;
+      //       game.endGame();
+      //     });
+      //     gameArea.handleCommand({ type: 'GameMove', move: finalMove, gameID }, player1);
+      //     expect(game.state.status).toEqual('OVER');
+      //     expect(gameArea.history.length).toEqual(1);
+      //     expect(gameArea.history[0]).toEqual({
+      //       gameID: game.id,
+      //       scores: {
+      //         [player1.userName]: 25,
+      //       },
+      //     });
+      //     expect(interactableUpdateSpy).toHaveBeenCalledTimes(1);
+      //   });
+      // });
     });
   });
   test('[T3.5] When given an invalid command it should throw an error', () => {
