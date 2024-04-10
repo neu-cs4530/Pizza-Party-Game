@@ -133,7 +133,7 @@ export default function PizzaPartyArea({
           <h2>Score: {score}</h2>
         </div>
         <button
-          style={{ display: 'inline-block', backgroundColor: 'red' }}
+          style={{ display: 'inline-block', backgroundColor: 'green' }}
           onClick={async () => {
             await gameAreaController.endGame();
           }}>

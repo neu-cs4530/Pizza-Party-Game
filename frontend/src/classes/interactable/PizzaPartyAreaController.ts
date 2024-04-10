@@ -170,6 +170,17 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return customer;
   };
 
+  public generateEmptyCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Empty',
+      timeRemaining: 100 - 10 * ((this.game?.difficulty ?? 1) - 1),
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
+
   protected resetPizza = (): void => {
     if (this.game !== undefined) {
       this.game.currentPizza = {
@@ -178,6 +189,23 @@ export default class PizzaPartyAreaController extends GameAreaController<
         cooked: false,
       };
     }
+  };
+
+  public sameToppings = (
+    pizzaToppings: Topping[],
+    orderToppings: Topping[] | undefined,
+  ): boolean => {
+    if (orderToppings === undefined) {
+      return false;
+    }
+    const pizzaOptions = pizzaToppings.map(topping => topping.kind);
+    const orderOptions = orderToppings.map(topping => topping.kind);
+
+    return (
+      pizzaOptions.length === orderOptions.length &&
+      pizzaOptions.every(topping => orderOptions.includes(topping)) &&
+      orderOptions.every(topping => pizzaOptions.includes(topping))
+    );
   };
 
   protected checkDifficulty = (): void => {

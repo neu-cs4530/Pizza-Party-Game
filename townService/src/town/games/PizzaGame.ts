@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { nanoid, random } from 'nanoid';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -54,7 +54,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   };
 
   public applyMove(move: GameMove<PizzaPartyGameMove>): void {
-    console.log('Applying move', move);
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
@@ -62,9 +61,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      // if (move.move.pizza === undefined) {
-      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      // }
       this.state = {
         ...this.state,
         currentPizza: {
@@ -96,11 +92,11 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      const validPizza: boolean = this.sameToppings(
-        move.move.pizza?.toppings,
-        move.move.customer.order.pizzas[0].toppings,
-      );
+      const validPizza: boolean =
+        this.sameToppings(move.move.pizza?.toppings, move.move.customer.order.pizzas[0].toppings) &&
+        move.move.pizza?.cooked === true;
       if (validPizza) {
+        console.log('CORRECT!');
         this.state.currentScore += move.move.customer.order.pointValue;
         if (move.move.pizza === this.state.currentPizza) {
           this.resetPizza();
@@ -109,19 +105,12 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           this.state.oven.pizza = undefined;
           this.state.oven.ovenFull = false;
         }
+        move.move.customer.completed = true;
         const satisfiedCustomerIndex = this.state.currentCustomers.findIndex(
           customer => customer.id === move.move.customer?.id,
         );
         this.state.currentCustomers[satisfiedCustomerIndex] = this.generateEmptyCustomer();
       }
-      // TODO: handle customer functionality (how do we give them stuff)
-      /**
-       * if move.pizza.toppings === customer.order.toppings:
-       *  update score
-       *  this.ovenFull = false
-       *  this.reset(currentPizza)
-       * else ()
-       */
     } else if (move.move.gamePiece === 'moveToOven') {
       this.state.currentPizza = {
         ...this.state.currentPizza,
@@ -179,9 +168,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
       ],
     };
     return this.state;
@@ -215,7 +204,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     const toppings: Topping[] = [];
     for (let i = 0; i < numberOfToppings; i++) {
       const randomTopping: Topping = this.generateRandomTopping();
-      toppings.push(randomTopping);
+      if (!toppings.find(topping => topping.kind === randomTopping.kind)) {
+        toppings.push(randomTopping);
+      }
     }
     return {
       id: this.getRandomInt(0, 1000),

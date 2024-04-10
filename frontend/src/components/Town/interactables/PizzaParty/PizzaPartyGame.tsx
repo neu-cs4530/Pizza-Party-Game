@@ -26,8 +26,8 @@ export type PizzaPartyGameProps = {
 const StyledPizzaGameBoard = chakra(Container, {
   baseStyle: {
     display: 'flex',
-    width: '400px',
-    height: '400px',
+    width: '40vw',
+    height: '40vh',
     padding: '5px',
     flexWrap: 'wrap',
   },
@@ -91,7 +91,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('scoreChanged', setCurrentScore);
       gameAreaController.removeListener('gameChanged', setCurrentGame);
     };
-  }, [currentGame, currentPizza, gameAreaController]);
+  }, [currentGame, currentPizza, gameAreaController, currentScore]);
 
   function applyTopping(topp: ToppingOptions): void {
     const top = {
@@ -129,6 +129,26 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       customer: cust,
       gamePiece: 'moveToCustomer',
     });
+
+    const index = currentCustomers?.findIndex(c => c.id === cust.id);
+    if (
+      gameAreaController.sameToppings(cust.order.pizzas[0].toppings, currentPizza?.toppings) &&
+      currentCustomers !== undefined &&
+      index !== undefined &&
+      gameAreaController.currentCustomers !== undefined
+    ) {
+      cust.completed = true;
+      if (currentScore !== undefined) {
+        setCurrentScore(currentScore + 1);
+      }
+      console.log('replace customer');
+      const newCustomers = [...currentCustomers];
+      const empty = gameAreaController.generateEmptyCustomer();
+      newCustomers[index] = empty;
+      gameAreaController.currentCustomers[index] = empty;
+      setCurrentCustomers(newCustomers);
+      handleTrashClick();
+    }
   }
   return (
     <StyledPizzaGameBoard>
@@ -145,9 +165,12 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index} onClick={() => giveToCustomer(customer)}>
+            <button
+              style={{ marginRight: 30, zIndex: 999 }}
+              key={index}
+              onClick={() => giveToCustomer(customer)}>
               <Customer customer={customer} />
-            </div>
+            </button>
           ) : (
             <div style={{ marginRight: 30 }} key={index}></div>
           ),
