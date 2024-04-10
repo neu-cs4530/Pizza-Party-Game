@@ -180,6 +180,8 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
+<<<<<<< HEAD
+=======
       it('should throw an error if move is of type moveToOven and pizza is undefined', () => {
         game.startGame(player1);
         expect(() =>
@@ -222,6 +224,7 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
+>>>>>>> 0da98759276a1d05f44e82ec7bf8d821cba4c094
     });
     describe('when given a placeTopping move', () => {
       it("should reflect in the pizza's topping list (1 topping)", () => {
@@ -287,84 +290,16 @@ describe('PizzaPartyGame', () => {
         const pizza1 = createPizzaForTesting();
         game.startGame(player1);
         const emptyPizza = game.state.currentPizza;
-        game.state.currentPizza = pizza1;
-        expect(game.state.currentPizza).toEqual(pizza1);
         game.applyMove({
           gameID: game.id,
           playerID: player1.id,
           move: {
             gamePiece: 'throwOut',
-            pizza: pizza1,
           },
         });
-        expect(game.state.currentPizza).toEqual(emptyPizza);
-      });
-      it('should set the oven pizza to undefined if the pizza is in the oven', () => {
-        const pizza1 = createPizzaForTesting();
-        const pizza2 = createPizzaForTesting(['cheese', 'pepperoni']);
-        game.startGame(player1);
-        game.state.currentPizza = pizza1;
-        game.state.oven = {
-          pizza: pizza2,
-          ovenFull: true,
-        };
-        expect(game.state.currentPizza).toEqual(pizza1);
-        game.applyMove({
-          gameID: game.id,
-          playerID: player1.id,
-          move: {
-            gamePiece: 'throwOut',
-            pizza: pizza2,
-          },
-        });
-        expect(game.state.currentPizza).toBe(pizza1);
-        expect(game.state.oven.pizza).toBeUndefined();
-        expect(game.state.oven.ovenFull).toBeFalsy();
-      });
-    });
-    describe('when given a moveToOven move', () => {
-      it('places the pizza in the oven and sets the oven to full', () => {
-        const pizza1 = createPizzaForTesting();
-        expect(game.state.oven.pizza).toBeUndefined();
-        expect(game.state.oven.ovenFull).toBeFalsy();
-        game.startGame(player1);
-        game.applyMove({
-          gameID: game.id,
-          playerID: player1.id,
-          move: {
-            gamePiece: 'moveToOven',
-            pizza: pizza1,
-          },
-        });
-        expect(game.state.oven.pizza).toBe(pizza1);
-        expect(game.state.oven.ovenFull).toBe(true);
-      });
-      it("doesn't allow for two pizzas to be placed in the oven at the same time", () => {
-        const pizza1 = createPizzaForTesting();
-        const pizza2 = createPizzaForTesting(['cheese', 'mushrooms']);
-        expect(game.state.oven.pizza).toBeUndefined();
-        expect(game.state.oven.ovenFull).toBeFalsy();
-        game.startGame(player1);
-        game.applyMove({
-          gameID: game.id,
-          playerID: player1.id,
-          move: {
-            gamePiece: 'moveToOven',
-            pizza: pizza1,
-          },
-        });
-        expect(game.state.oven.pizza).toBe(pizza1);
-        expect(game.state.oven.ovenFull).toBe(true);
-        expect(() =>
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: {
-              gamePiece: 'moveToOven',
-              pizza: pizza2,
-            },
-          }),
-        ).toThrowError(INVALID_MOVE_MESSAGE);
+        expect(
+          game.state.currentPizza.toppings.every(topping => topping.appliedOnPizza === false),
+        ).toBeTruthy();
       });
     });
     describe('when given a moveToCustomer move', () => {

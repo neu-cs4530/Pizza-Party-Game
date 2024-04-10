@@ -18,7 +18,6 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
-import pizzaSchema from '../database/pizza/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -125,9 +124,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
        * else ()
        */
     } else if (move.move.gamePiece === 'moveToOven') {
-      if (!this.state.currentPizza) {
-        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      }
       this.state.currentPizza = {
         ...this.state.currentPizza,
         cooked: true,
