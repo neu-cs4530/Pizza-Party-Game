@@ -11,6 +11,10 @@ module.exports = {
   testEnvironment: 'jsdom',
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  moduleNameMapper: {
+    "\\.(css)$": "identity-obj-proxy",
+    "\\.(jpg|jpeg|png)$": "identity-obj-proxy",
+  },
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

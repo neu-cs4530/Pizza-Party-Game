@@ -8,7 +8,7 @@ interface TrashProps {
 export default function Trash({ onClick }: TrashProps): JSX.Element {
   return (
     <button onClick={onClick}>
-      <Image src={'/assets/pizza-party/trash.jpg'} height={120} width={60} />
+      <img src={'/assets/pizza-party/trash.jpg'} height={120} width={60} />
     </button>
   );
 }

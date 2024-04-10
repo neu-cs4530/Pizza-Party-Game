@@ -32,9 +32,8 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
       break;
   }
 
-  if (pizza === undefined) {
-    return <div />;
-  } else if (pizza.cooked === true) {
+  console.log('currentPizza' + currentPizza);
+  if (pizza?.cooked === true) {
     currentBase = currentBase.replace('raw-pizzas', 'baked-pizzas');
   }
 

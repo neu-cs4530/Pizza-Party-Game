@@ -42,7 +42,7 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
   return (
     <button>
       <div style={{ backgroundColor: 'silver' }}>
-        <Image src={imageSource} alt={topping} width={20} height={40} />
+        <Image src={imageSource} alt={topping} width={20} height={40} unoptimized={true} />
       </div>
     </button>
   );
