@@ -34,7 +34,6 @@ export const generateRandomPizza = (): Pizza => {
     id: getRandomInt(0, 1000),
     toppings,
     cooked: false,
-    isInOven: false,
   };
 };
 

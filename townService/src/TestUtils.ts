@@ -230,7 +230,6 @@ export function createPizzaForTesting(toppings?: ToppingOptions[]): Pizza {
     id: 1,
     cooked: true,
     toppings: toppingsList,
-    isInOven: false,
   };
 }
 

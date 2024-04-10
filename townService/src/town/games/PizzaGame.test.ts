@@ -211,7 +211,6 @@ describe('PizzaPartyGame', () => {
       it('should throw an error if move is of type moveToOven and pizza is in oven', () => {
         const pizza1 = createPizzaForTesting();
         game.startGame(player1);
-        pizza1.isInOven = true;
         expect(() =>
           game.applyMove({
             gameID: game.id,

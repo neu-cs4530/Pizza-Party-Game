@@ -33,7 +33,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         id: 0,
         toppings: [],
         cooked: false,
-        isInOven: false,
       },
       difficulty: 1,
     });
@@ -88,7 +87,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           ...this.state.currentPizza,
           toppings: [],
           cooked: false,
-          isInOven: false,
         },
       };
       console.log('remove toppings', this.state.currentPizza);
@@ -132,10 +130,8 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       }
       this.state.currentPizza = {
         ...this.state.currentPizza,
-        isInOven: true,
         cooked: true,
       };
-      console.log("button pressed", this.state.currentPizza);
     }
     this.checkDifficulty();
   }
@@ -230,7 +226,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       id: this.getRandomInt(0, 1000),
       toppings,
       cooked: false,
-      isInOven: false,
     };
   };
 
@@ -262,7 +257,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         id: 0,
         toppings: [],
         cooked: false,
-        isInOven: false,
       },
     };
   };
