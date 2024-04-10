@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { nanoid, random } from 'nanoid';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -179,9 +179,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
-        this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
+        // this.generateEmptyCustomer(),
       ],
     };
     return this.state;
@@ -215,7 +215,9 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     const toppings: Topping[] = [];
     for (let i = 0; i < numberOfToppings; i++) {
       const randomTopping: Topping = this.generateRandomTopping();
-      toppings.push(randomTopping);
+      if (!toppings.find(topping => topping.kind === randomTopping.kind)) {
+        toppings.push(randomTopping);
+      }
     }
     return {
       id: this.getRandomInt(0, 1000),

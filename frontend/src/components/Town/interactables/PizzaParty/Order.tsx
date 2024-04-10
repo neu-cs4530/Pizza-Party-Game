@@ -18,8 +18,11 @@ const pizzaDisplay = (pizza: Pizza) => {
   const toppingsFormatted = toppingsToString(pizza.toppings);
   return (
     <div>
-      <h2>Pizza</h2>
-      <p>{toppingsFormatted}</p>
+      {/* <h2>Pizza</h2> */}
+      {toppingsFormatted.map(topping => (
+        <p key='topping'>{topping}</p>
+      ))}
+      {/* <p>{toppingsFormatted}</p> */}
     </div>
   );
 };
@@ -32,11 +35,14 @@ export default function Order({ order }: OrderProps): JSX.Element {
         backgroundImage: '/assets/pizza-party/speech-bubble.png',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
+        // width: '100%',
+        // height: '100&',
         backgroundColor: 'white',
-        borderRadius: 50,
+        borderRadius: '10px',
+        padding: '0.2rem',
         textAlign: 'center',
       }}>
-      <h1 style={{ fontSize: 'small' }}>Order</h1>
+      {/* <h1 style={{ fontSize: 'small' }}>Order</h1> */}
       <div>{pizzaDisplay(order.pizzas[0])}</div>
     </div>
   );

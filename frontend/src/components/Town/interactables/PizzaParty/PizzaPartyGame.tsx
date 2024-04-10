@@ -26,8 +26,8 @@ export type PizzaPartyGameProps = {
 const StyledPizzaGameBoard = chakra(Container, {
   baseStyle: {
     display: 'flex',
-    width: '400px',
-    height: '400px',
+    width: '40vw',
+    height: '40vh',
     padding: '5px',
     flexWrap: 'wrap',
   },

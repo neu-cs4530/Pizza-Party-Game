@@ -197,7 +197,6 @@ describe('PizzaPartyGame', () => {
               kind: 'olives',
               appliedOnPizza: false,
             },
-            // pizza: pizza1,
           },
         });
         expect(game.state.currentPizza.toppings.length).toEqual(1);
