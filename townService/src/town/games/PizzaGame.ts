@@ -229,7 +229,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
     const customer: Customer = {
       id: nanoid(),
       name: 'Customer',
-      timeRemaining: 100 - 10 * (this.state.difficulty - 1),
+      timeRemaining: 40 - 10 * (this.state.difficulty - 1),
       completed: false,
       order: this.generateRandomOrder(),
     };

@@ -172,7 +172,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
     const customer: Customer = {
       id: nanoid(),
       name: 'Customer',
-      timeRemaining: 100 - 10 * ((this.game?.difficulty ?? 1) - 1),
+      timeRemaining: 40 - 10 * ((this.game?.difficulty ?? 1) - 1),
       completed: false,
       order: this.generateRandomOrder(),
     };
