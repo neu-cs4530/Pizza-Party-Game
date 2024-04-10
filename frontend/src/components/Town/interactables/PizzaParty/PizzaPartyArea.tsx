@@ -12,6 +12,7 @@ import * as client from './client';
 import { nanoid } from 'nanoid';
 import Image from 'next/image';
 import instructions from '../../../../../public/assets/pizza-party/instructions.png';
+import { findLastIndex } from 'ramda';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -48,9 +49,9 @@ export default function PizzaPartyArea({
   }, [townController, gameAreaController, toast]);
   if (gameStatus === 'WAITING_FOR_PLAYERS' || gameStatus === 'WAITING_TO_START') {
     return (
-      <div>
-        <h1>Pizza Party Game</h1>
-        <p>Waiting to start game</p>
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: '10px'}}>
+        <h1 style={{color: 'maroon', fontSize: '30px'}}>Pizza Party Game</h1>
+        <p style={{fontWeight: 'bold'}}>Waiting to start game</p>
         <button
           onClick={async () => {
             setJoiningGame(true);
@@ -65,7 +66,8 @@ export default function PizzaPartyArea({
               });
             }
             setJoiningGame(false);
-          }}>
+          }}
+          style={{backgroundColor: 'maroon', color: 'white', fontWeight: 'bold', padding: '5px', borderRadius: '5px'}}>
           Start Game
         </button>
         <Image
@@ -95,7 +97,7 @@ export default function PizzaPartyArea({
             <h2>Score: {score}</h2>
           </div>
           <button
-            style={{ display: 'inline-block', backgroundColor: 'red' }}
+            style={{ display: 'inline-block', backgroundColor: 'red', padding: '5px', borderRadius: '5px', color: 'white' }}
             onClick={async () => {
               await gameAreaController.endGame();
             }}>
@@ -133,7 +135,7 @@ export default function PizzaPartyArea({
           <h2>Score: {score}</h2>
         </div>
         <button
-          style={{ display: 'inline-block', backgroundColor: 'green' }}
+          style={{ display: 'inline-block', backgroundColor: 'red' }}
           onClick={async () => {
             await gameAreaController.endGame();
           }}>
