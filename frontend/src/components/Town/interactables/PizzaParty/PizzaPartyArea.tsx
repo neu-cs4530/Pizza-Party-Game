@@ -68,10 +68,11 @@ export default function PizzaPartyArea({
           Start Game
         </button>
         <Image
-          src={'/assets/pizza-party/Instructions.png'}
+          src={'/assets/pizza-party/instructions.png'}
           alt='Tutorial'
           width={500}
           height={400}
+          unoptimized={true}
         />
       </div>
     );
