@@ -146,7 +146,6 @@ export default class PizzaPartyAreaController extends GameAreaController<
       id: this.getRandomInt(0, 1000),
       toppings,
       cooked: false,
-      isInOven: false,
     };
   };
 
@@ -177,7 +176,6 @@ export default class PizzaPartyAreaController extends GameAreaController<
         id: 0,
         toppings: [],
         cooked: false,
-        isInOven: false,
       };
     }
   };

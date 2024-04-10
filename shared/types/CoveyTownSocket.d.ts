@@ -318,7 +318,6 @@ export interface Pizza {
   id: number
   toppings: Topping[]
   cooked: boolean
-  isInOven: boolean
 }
 
 export interface Oven {
