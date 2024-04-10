@@ -169,7 +169,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
               style={{ marginRight: 30, zIndex: 999 }}
               key={index}
               onClick={() => giveToCustomer(customer)}>
-              <Customer customer={customer} />
+              <Customer customer={customer} game={gameAreaController} />
             </button>
           ) : (
             <div style={{ marginRight: 30 }} key={index}></div>
