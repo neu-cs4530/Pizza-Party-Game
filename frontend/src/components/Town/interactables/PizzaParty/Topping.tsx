@@ -34,7 +34,7 @@ export default function Topping({ topping }: ToppingProps): JSX.Element {
 
   return (
     <button onClick={() => console.log('Topping clicked')}>
-      <Image src={imageSource} alt={topping.kind} width={200} height={200} unoptimized={true} />
+      <img src={imageSource} alt={topping.kind} width={200} height={200} />
     </button>
   );
 }
