@@ -191,6 +191,23 @@ export default class PizzaPartyAreaController extends GameAreaController<
     }
   };
 
+  public sameToppings = (
+    pizzaToppings: Topping[],
+    orderToppings: Topping[] | undefined,
+  ): boolean => {
+    if (orderToppings === undefined) {
+      return false;
+    }
+    const pizzaOptions = pizzaToppings.map(topping => topping.kind);
+    const orderOptions = orderToppings.map(topping => topping.kind);
+
+    return (
+      pizzaOptions.length === orderOptions.length &&
+      pizzaOptions.every(topping => orderOptions.includes(topping)) &&
+      orderOptions.every(topping => pizzaOptions.includes(topping))
+    );
+  };
+
   protected checkDifficulty = (): void => {
     if (this.game !== undefined) {
       const score: number = this.game.currentScore;
