@@ -18,7 +18,6 @@ import {
   Customer,
 } from '../../types/CoveyTownSocket';
 import Game from './Game';
-import pizzaSchema from '../database/pizza/schema';
 
 export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
   public constructor() {
@@ -129,7 +128,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         ...this.state.currentPizza,
         cooked: true,
       };
-      console.log('button pressed', this.state.currentPizza);
     }
     this.checkDifficulty();
   }
