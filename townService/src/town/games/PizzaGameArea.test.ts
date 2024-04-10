@@ -11,7 +11,7 @@ import {
 import PizzaPartyGameArea from './PizzaGameArea';
 import * as PizzaPartyGameModule from './PizzaGame';
 import Game from './Game';
-import { createPizzaForTesting, createPlayerForTesting } from '../../TestUtils';
+import { createPlayerForTesting } from '../../TestUtils';
 import {
   GAME_ID_MISSMATCH_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,

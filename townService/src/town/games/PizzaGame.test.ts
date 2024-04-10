@@ -180,51 +180,6 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-<<<<<<< HEAD
-=======
-      it('should throw an error if move is of type moveToOven and pizza is undefined', () => {
-        game.startGame(player1);
-        expect(() =>
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: {
-              gamePiece: 'moveToOven',
-              pizza: undefined,
-            },
-          }),
-        ).toThrowError(INVALID_MOVE_MESSAGE);
-      });
-      it('should throw an error if move is of type moveToOven and oven is full', () => {
-        const pizza1 = createPizzaForTesting();
-        game.startGame(player1);
-        game.state.oven.ovenFull = true;
-        expect(() =>
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: {
-              gamePiece: 'moveToOven',
-              pizza: pizza1,
-            },
-          }),
-        ).toThrowError(INVALID_MOVE_MESSAGE);
-      });
-      it('should throw an error if move is of type moveToOven and pizza is in oven', () => {
-        const pizza1 = createPizzaForTesting();
-        game.startGame(player1);
-        expect(() =>
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: {
-              gamePiece: 'moveToOven',
-              pizza: pizza1,
-            },
-          }),
-        ).toThrowError(INVALID_MOVE_MESSAGE);
-      });
->>>>>>> 0da98759276a1d05f44e82ec7bf8d821cba4c094
     });
     describe('when given a placeTopping move', () => {
       it("should reflect in the pizza's topping list (1 topping)", () => {

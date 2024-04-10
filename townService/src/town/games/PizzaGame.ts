@@ -96,7 +96,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-
       const validPizza: boolean = this.sameToppings(
         move.move.pizza?.toppings,
         move.move.customer.order.pizzas[0].toppings,
