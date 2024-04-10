@@ -90,12 +90,8 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           cooked: false,
           isInOven: false,
         },
-        oven: {
-          ...this.state.oven,
-          pizza: undefined,
-          ovenFull: false,
-        },
       };
+      console.log('remove toppings', this.state.currentPizza);
     } else if (move.move.gamePiece === 'moveToCustomer') {
       if (move.move.customer === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
@@ -131,23 +127,16 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
        * else ()
        */
     } else if (move.move.gamePiece === 'moveToOven') {
-      if (!move.move.pizza) {
+      if (!this.state.currentPizza) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      if (this.state.oven.ovenFull || move.move.pizza?.isInOven) {
-        throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      }
-      this.state.oven.pizza = move.move.pizza;
-      this.state.oven.ovenFull = true;
+      this.state.currentPizza = {
+        ...this.state.currentPizza,
+        isInOven: true,
+        cooked: true,
+      };
+      console.log("button pressed", this.state.currentPizza);
     }
-    // else if (move.move.gamePiece === 'throwOut') {
-    //   if (move.move.pizza === this.state.currentPizza) {
-    //     this.resetPizza();
-    //   } else if (move.move.pizza === this.state.oven.pizza) {
-    //     this.state.oven.pizza = undefined;
-    //     this.state.oven.ovenFull = false;
-    //   }
-    // }
     this.checkDifficulty();
   }
 

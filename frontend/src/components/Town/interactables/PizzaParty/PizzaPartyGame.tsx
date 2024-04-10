@@ -14,6 +14,7 @@ import ToppingTray from './ToppingTray';
 import Oven from './Oven';
 import Trash from './Trash';
 import { chakra, Container } from '@chakra-ui/react';
+import OvenButton from './OvenButton';
 
 export type PizzaPartyGameProps = {
   gameAreaController: PizzaPartyAreaController;
@@ -151,8 +152,8 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
           ),
         )}
       </div>
-      <div style={{ position: 'absolute', top: 350, left: 480 }}>
-        <Oven />
+      <div style={{ position: 'absolute', top: 430, left: 250 }}>
+        <OvenButton onClick={() => bakeCurrentPizza()} />
       </div>
       <div style={{ position: 'absolute', top: 430, left: 410 }}>
         <Trash onClick={() => handleTrashClick()} />

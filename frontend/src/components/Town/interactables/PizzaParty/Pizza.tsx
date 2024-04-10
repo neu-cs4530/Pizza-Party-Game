@@ -1,7 +1,6 @@
-import React from 'react';
 import Image from 'next/image';
 import { Pizza as PizzaType, Topping as ToppingType } from '../../../../types/CoveyTownSocket';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Topping from './Topping';
 
 export type PizzaProps = {
@@ -11,41 +10,50 @@ export type PizzaProps = {
 
 export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Element {
   const [currentPizza, setCurrentPizza] = useState<PizzaType | undefined>(pizza);
-  const hasSauce = toppings?.some(topping => topping.kind === 'sauce' && topping.appliedOnPizza);
+  let currentBase = '/assets/pizza-party/raw-pizzas/dough.png';
+  
+  const hasSauce = toppings?.some(
+    topping => topping.kind === "sauce" && topping.appliedOnPizza
+  );
+  
+  const hasCheese = toppings?.some(
+    topping => topping.kind === "cheese" && topping.appliedOnPizza
+  );
 
-  const hasCheese = toppings?.some(topping => topping.kind === 'cheese' && topping.appliedOnPizza);
-  if (!currentPizza) {
-    return <div />;
+  switch (true) {
+    case hasCheese && !hasSauce:
+      currentBase = '/assets/pizza-party/raw-pizzas/cheese.png';
+      break;
+    case hasSauce && !hasCheese:
+      currentBase = '/assets/pizza-party/raw-pizzas/sauce.png';
+      break;
+    case hasSauce && hasCheese:
+      currentBase = '/assets/pizza-party/raw-pizzas/cheese-and-sauce.png';
+      break;
+    default:
+      currentBase = '/assets/pizza-party/raw-pizzas/dough.png';
+      break;
   }
+
+  console.log("currentPizza" + currentPizza)
+  if (pizza === undefined) {
+    return <div />;
+  } else if (pizza.cooked === true || pizza.isInOven === true) {
+    currentBase = currentBase.replace('raw-pizzas', 'baked-pizzas');
+    console.log("cooking" +  currentBase)
+  }
+
 
   return (
     <div style={{ position: 'relative', width: '200px', height: '100px' }}>
-      {hasCheese && !hasSauce && (
-        <Image src={'/assets/pizza-party/raw-pizzas/cheese.png'} width={200} height={100} />
-      )}
-      {hasSauce && !hasCheese && (
-        <Image src={'/assets/pizza-party/raw-pizzas/sauce.png'} width={200} height={100} />
-      )}
-      {hasSauce && hasCheese && (
-        <Image
-          src={'/assets/pizza-party/raw-pizzas/cheese-and-sauce.png'}
-          width={200}
-          height={100}
-        />
-      )}
-      {!hasSauce && !hasCheese && (
-        <Image src={'/assets/pizza-party/raw-pizzas/dough.png'} width={200} height={100} />
-      )}
+      <Image
+        src={currentBase}
+        width={200}
+        height={100}
+      />
       {toppings?.map((topping, index) => (
-        <div
-          key={index}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}>
-          <Topping key={index} topping={topping} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} key={index}>
+          <Topping topping={topping} />
         </div>
       ))}
     </div>
