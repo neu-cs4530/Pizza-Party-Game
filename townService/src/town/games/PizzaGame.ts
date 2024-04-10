@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { customAlphabet, nanoid } from 'nanoid';
 import InvalidParametersError, {
   GAME_FULL_MESSAGE,
   GAME_NOT_IN_PROGRESS_MESSAGE,
@@ -103,11 +103,13 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-
+      console.log(move.move.customer, "This is the customer")
+      console.log(move.move.pizza, "This is the pizza")
       const validPizza: boolean = this.sameToppings(
         move.move.pizza?.toppings,
         move.move.customer.order.pizzas[0].toppings,
       );
+      console.log(validPizza, "This is the valid pizza")
       if (validPizza) {
         this.state.currentScore += move.move.customer.order.pointValue;
         if (move.move.pizza === this.state.currentPizza) {
@@ -120,16 +122,34 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         const satisfiedCustomerIndex = this.state.currentCustomers.findIndex(
           customer => customer.id === move.move.customer?.id,
         );
-        this.state.currentCustomers[satisfiedCustomerIndex] = this.generateEmptyCustomer();
+        if (satisfiedCustomerIndex !== -1) {
+          // Create a new array with the updated customer at the specified index
+          const updatedCustomers : Customer[] = [
+            ...this.state.currentCustomers.slice(0, satisfiedCustomerIndex), // Keep the customers before the satisfied customer
+           this.generateEmptyCustomer(),
+            ...this.state.currentCustomers.slice(satisfiedCustomerIndex + 1) // Keep the customers after the satisfied customer
+          ];
+          this.state = {
+            ...this.state,
+            currentScore: this.state.currentScore + move.move.customer.order.pointValue,
+            currentPizza: {
+              ...this.state.currentPizza,
+              toppings: [],
+              cooked: false,
+              isInOven: false,
+            },
+            oven: {
+              ...this.state.oven,
+              pizza: undefined,
+              ovenFull: false,
+            },
+            currentCustomers: updatedCustomers,
+          };
+        }
+        console.log(this.state.currentCustomers, "This is the current score")
       }
-      // TODO: handle customer functionality (how do we give them stuff)
-      /**
-       * if move.pizza.toppings === customer.order.toppings:
-       *  update score
-       *  this.ovenFull = false
-       *  this.reset(currentPizza)
-       * else ()
-       */
+      
+      //TODO - Update customer stuff
     } else if (move.move.gamePiece === 'moveToOven') {
       if (!move.move.pizza) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
