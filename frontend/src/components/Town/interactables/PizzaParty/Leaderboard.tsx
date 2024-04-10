@@ -15,7 +15,7 @@ export default function LeaderBoard(): JSX.Element {
     const fetchData = async () => {
       try {
         const data = await retrieveAllLeaderboardData();
-        data.sort((a: Score, b: Score) => a.score - b.score);
+        data.sort((a: Score, b: Score) => b.score - a.score);
         setScores(data.slice(0, 10));
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);

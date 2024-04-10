@@ -102,7 +102,7 @@ export default class PizzaPartyAreaController extends GameAreaController<
       score: this.currentScore,
     };
     console.log(entry);
-    client.createLeaderboardEntry(entry);
+    await client.createLeaderboardEntry(entry);
 
     await this._townController.sendInteractableCommand(this.id, {
       gameID: instanceID,
