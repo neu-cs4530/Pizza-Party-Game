@@ -40,7 +40,7 @@ export default function PizzaSprite({ pizza, toppings }: PizzaProps): JSX.Elemen
 
   return (
     <div style={{ position: 'relative', width: '200px', height: '100px' }}>
-      <Image src={currentBase} width={200} height={100} />
+      <Image src={currentBase} width={200} height={100} unoptimized={true} />
       {toppings?.map((topping, index) => (
         <div
           style={{
