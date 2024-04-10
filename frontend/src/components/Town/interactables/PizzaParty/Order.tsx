@@ -18,11 +18,9 @@ const pizzaDisplay = (pizza: Pizza) => {
   const toppingsFormatted = toppingsToString(pizza.toppings);
   return (
     <div>
-      {/* <h2>Pizza</h2> */}
-      {toppingsFormatted.map(topping => (
-        <p key='topping'>{topping}</p>
+      {toppingsFormatted.map((topping, index) => (
+        <p key={index}>{topping}</p>
       ))}
-      {/* <p>{toppingsFormatted}</p> */}
     </div>
   );
 };

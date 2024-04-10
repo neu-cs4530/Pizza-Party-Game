@@ -54,7 +54,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
   };
 
   public applyMove(move: GameMove<PizzaPartyGameMove>): void {
-    console.log('Applying move', move);
     if (this.state.status !== 'IN_PROGRESS') {
       throw new InvalidParametersError(GAME_NOT_IN_PROGRESS_MESSAGE);
     }
@@ -62,9 +61,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.topping === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      // if (move.move.pizza === undefined) {
-      //   throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
-      // }
       this.state = {
         ...this.state,
         currentPizza: {
@@ -96,11 +92,11 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
       if (move.move.pizza === undefined) {
         throw new InvalidParametersError(INVALID_MOVE_MESSAGE);
       }
-      const validPizza: boolean = this.sameToppings(
-        move.move.pizza?.toppings,
-        move.move.customer.order.pizzas[0].toppings,
-      );
+      const validPizza: boolean =
+        this.sameToppings(move.move.pizza?.toppings, move.move.customer.order.pizzas[0].toppings) &&
+        move.move.pizza?.cooked === true;
       if (validPizza) {
+        console.log('CORRECT!');
         this.state.currentScore += move.move.customer.order.pointValue;
         if (move.move.pizza === this.state.currentPizza) {
           this.resetPizza();
@@ -109,6 +105,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
           this.state.oven.pizza = undefined;
           this.state.oven.ovenFull = false;
         }
+        move.move.customer.completed = true;
         const satisfiedCustomerIndex = this.state.currentCustomers.findIndex(
           customer => customer.id === move.move.customer?.id,
         );

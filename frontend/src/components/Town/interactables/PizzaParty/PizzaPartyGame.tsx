@@ -91,7 +91,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gameAreaController.removeListener('scoreChanged', setCurrentScore);
       gameAreaController.removeListener('gameChanged', setCurrentGame);
     };
-  }, [currentGame, currentPizza, gameAreaController]);
+  }, [currentGame, currentPizza, gameAreaController, currentScore]);
 
   function applyTopping(topp: ToppingOptions): void {
     const top = {
@@ -129,6 +129,27 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       customer: cust,
       gamePiece: 'moveToCustomer',
     });
+
+    cust.completed = true;
+    if (currentScore !== undefined) {
+      setCurrentScore(currentScore + 1);
+    }
+
+    const completedCustomer = currentCustomers?.find(customer => customer.completed === true);
+    console.log(completedCustomer);
+    if (
+      completedCustomer !== undefined &&
+      currentCustomers !== undefined &&
+      gameAreaController.currentCustomers !== undefined
+    ) {
+      console.log('replace customer');
+      const newCustomers = [...currentCustomers];
+      const empty = gameAreaController.generateEmptyCustomer();
+      const index = newCustomers.findIndex(c => c.id === completedCustomer.id);
+      newCustomers[index] = empty;
+      gameAreaController.currentCustomers[index] = empty;
+      setCurrentCustomers(newCustomers);
+    }
   }
   return (
     <StyledPizzaGameBoard>
@@ -144,9 +165,12 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index} onClick={() => giveToCustomer(customer)}>
+            <button
+              style={{ marginRight: 30, zIndex: 999 }}
+              key={index}
+              onClick={() => giveToCustomer(customer)}>
               <Customer customer={customer} />
-            </div>
+            </button>
           ) : (
             <div style={{ marginRight: 30 }} key={index}></div>
           ),
