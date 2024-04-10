@@ -130,24 +130,6 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-      // it('should throw an error if move is type placeTopping and pizza is undefined', () => {
-      //   game.startGame(player1);
-      //   expect(() =>
-      //     game.applyMove({
-      //       gameID: game.id,
-      //       playerID: player1.id,
-      //       move: {
-      //         gamePiece: 'placeTopping',
-      //         topping: {
-      //           id: 1,
-      //           kind: 'olives',
-      //           appliedOnPizza: false,
-      //         },
-      //         pizza: undefined,
-      //       },
-      //     }),
-      //   ).toThrowError(INVALID_MOVE_MESSAGE);
-      // });
       it('should throw an error if move is of type moveToCustomer and customer is undefined', () => {
         const pizza1: Pizza = createPizzaForTesting();
         game.startGame(player1);
