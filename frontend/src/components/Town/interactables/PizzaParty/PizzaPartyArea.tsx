@@ -11,6 +11,7 @@ import LeaderBoard from './Leaderboard';
 import * as client from './client';
 import { nanoid } from 'nanoid';
 import Image from 'next/image';
+import instructions from "../../../../../public/assets/pizza-party/instructions.png";
 
 export default function PizzaPartyArea({
   interactableID,
@@ -67,7 +68,7 @@ export default function PizzaPartyArea({
           }}>
           Start Game
         </button>
-        <img src={'/assets/pizza-party/instructions.png'} alt='Tutorial' width={500} height={400} />
+        <Image src={instructions} alt='Tutorial' width={500} height={400} />
       </div>
     );
   } else if (gameStatus === 'IN_PROGRESS') {
