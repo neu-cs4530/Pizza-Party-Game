@@ -67,7 +67,7 @@ export default function PizzaPartyArea({
           }}>
           Start Game
         </button>
-        <img src={tutorialImage} alt="Tutorial" width={100} height={100}/>
+        <img src={tutorialImage} alt='Tutorial' width={100} height={100} />
       </div>
     );
   } else if (gameStatus === 'IN_PROGRESS') {
