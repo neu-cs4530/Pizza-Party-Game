@@ -6,16 +6,22 @@ import Order from './Order';
 
 export type CustomerProps = {
   customer: CustomerType;
+  onClick: () => void;
 };
 
-export default function Customer({ customer }: CustomerProps): JSX.Element {
-  const [currentCustomer, setCurrentCustomer] = useState<CustomerType>(customer);
-
+export default function Customer({ customer, onClick }: CustomerProps): JSX.Element {
   return (
     <div>
-      <Image src={'/assets/pizza-party/customer.png'} alt='Customer' width={50} height={100} />
+      <Image
+        src={'/assets/pizza-party/customer.png'}
+        alt='Customer'
+        width={25}
+        height={50}
+        onClick={onClick}
+      />
       <div style={{ position: 'relative', top: '-10px' }}>
-        <Order order={currentCustomer.order} />
+        Name: {customer.id}
+        <Order order={customer.order} />
       </div>
     </div>
   );

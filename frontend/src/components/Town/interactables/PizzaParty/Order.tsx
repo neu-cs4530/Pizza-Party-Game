@@ -9,7 +9,9 @@ export interface OrderProps {
 const toppingsToString = (toppings: Topping[]): string[] => {
   const toppingsFormatted: string[] = [];
   toppings.forEach(topping => {
-    toppingsFormatted.push(topping.kind);
+    if (topping.kind !== 'sauce' && topping.kind !== 'cheese') {
+      toppingsFormatted.push(topping.kind);
+    }
   });
   return toppingsFormatted;
 };

@@ -112,6 +112,17 @@ export default class PizzaPartyAreaController extends GameAreaController<
     return undefined;
   }
 
+  public generateEmptyCustomer = (): Customer => {
+    const customer: Customer = {
+      id: nanoid(),
+      name: 'Empty',
+      timeRemaining: 100000,
+      completed: false,
+      order: this.generateRandomOrder(),
+    };
+    return customer;
+  };
+
   protected TOPPINGS_LIST: ToppingOptions[] = [
     'pepperoni',
     'mushrooms',
@@ -138,6 +149,16 @@ export default class PizzaPartyAreaController extends GameAreaController<
     // Edited to be variable based on the game's difficulty.
     const numberOfToppings = this.getRandomInt(1, 2 * (this.game?.difficulty ?? 0) + 1);
     const toppings: Topping[] = [];
+    toppings.push({
+      id: Math.floor(Math.random() * 1000),
+      kind: 'sauce',
+      appliedOnPizza: false,
+    });
+    toppings.push({
+      id: Math.floor(Math.random() * 1000),
+      kind: 'cheese',
+      appliedOnPizza: false,
+    });
     for (let i = 0; i < numberOfToppings; i++) {
       const randomTopping: Topping = this.generateRandomTopping();
       toppings.push(randomTopping);

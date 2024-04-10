@@ -57,21 +57,23 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // if (currentCustomers && currentCustomers.length >= 3) {
-      //   clearInterval(intervalId);
-      // } else {
+      console.log('Checking for empty seat');
       const index = gameAreaController.findEmptySeat();
+      console.log(index);
       if (
         index !== -1 &&
         index !== undefined &&
         currentCustomers !== undefined &&
-        gameAreaController.currentCustomers !== undefined
+        gameAreaController.game !== undefined
       ) {
         const newCustomers = [...currentCustomers];
         const customer = gameAreaController.generateRandomCustomer();
         newCustomers[index] = customer;
-        gameAreaController.currentCustomers[index] = customer;
+        gameAreaController.game.currentCustomers[index] = customer;
         setCurrentCustomers(newCustomers);
+      }
+      if (index === -1) {
+        return;
       }
       gameAreaController.addListener('customerChanged', setCurrentCustomers);
     }, 3000);
@@ -129,6 +131,21 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       customer: cust,
       gamePiece: 'moveToCustomer',
     });
+
+    const completedCustomer = currentCustomers?.find(customer => customer.completed === true);
+    if (
+      completedCustomer !== undefined &&
+      currentCustomers !== undefined &&
+      gameAreaController.currentCustomers !== undefined
+    ) {
+      console.log('replace customer');
+      const newCustomers = [...currentCustomers];
+      const empty = gameAreaController.generateEmptyCustomer();
+      const index = newCustomers.findIndex(c => c.id === completedCustomer.id);
+      newCustomers[index] = empty;
+      gameAreaController.currentCustomers[index] = empty;
+      setCurrentCustomers(newCustomers);
+    }
   }
   return (
     <StyledPizzaGameBoard>
@@ -144,8 +161,8 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
-            <div style={{ marginRight: 30 }} key={index} onClick={() => giveToCustomer(customer)}>
-              <Customer customer={customer} />
+            <div style={{ marginRight: 30 }} key={index}>
+              <Customer customer={customer} onClick={() => giveToCustomer(customer)} />
             </div>
           ) : (
             <div style={{ marginRight: 30 }} key={index}></div>
