@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Pizza, Pizza as PizzaType } from '../../../../types/CoveyTownSocket';
 import Image from 'next/image';
 import PizzaPartyAreaController from '../../../../classes/interactable/PizzaPartyAreaController';
@@ -55,20 +55,27 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentScore, setCurrentScore] = useState(gameAreaController.currentScore);
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
 
+  const currentCustomersRef = useRef(currentCustomers);
+
+  useEffect(() => {
+    currentCustomersRef.current = currentCustomers;
+  }, [currentCustomers]);
+
   useEffect(() => {
     gameAreaController.addListener('customerChanged', setCurrentCustomers);
+
     const intervalId = setInterval(() => {
-      if (currentCustomers && currentCustomers.length >= 3) {
+      if (currentCustomersRef.current && currentCustomersRef.current.length >= 3) {
         clearInterval(intervalId);
       } else {
         const index = gameAreaController.findEmptySeat();
         if (
           index !== -1 &&
           index !== undefined &&
-          currentCustomers !== undefined &&
+          currentCustomersRef.current !== undefined &&
           gameAreaController.currentCustomers !== undefined
         ) {
-          const newCustomers = [...currentCustomers];
+          const newCustomers = [...currentCustomersRef.current];
           const customer = gameAreaController.generateRandomCustomer();
           newCustomers[index] = customer;
           gameAreaController.currentCustomers[index] = customer;
@@ -76,11 +83,12 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         }
       }
     }, 3000);
+
     return () => {
       gameAreaController.removeListener('customerChanged', setCurrentCustomers);
       clearInterval(intervalId);
     };
-  }, [gameAreaController, currentCustomers]);
+  }, [gameAreaController]);
 
   useEffect(() => {
     gameAreaController.addListener('pizzaChanged', setCurrentPizza);

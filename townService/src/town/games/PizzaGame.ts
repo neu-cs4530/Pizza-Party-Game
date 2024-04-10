@@ -168,7 +168,7 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
         this.generateEmptyCustomer(),
-        // this.generateEmptyCustomer(),
+        this.generateEmptyCustomer(),
         // this.generateEmptyCustomer(),
         // this.generateEmptyCustomer(),
       ],
