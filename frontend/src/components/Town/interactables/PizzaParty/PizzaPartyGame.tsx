@@ -157,6 +157,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         alt='Pizza Party Game'
         layout='fill'
         style={{ position: 'absolute', top: 0, left: 0 }}
+        unoptimized={true}
       />
       <div style={{ position: 'absolute', top: 450, left: 55, width: '100%', height: '100%' }}>
         <PizzaSprite pizza={currentPizza} toppings={currentPizza?.toppings} />

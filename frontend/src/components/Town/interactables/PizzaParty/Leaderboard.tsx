@@ -30,6 +30,7 @@ export default function LeaderBoard(): JSX.Element {
         src={'/assets/pizza-party/leaderboard-background.png'}
         alt='Background Image'
         layout='fill'
+        unoptimized={true}
       />
       <div style={{ position: 'absolute', zIndex: 1, left: 225 }}>
         <h1>Leaderboard</h1>
