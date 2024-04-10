@@ -33,8 +33,6 @@ export default function Order({ order }: OrderProps): JSX.Element {
         backgroundImage: '/assets/pizza-party/speech-bubble.png',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        // width: '100%',
-        // height: '100&',
         backgroundColor: 'white',
         borderRadius: '10px',
         padding: '0.2rem',

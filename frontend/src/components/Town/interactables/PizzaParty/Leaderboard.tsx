@@ -34,13 +34,17 @@ export default function LeaderBoard(): JSX.Element {
         unoptimized={true}
       />
       <div style={{ position: 'absolute', zIndex: 1, left: 225 }}>
-        <h1>Leaderboard</h1>
+        <h1 style={{ fontWeight: 'bold' }}>Leaderboard</h1>
         <ol>
-          {scores?.map((score, index) => (
-            <li key={index}>
-              {score.playerId} - {score.score}
-            </li>
-          ))}
+          {scores?.map((score, index) => {
+            if (index < 10) {
+              return (
+                <li key={index}>
+                  {score.playerId} - {score.score}
+                </li>
+              );
+            }
+          })}
         </ol>
       </div>
     </div>

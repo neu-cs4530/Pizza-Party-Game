@@ -162,10 +162,10 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
         style={{ position: 'absolute', top: 0, left: 0 }}
         unoptimized={true}
       />
-      <div style={{ position: 'absolute', top: 450, left: 55, width: '100%', height: '100%' }}>
+      <div style={{ position: 'absolute', top: 425, left: 50, width: '100%', height: '100%' }}>
         <PizzaSprite pizza={currentPizza} toppings={currentPizza?.toppings} />
       </div>
-      <div style={{ display: 'flex', position: 'absolute', left: 7 }}>
+      <div style={{ display: 'flex', position: 'absolute', left: 7, top: 100 }}>
         {currentCustomers?.map((customer, index) =>
           customer.name !== 'Empty' ? (
             <button
