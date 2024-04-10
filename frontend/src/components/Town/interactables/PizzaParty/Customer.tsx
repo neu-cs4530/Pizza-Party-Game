@@ -19,8 +19,8 @@ export default function Customer({ customer, game }: CustomerProps): JSX.Element
       if (timer > 0) {
         setTimer(timer - 1);
       } else {
-        clearInterval(intervalId);
         game.endGame();
+        clearInterval(intervalId);
       }
     }, 1000);
     return () => clearInterval(intervalId);
