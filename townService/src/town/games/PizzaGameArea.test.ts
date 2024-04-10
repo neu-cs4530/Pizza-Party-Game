@@ -29,7 +29,6 @@ class TestingGame extends Game<PizzaPartyGameState, PizzaPartyGameMove> {
         id: 0,
         toppings: [],
         cooked: false,
-        isInOven: false,
       },
       difficulty: 1,
       oven: {
