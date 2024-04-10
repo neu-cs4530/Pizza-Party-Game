@@ -56,21 +56,25 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
   const [currentGame, setCurrentGame] = useState(gameAreaController.game);
 
   useEffect(() => {
+    gameAreaController.addListener('customerChanged', setCurrentCustomers);
     const intervalId = setInterval(() => {
-      const index = gameAreaController.findEmptySeat();
-      if (
-        index !== -1 &&
-        index !== undefined &&
-        currentCustomers !== undefined &&
-        gameAreaController.currentCustomers !== undefined
-      ) {
-        const newCustomers = [...currentCustomers];
-        const customer = gameAreaController.generateRandomCustomer();
-        newCustomers[index] = customer;
-        gameAreaController.currentCustomers[index] = customer;
-        setCurrentCustomers(newCustomers);
+      if (currentCustomers && currentCustomers.length >= 3) {
+        clearInterval(intervalId);
+      } else {
+        const index = gameAreaController.findEmptySeat();
+        if (
+          index !== -1 &&
+          index !== undefined &&
+          currentCustomers !== undefined &&
+          gameAreaController.currentCustomers !== undefined
+        ) {
+          const newCustomers = [...currentCustomers];
+          const customer = gameAreaController.generateRandomCustomer();
+          newCustomers[index] = customer;
+          gameAreaController.currentCustomers[index] = customer;
+          setCurrentCustomers(newCustomers);
+        }
       }
-      gameAreaController.addListener('customerChanged', setCurrentCustomers);
     }, 3000);
     return () => {
       gameAreaController.removeListener('customerChanged', setCurrentCustomers);
@@ -128,6 +132,8 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     });
 
     const index = currentCustomers?.findIndex(c => c.id === cust.id);
+    console.log(cust.order.pizzas[0].toppings);
+    console.log(currentPizza?.toppings);
     if (
       gameAreaController.sameToppings(cust.order.pizzas[0].toppings, currentPizza?.toppings) &&
       currentCustomers !== undefined &&
