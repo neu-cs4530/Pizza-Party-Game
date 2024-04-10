@@ -11,7 +11,7 @@ import LeaderBoard from './Leaderboard';
 import * as client from './client';
 import { nanoid } from 'nanoid';
 import Image from 'next/image';
-import instructions from "../../../../../public/assets/pizza-party/instructions.png";
+import instructions from '../../../../../public/assets/pizza-party/instructions.png';
 
 export default function PizzaPartyArea({
   interactableID,
