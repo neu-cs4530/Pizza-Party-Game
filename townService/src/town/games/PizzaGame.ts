@@ -111,14 +111,6 @@ export default class PizzaPartyGame extends Game<PizzaPartyGameState, PizzaParty
         );
         this.state.currentCustomers[satisfiedCustomerIndex] = this.generateEmptyCustomer();
       }
-      // TODO: handle customer functionality (how do we give them stuff)
-      /**
-       * if move.pizza.toppings === customer.order.toppings:
-       *  update score
-       *  this.ovenFull = false
-       *  this.reset(currentPizza)
-       * else ()
-       */
     } else if (move.move.gamePiece === 'moveToOven') {
       this.state.currentPizza = {
         ...this.state.currentPizza,

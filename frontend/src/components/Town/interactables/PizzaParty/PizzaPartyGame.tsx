@@ -130,25 +130,24 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
       gamePiece: 'moveToCustomer',
     });
 
-    cust.completed = true;
-    if (currentScore !== undefined) {
-      setCurrentScore(currentScore + 1);
-    }
-
-    const completedCustomer = currentCustomers?.find(customer => customer.completed === true);
-    console.log(completedCustomer);
+    const index = currentCustomers?.findIndex(c => c.id === cust.id);
     if (
-      completedCustomer !== undefined &&
+      gameAreaController.sameToppings(cust.order.pizzas[0].toppings, currentPizza?.toppings) &&
       currentCustomers !== undefined &&
+      index !== undefined &&
       gameAreaController.currentCustomers !== undefined
     ) {
+      cust.completed = true;
+      if (currentScore !== undefined) {
+        setCurrentScore(currentScore + 1);
+      }
       console.log('replace customer');
       const newCustomers = [...currentCustomers];
       const empty = gameAreaController.generateEmptyCustomer();
-      const index = newCustomers.findIndex(c => c.id === completedCustomer.id);
       newCustomers[index] = empty;
       gameAreaController.currentCustomers[index] = empty;
       setCurrentCustomers(newCustomers);
+      handleTrashClick();
     }
   }
   return (
