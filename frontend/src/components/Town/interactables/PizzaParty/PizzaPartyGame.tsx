@@ -131,6 +131,8 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     });
 
     const index = currentCustomers?.findIndex(c => c.id === cust.id);
+    console.log(cust.order.pizzas[0].toppings);
+    console.log(currentPizza?.toppings);
     if (
       gameAreaController.sameToppings(cust.order.pizzas[0].toppings, currentPizza?.toppings) &&
       currentCustomers !== undefined &&

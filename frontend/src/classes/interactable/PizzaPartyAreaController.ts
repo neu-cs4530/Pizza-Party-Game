@@ -15,6 +15,7 @@ import GameAreaController, {
   NO_GAME_IN_PROGRESS_ERROR,
 } from './GameAreaController';
 import { nanoid } from 'nanoid';
+import * as client from '../../components/Town/interactables/PizzaParty/client';
 
 export type PizzaPartyEvents = GameEventTypes & {
   gameChanged: (currentGame: PizzaPartyGameState) => void;
@@ -94,6 +95,14 @@ export default class PizzaPartyAreaController extends GameAreaController<
     if (!instanceID || this._model.game?.state.status !== 'IN_PROGRESS') {
       throw new Error('Game Not endable');
     }
+
+    const entry = {
+      _id: nanoid(),
+      playerId: this.players[0].userName,
+      score: this.currentScore,
+    };
+    console.log(entry);
+    client.createLeaderboardEntry(entry);
 
     await this._townController.sendInteractableCommand(this.id, {
       gameID: instanceID,

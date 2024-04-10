@@ -120,13 +120,6 @@ export default function PizzaPartyArea({
       </div>
     );
   } else if (gameStatus === 'OVER') {
-    const entry = {
-      _id: nanoid(),
-      playerId: gameAreaController.game?.player,
-      score: gameAreaController.currentScore,
-    };
-    console.log(entry);
-    client.createLeaderboardEntry(entry);
     return <LeaderBoard />;
   }
   return (
