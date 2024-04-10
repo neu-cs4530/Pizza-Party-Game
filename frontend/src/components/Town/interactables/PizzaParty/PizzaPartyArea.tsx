@@ -7,10 +7,10 @@ import { Customer, GameStatus, InteractableID } from '../../../../types/CoveyTow
 import PizzaPartyGame from './PizzaPartyGame';
 import { Button, useToast } from '@chakra-ui/react';
 import PlayerController from '../../../../classes/PlayerController';
-import { instructions as tutorialImage } from './Instructions.png';
 import LeaderBoard from './Leaderboard';
 import * as client from './client';
 import { nanoid } from 'nanoid';
+import Image from 'next/image';
 
 export default function PizzaPartyArea({
   interactableID,
@@ -67,7 +67,7 @@ export default function PizzaPartyArea({
           }}>
           Start Game
         </button>
-        <img src={tutorialImage} alt='Tutorial' width={100} height={100} />
+        <Image src={'/assets/pizza-party/Instructions.png'} alt='Tutorial' width={500} height={400} />
       </div>
     );
   } else if (gameStatus === 'IN_PROGRESS') {
