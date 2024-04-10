@@ -180,8 +180,6 @@ describe('PizzaPartyGame', () => {
           }),
         ).toThrowError(INVALID_MOVE_MESSAGE);
       });
-<<<<<<< HEAD
-=======
       it('should throw an error if move is of type moveToOven and pizza is undefined', () => {
         game.startGame(player1);
         expect(() =>
