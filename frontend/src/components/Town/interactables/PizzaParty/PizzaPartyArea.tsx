@@ -73,6 +73,7 @@ export default function PizzaPartyArea({
           alt='Tutorial'
           width={500}
           height={400}
+          unoptimized={true}
         />
       </div>
     );
