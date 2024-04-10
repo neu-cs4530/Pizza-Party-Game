@@ -12,7 +12,7 @@ import LeaderBoard from './Leaderboard';
 import * as client from './client';
 import { nanoid } from 'nanoid';
 
-export default function PizzaPasrtyArea({
+export default function PizzaPartyArea({
   interactableID,
 }: {
   interactableID: InteractableID;
