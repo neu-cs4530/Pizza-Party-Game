@@ -1,3 +1,8 @@
+Built a Pizza Party Game on top of the Covey.Town code base.
+For information on the project see the following slide show: https://github.com/neu-cs4530/spring24-project-s24-group-207/blob/main/Pizza%20Party%20Game%20Slideshow.pdf
+
+Visit the following link to play the game: https://pizza-party-exbp.onrender.com/
+
 # Covey.Town
 
 Covey.Town provides a virtual meeting space where different groups of people can have simultaneous video calls, allowing participants to drift between different conversations, just like in real life.

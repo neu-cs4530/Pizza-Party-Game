@@ -132,7 +132,7 @@ export default function PizzaPartyGame({ gameAreaController }: PizzaPartyGamePro
     });
   }
   function giveToCustomer(cust: CustomerType): void {
-    console.log('give to customer')
+    console.log('give to customer');
     gameAreaController.makeMove({
       topping: undefined,
       pizza: currentPizza,
